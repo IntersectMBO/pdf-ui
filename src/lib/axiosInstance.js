@@ -1,6 +1,6 @@
 // Import the Axios library, which is used for making HTTP requests.
 import axios from 'axios';
-import { getDataFromSession } from '@/lib/utils';
+import { getDataFromSession } from './utils';
 
 // Define the base URL for the Axios instance. This uses an environment variable for flexibility,
 // defaulting to "http://localhost:1337" if the environment variable is not set.
