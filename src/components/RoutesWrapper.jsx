@@ -1,5 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
-import { ProposedGovernanceActions, SingleGovernanceAction } from '../pages';
+import {
+    ProposedGovernanceActions,
+    SingleGovernanceAction,
+    CreateGovernanceAction,
+} from '../pages';
 
 const RoutesWrapper = ({ locale }) => {
     return (
@@ -11,6 +15,10 @@ const RoutesWrapper = ({ locale }) => {
             <Route
                 path={`/${locale}/proposed-governance-actions/:id`}
                 element={<SingleGovernanceAction />}
+            />
+            <Route
+                path={`/${locale}/proposed-governance-actions/create-goverance-action`}
+                element={<CreateGovernanceAction />}
             />
         </Routes>
     );
