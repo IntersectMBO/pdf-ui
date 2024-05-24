@@ -2,7 +2,7 @@
 
 import { Box } from '@mui/material';
 import { useEffect } from 'react';
-import { RoutesWrapper } from '../components';
+import { RoutesWrapper } from '.';
 import { useAppContext } from '../context/context';
 import { loginUser } from '../lib/api';
 import { clearSession, saveDataInSession } from '../lib/utils';
