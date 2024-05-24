@@ -32,7 +32,7 @@ const ProposalsList = ({
                 governanceAction?.id
             }&filters[$and][1][prop_name][$containsi]=${
                 debouncedSearchValue || ''
-            }&pagination[page]=${page}&pagination[pageSize]=3&sort[createdAt]=${sortType}&populate[0]=proposal_links`;
+            }&pagination[page]=${page}&pagination[pageSize]=25&sort[createdAt]=${sortType}&populate[0]=proposal_links`;
             const { proposals, pgCount } = await getProposals(query);
             if (!proposals) return;
 
