@@ -5,6 +5,8 @@ const AppContext = createContext();
 export function AppContextProvider({ children }) {
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(false);
+    const [walletAPI, setWalletAPI] = useState(null);
+    const [locale, setLocale] = useState('en');
 
     return (
         <AppContext.Provider
@@ -13,6 +15,10 @@ export function AppContextProvider({ children }) {
                 setUser,
                 loading,
                 setLoading,
+                walletAPI,
+                setWalletAPI,
+                locale,
+                setLocale,
             }}
         >
             {children}
