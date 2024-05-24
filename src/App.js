@@ -1,3 +1,5 @@
+'use client';
+
 import { BrowserRouter } from 'react-router-dom';
 import { GlobalWrapper, ThemeProviderWrapper } from './components';
 import { AppContextProvider } from './context/context';
