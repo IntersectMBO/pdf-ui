@@ -7,7 +7,7 @@ import { getDataFromSession } from './utils';
 // This is useful for differentiating between development and production environments.
 const baseURL =
     process.env.NEXT_PUBLIC_PROPOSAL_DISCUSSION_API_URL ||
-    'http://localhost:1337';
+    'https://dev.api.pdf.gov.tools';
 
 // Create a customized instance of Axios with the defined base URL.
 // This instance will inherit all the default settings of Axios, but will use the specified baseURL
