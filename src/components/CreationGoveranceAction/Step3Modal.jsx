@@ -1,8 +1,7 @@
-import { useNavigate } from 'react-router-dom';
 import { IconClock, IconX } from '@intersect.mbo/intersectmbo.org-icons-set';
 import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
 import { useState } from 'react';
-import { useAppContext } from '../../context/context';
+import { useNavigate } from 'react-router-dom';
 
 const style = {
     position: 'absolute',
@@ -21,7 +20,6 @@ const style = {
 
 const AddPollModal = ({ handleSaveDraft }) => {
     const navigation = useNavigate();
-    const { locale } = useAppContext();
     const [openChildModal, setOpenChildModal] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [proposalId, setProposalId] = useState(null);
@@ -35,12 +33,15 @@ const AddPollModal = ({ handleSaveDraft }) => {
 
     const saveDraft = async () => {
         setIsSaving(true);
-        handleOpenChildModal();
-
-        const newProposalId = await handleSaveDraft(true, false);
-        setProposalId(newProposalId);
-
-        setIsSaving(false);
+        try {
+            const newProposalId = await handleSaveDraft(true, false);
+            setProposalId(newProposalId);
+            handleOpenChildModal();
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return (
@@ -52,7 +53,7 @@ const AddPollModal = ({ handleSaveDraft }) => {
                     sx={{
                         borderRadius: '20px',
                     }}
-                    onClick={saveDraft}
+                    onClick={() => saveDraft()}
                 >
                     Add poll
                 </Button>
@@ -107,7 +108,7 @@ const AddPollModal = ({ handleSaveDraft }) => {
                         onClick={() => {
                             if (proposalId) {
                                 navigation(
-                                    `/${locale}/proposed-governance-actions/${proposalId}`
+                                    `/proposed-governance-actions/${proposalId}`
                                 );
                             } else {
                                 console.error(

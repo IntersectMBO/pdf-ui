@@ -7,8 +7,8 @@ import {
 import { Box, Button, Grid, IconButton, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import Slider from 'react-slick';
-import { useDebounce } from '../..//lib/hooks';
 import { ProposalCard } from '..';
+import { useDebounce } from '../..//lib/hooks';
 import { getProposals } from '../../lib/api';
 import { settings } from '../../lib/carouselSettings';
 

@@ -1,16 +1,15 @@
-import { Grid, Button, Link } from '@mui/material';
-import React, { useState, useEffect, useCallback } from 'react';
-import { IconCheveronLeft } from '@intersect.mbo/intersectmbo.org-icons-set';
 import { useTheme } from '@emotion/react';
+import { IconCheveronLeft } from '@intersect.mbo/intersectmbo.org-icons-set';
+import { Button, Grid, useMediaQuery } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     Step1,
     Step2,
     Step3,
 } from '../../../components/CreationGoveranceAction';
-import { createProposal } from '../../../lib/api';
-import { useMediaQuery } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../../context/context';
+import { createProposal } from '../../../lib/api';
 
 const CreateGovernanceAction = () => {
     const navigate = useNavigate();
@@ -68,14 +67,14 @@ const CreateGovernanceAction = () => {
                     data?.attributes?.proposal_id
                 ) {
                     navigate(
-                        `/${locale}/proposed-governance-actions/${data?.attributes?.proposal_id}`
+                        `/proposed-governance-actions/${data?.attributes?.proposal_id}`
                     );
                 }
 
                 return data?.attributes?.proposal_id;
             }
         } catch (error) {
-            console.error('Error handling the proposal creation:', error);
+            throw error;
         } finally {
             setLoading(false);
         }
@@ -100,8 +99,7 @@ const CreateGovernanceAction = () => {
                             fill={theme.palette.primary.main}
                         />
                     }
-                    component={Link}
-                    href='/proposed-governance-actions'
+                    onClick={() => navigate(`/proposed-governance-actions`)}
                 >
                     Show all
                 </Button>

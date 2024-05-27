@@ -1,4 +1,3 @@
-import { Step3Modal } from '.';
 import { useTheme } from '@emotion/react';
 import {
     IconLink,
@@ -13,6 +12,7 @@ import {
     Typography,
 } from '@mui/material';
 import { useState } from 'react';
+import { Step3Modal } from '.';
 
 const Step3 = ({
     setStep,
@@ -23,7 +23,7 @@ const Step3 = ({
 }) => {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
-    console.log('proposalData', proposalData);
+
     const handleOpen = () => {
         setOpen(true);
     };

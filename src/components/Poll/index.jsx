@@ -1,12 +1,3 @@
-import { useAppContext } from '../../context/context';
-import {
-    createPoll,
-    createPollVote,
-    getPoll,
-    getUserPollVote,
-    updatePollVote,
-} from '../../lib/api';
-import { formatPollDateDisplay } from '../../lib/utils';
 import { IconX } from '@intersect.mbo/intersectmbo.org-icons-set';
 import {
     Box,
@@ -21,6 +12,15 @@ import {
     alpha,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useAppContext } from '../../context/context';
+import {
+    createPoll,
+    createPollVote,
+    getPoll,
+    getUserPollVote,
+    updatePollVote,
+} from '../../lib/api';
+import { formatPollDateDisplay } from '../../lib/utils';
 
 const Poll = ({ proposalID, proposalUserId }) => {
     const { user, setLoading } = useAppContext();
@@ -248,7 +248,11 @@ const Poll = ({ proposalID, proposalUserId }) => {
                             <Typography
                                 variant='caption'
                                 sx={{
-                                    color: (theme) => theme.palette.text.black,
+                                    color: (theme) =>
+                                        userPollVote?.attributes
+                                            ?.vote_result === true
+                                            ? theme.palette.primary.main
+                                            : theme.palette.text.black,
                                     textWrap: 'nowrap',
                                     minWidth: '80px',
                                 }}
@@ -291,7 +295,11 @@ const Poll = ({ proposalID, proposalUserId }) => {
                             <Typography
                                 variant='caption'
                                 sx={{
-                                    color: (theme) => theme.palette.text.black,
+                                    color: (theme) =>
+                                        userPollVote?.attributes
+                                            ?.vote_result === false
+                                            ? theme.palette.primary.main
+                                            : theme.palette.text.black,
                                     textWrap: 'nowrap',
                                     minWidth: '80px',
                                 }}

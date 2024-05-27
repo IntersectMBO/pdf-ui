@@ -1,7 +1,7 @@
-import { useNavigate } from 'react-router-dom';
 import { IconX } from '@intersect.mbo/intersectmbo.org-icons-set';
 import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/context';
 
 const style = {
@@ -103,9 +103,7 @@ const ChildModal = ({
                         sx={{
                             borderRadius: '20px',
                         }}
-                        onClick={() =>
-                            navigate(`/${locale}/proposed-governance-actions/`)
-                        }
+                        onClick={() => navigate(`/proposed-governance-actions`)}
                     >
                         Close and go to Proposal List
                     </Button>
