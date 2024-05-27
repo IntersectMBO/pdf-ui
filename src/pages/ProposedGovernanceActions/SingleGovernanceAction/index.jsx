@@ -91,7 +91,7 @@ const SingleGovernanceAction = () => {
             if (!response) return;
 
             handleCloseDeleteModal();
-            navigate('/proposed-governance-actions');
+            navigate('/proposal_discussion');
         } catch (error) {
             console.error('Failed to delete proposal:', error);
         } finally {
@@ -113,7 +113,7 @@ const SingleGovernanceAction = () => {
             if (
                 error?.response?.data?.error?.details === 'Proposal not found'
             ) {
-                return navigate('/proposed-governance-actions');
+                return navigate('/proposal_discussion');
             }
             console.error(error);
         } finally {
@@ -254,9 +254,7 @@ const SingleGovernanceAction = () => {
                                     fill={theme.palette.primary.main}
                                 />
                             }
-                            onClick={() =>
-                                navigate(`/proposed-governance-actions`)
-                            }
+                            onClick={() => navigate(`/proposal_discussion`)}
                         >
                             Show all
                         </Button>

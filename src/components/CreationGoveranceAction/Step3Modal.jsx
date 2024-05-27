@@ -108,7 +108,7 @@ const AddPollModal = ({ handleSaveDraft }) => {
                         onClick={() => {
                             if (proposalId) {
                                 navigation(
-                                    `/proposed-governance-actions/${proposalId}`
+                                    `/proposal_discussion/${proposalId}`
                                 );
                             } else {
                                 console.error(

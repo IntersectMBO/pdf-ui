@@ -1,33 +1,30 @@
 'use client';
 
 import { Route, Routes } from 'react-router-dom';
-import { useAppContext } from '../context/context';
 import {
     CreateGovernanceAction,
     ProposedGovernanceActions,
     SingleGovernanceAction,
 } from '../pages';
 
-const RoutesWrapper = ({ locale }) => {
-    const { user } = useAppContext();
-
+const RoutesWrapper = () => {
     return (
         <Routes>
             <Route
-                path={`/proposed-governance-actions`}
+                path={`/proposal_discussion`}
                 element={<ProposedGovernanceActions />}
             />
             <Route
-                path={`/proposed-governance-actions/:id`}
+                path={`/proposal_discussion/:id`}
                 element={<SingleGovernanceAction />}
             />
             <Route
-                path={`/proposed-governance-actions/create-governance-action`}
+                path={`/proposal_discussion/create-governance-action`}
                 element={
                     // user ? (
-                <CreateGovernanceAction />
+                    <CreateGovernanceAction />
                     // ) : (
-                    //     <Navigate to={`/proposed-governance-actions`} />
+                    //     <Navigate to={`/proposal_discussion`} />
                     // )
                 }
             />

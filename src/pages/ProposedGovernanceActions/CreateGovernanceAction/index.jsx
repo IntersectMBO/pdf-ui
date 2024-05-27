@@ -67,7 +67,7 @@ const CreateGovernanceAction = () => {
                     data?.attributes?.proposal_id
                 ) {
                     navigate(
-                        `/proposed-governance-actions/${data?.attributes?.proposal_id}`
+                        `/proposal_discussion/${data?.attributes?.proposal_id}`
                     );
                 }
 
@@ -99,7 +99,7 @@ const CreateGovernanceAction = () => {
                             fill={theme.palette.primary.main}
                         />
                     }
-                    onClick={() => navigate(`/proposed-governance-actions`)}
+                    onClick={() => navigate(`/proposal_discussion`)}
                 >
                     Show all
                 </Button>
