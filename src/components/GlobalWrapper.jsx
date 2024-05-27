@@ -57,7 +57,7 @@ const GlobalWrapper = ({ ...props }) => {
             flexDirection={'column'}
             flexGrow={1}
         >
-            <RoutesWrapper locale={GovToolAssemblyLocale} />
+            <RoutesWrapper />
         </Box>
     );
 };

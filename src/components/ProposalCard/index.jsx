@@ -214,9 +214,7 @@ const ProposalCard = ({ proposal }) => {
                                         )}
                                 </Box>
                             ) : null}
-                            <Link
-                                to={`/proposed-governance-actions/${proposal?.id}`}
-                            >
+                            <Link to={`/proposal_discussion/${proposal?.id}`}>
                                 <Button
                                     variant='contained'
                                     fullWidth={

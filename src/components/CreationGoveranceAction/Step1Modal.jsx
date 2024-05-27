@@ -103,7 +103,7 @@ const ChildModal = ({
                         sx={{
                             borderRadius: '20px',
                         }}
-                        onClick={() => navigate(`/proposed-governance-actions`)}
+                        onClick={() => navigate(`/proposal_discussion`)}
                     >
                         Close and go to Proposal List
                     </Button>
