@@ -19,13 +19,13 @@ import {
     styled,
 } from '@mui/material';
 
-import { useAppContext } from '@/context/context';
 import { useTheme } from '@emotion/react';
 import { Link } from 'react-router-dom';
+import { useAppContext } from '../../context/context';
 import { formatIsoDate } from '../../lib/utils';
 
 const ProposalCard = ({ proposal }) => {
-    const { locale } = useAppContext();
+    const { user } = useAppContext();
     const theme = useTheme();
 
     const CardStatusBadge = styled(Badge)(({ theme }) => ({
@@ -205,13 +205,17 @@ const ProposalCard = ({ proposal }) => {
                                         ></StyledBadge>
                                         <IconChatAlt />
                                     </IconButton>
-                                    <IconButton aria-label='edit'>
-                                        <IconPencilAlt />
-                                    </IconButton>
+                                    {user &&
+                                        user?.user?.id?.toString() ===
+                                            proposal?.attributes?.user_id?.toString() && (
+                                            <IconButton aria-label='edit'>
+                                                <IconPencilAlt />
+                                            </IconButton>
+                                        )}
                                 </Box>
                             ) : null}
                             <Link
-                                to={`/${locale || 'en'}/proposed-governance-actions/${proposal?.id}`}
+                                to={`/proposed-governance-actions/${proposal?.id}`}
                             >
                                 <Button
                                     variant='contained'

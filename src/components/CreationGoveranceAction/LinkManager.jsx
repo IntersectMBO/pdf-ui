@@ -50,7 +50,6 @@ const LinkManager = ({ maxLinks = 7, proposalData, setProposalData }) => {
                     flexDirection='row'
                     p={2}
                     mb={2}
-                    pt={3}
                     backgroundColor={(theme) => theme.palette.primary.lightGray}
                     position='relative'
                 >
@@ -60,6 +59,11 @@ const LinkManager = ({ maxLinks = 7, proposalData, setProposalData }) => {
                         flexGrow={1}
                         gap={2}
                     >
+                        <Box display={'flex'} justifyContent={'flex-end'}>
+                            <IconButton onClick={() => handleRemoveLink(index)}>
+                                <IconX width='16px' height='16px' />
+                            </IconButton>
+                        </Box>
                         <TextField
                             label={`Link #${index + 1} URL`}
                             variant='outlined'
@@ -105,22 +109,6 @@ const LinkManager = ({ maxLinks = 7, proposalData, setProposalData }) => {
                             }}
                         />
                     </Box>
-
-                    <IconButton
-                        onClick={() => handleRemoveLink(index)}
-                        sx={{
-                            position: 'absolute',
-                            top: 0,
-                            right: 0,
-                            color: 'gray',
-                            '&:hover': {
-                                backgroundColor: 'transparent',
-                                boxShadow: 'none',
-                            },
-                        }}
-                    >
-                        <IconX width='16px' height='16px' />
-                    </IconButton>
                 </Box>
             ))}
             {proposalData?.proposal_links?.length < maxLinks && (

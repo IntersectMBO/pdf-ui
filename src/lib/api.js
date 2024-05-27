@@ -28,7 +28,7 @@ export const getSingleProposal = async (id) => {
 
         return data?.data;
     } catch (error) {
-        return error;
+        throw error;
     }
 };
 export const getGovernanceActionTypes = async () => {
