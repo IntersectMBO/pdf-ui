@@ -234,3 +234,15 @@ export const updatePollVote = async ({ pollVoteID, updateData }) => {
         throw error;
     }
 };
+export const closePoll = async ({ pollID }) => {
+    try {
+        const { data } = await axiosInstance.put(`api/polls/${pollID}`, {
+            data: {
+                is_poll_active: false,
+            },
+        });
+        return data?.data;
+    } catch (error) {
+        throw error;
+    }
+};

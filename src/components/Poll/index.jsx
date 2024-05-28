@@ -14,6 +14,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useAppContext } from '../../context/context';
 import {
+    closePoll,
     createPoll,
     createPollVote,
     getPoll,
@@ -28,6 +29,7 @@ const Poll = ({ proposalID, proposalUserId }) => {
     const [userPollVote, setUserPollVote] = useState(null);
     const [mounted, setMounted] = useState(false);
     const [showChangeVoteModal, setShowChangeVoteModal] = useState(false);
+    const [showClosePollModal, setShowClosePollModal] = useState(false);
 
     const fetchPoll = async (id) => {
         try {
@@ -111,6 +113,9 @@ const Poll = ({ proposalID, proposalUserId }) => {
     const toggleChangeVoteModal = () => {
         setShowChangeVoteModal((prev) => !prev);
     };
+    const toggleClosePollModal = () => {
+        setShowClosePollModal((prev) => !prev);
+    };
 
     const handlePollVoteChange = async () => {
         setLoading(true);
@@ -130,6 +135,19 @@ const Poll = ({ proposalID, proposalUserId }) => {
             console.error(error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const closeProposalPoll = async () => {
+        try {
+            const response = await closePoll({ pollID: poll?.id });
+
+            if (!response) return;
+
+            setPoll(response);
+            toggleClosePollModal();
+        } catch (error) {
+            console.error(error);
         }
     };
 
@@ -338,7 +356,10 @@ const Poll = ({ proposalID, proposalUserId }) => {
                                     display={'flex'}
                                     justifyContent={'flex-end'}
                                 >
-                                    <Button variant='outlined'>
+                                    <Button
+                                        variant='outlined'
+                                        onClick={toggleClosePollModal}
+                                    >
                                         Close Poll
                                     </Button>
                                 </Box>
@@ -450,6 +471,87 @@ const Poll = ({ proposalID, proposalUserId }) => {
                                 onClick={handlePollVoteChange}
                             >
                                 Yes, change my Poll Vote
+                            </Button>
+                        </Box>
+                    </Box>
+                </Modal>
+                <Modal open={showClosePollModal} onClose={toggleClosePollModal}>
+                    <Box
+                        sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: {
+                                xs: '90%',
+                                sm: '50%',
+                                md: '30%',
+                            },
+                            bgcolor: 'background.paper',
+                            boxShadow: 24,
+                            borderRadius: '20px',
+                        }}
+                    >
+                        <Box
+                            pt={2}
+                            pl={2}
+                            pr={2}
+                            pb={1}
+                            borderBottom={1}
+                            borderColor={(theme) =>
+                                theme.palette.border.lightGray
+                            }
+                        >
+                            <Box
+                                display='flex'
+                                flexDirection='row'
+                                justifyContent='space-between'
+                                alignItems={'center'}
+                            >
+                                <Typography
+                                    id='modal-modal-title'
+                                    variant='h6'
+                                    component='h2'
+                                >
+                                    Do you really want to close the Poll?
+                                </Typography>
+                                <IconButton onClick={toggleClosePollModal}>
+                                    <IconX width='24px' height='24px' />
+                                </IconButton>
+                            </Box>
+                            <Typography
+                                id='modal-modal-description'
+                                mt={2}
+                                color={(theme) => theme.palette.text.grey}
+                            >
+                                Please confirm you want to close the Poll.
+                            </Typography>
+                        </Box>
+                        <Box
+                            display='flex'
+                            flexDirection='column'
+                            padding={2}
+                            gap={2}
+                        >
+                            <Button
+                                variant='contained'
+                                fullWidth
+                                sx={{
+                                    borderRadius: '20px',
+                                }}
+                                onClick={toggleClosePollModal}
+                            >
+                                I don't want to close
+                            </Button>
+                            <Button
+                                variant='outlined'
+                                fullWidth
+                                sx={{
+                                    borderRadius: '20px',
+                                }}
+                                onClick={() => closeProposalPoll()}
+                            >
+                                Yes, close Poll
                             </Button>
                         </Box>
                     </Box>
