@@ -152,14 +152,12 @@ const SingleGovernanceAction = () => {
         setLoading(true);
         try {
             const newComment = await createComment({
-                user_id: user?.user?.id.toString(),
                 proposal_id: id,
                 comment_text: newCommentText,
             });
 
             if (!newComment) return;
             setNewCommentText('');
-            console.log(id);
             fetchProposal(id);
             fetchComments();
         } catch (error) {
@@ -627,14 +625,17 @@ const SingleGovernanceAction = () => {
                                             }}
                                             disabled={
                                                 user
-                                                    ? userProposalVote
-                                                        ? userProposalVote
-                                                              ?.attributes
-                                                              ?.vote_result ===
-                                                          true
-                                                            ? true
-                                                            : false
-                                                        : false
+                                                    ? user?.user?.id?.toString() ===
+                                                      proposal?.attributes?.user_id?.toString()
+                                                        ? true
+                                                        : userProposalVote
+                                                          ? userProposalVote
+                                                                ?.attributes
+                                                                ?.vote_result ===
+                                                            true
+                                                              ? true
+                                                              : false
+                                                          : false
                                                     : true
                                             }
                                             onClick={() =>
@@ -700,14 +701,17 @@ const SingleGovernanceAction = () => {
                                             }}
                                             disabled={
                                                 user
-                                                    ? userProposalVote
-                                                        ? userProposalVote
-                                                              ?.attributes
-                                                              ?.vote_result ===
-                                                          false
-                                                            ? true
-                                                            : false
-                                                        : false
+                                                    ? user?.user?.id?.toString() ===
+                                                      proposal?.attributes?.user_id?.toString()
+                                                        ? true
+                                                        : userProposalVote
+                                                          ? userProposalVote
+                                                                ?.attributes
+                                                                ?.vote_result ===
+                                                            false
+                                                              ? true
+                                                              : false
+                                                          : false
                                                     : true
                                             }
                                             onClick={() =>

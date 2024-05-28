@@ -1,25 +1,29 @@
 'use client';
 
 import { Box } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { RoutesWrapper } from '.';
 import { useAppContext } from '../context/context';
 import { loginUser } from '../lib/api';
 import { clearSession, saveDataInSession } from '../lib/utils';
 
 const GlobalWrapper = ({ ...props }) => {
-    const { walletAPI, setWalletAPI, setLocale, setUser } = useAppContext();
+    const { walletAPI, setWalletAPI, setLocale, setUser, user } =
+        useAppContext();
+    const [mounted, setMounted] = useState(false);
+
     const {
         walletAPI: GovToolAssemblyWalletAPI,
         locale: GovToolAssemblyLocale,
     } = props;
 
-    const loginUserToApp = async (walletAddress) => {
+    const loginUserToApp = async (wallet) => {
         try {
             clearSession();
             setWalletAPI(null);
             setUser(null);
 
+            let walletAddress = await wallet?.getChangeAddress();
             const userResponse = await loginUser({
                 identifier: walletAddress,
             });
@@ -32,15 +36,19 @@ const GlobalWrapper = ({ ...props }) => {
     };
 
     useEffect(() => {
-        if (GovToolAssemblyWalletAPI) {
-            setWalletAPI(GovToolAssemblyWalletAPI);
-            loginUserToApp(GovToolAssemblyWalletAPI?.address);
+        if (!mounted) {
+            setMounted(true);
         } else {
-            clearSession();
-            setWalletAPI(null);
-            setUser(null);
+            if (GovToolAssemblyWalletAPI?.getChangeAddress) {
+                setWalletAPI(GovToolAssemblyWalletAPI);
+                loginUserToApp(GovToolAssemblyWalletAPI);
+            } else {
+                clearSession();
+                setWalletAPI(null);
+                setUser(null);
+            }
         }
-    }, [GovToolAssemblyWalletAPI, walletAPI]);
+    }, [GovToolAssemblyWalletAPI, walletAPI, mounted]);
 
     useEffect(() => {
         if (GovToolAssemblyLocale) {
