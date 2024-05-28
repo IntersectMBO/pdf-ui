@@ -1,5 +1,15 @@
 'use client';
 
+import '@fontsource/poppins/100.css';
+import '@fontsource/poppins/200.css';
+import '@fontsource/poppins/300.css';
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
+import '@fontsource/poppins/800.css';
+import '@fontsource/poppins/900.css';
+
 import {
     ThemeProvider,
     alpha,
@@ -7,6 +17,7 @@ import {
     responsiveFontSizes,
 } from '@mui/material/styles';
 import Loader from '../Loader';
+
 
 let theme = createTheme({
     palette: {
@@ -66,6 +77,21 @@ let theme = createTheme({
                 },
             },
         },
+    },
+    typography: {
+        fontFamily: [
+            'Poppins',
+            'Roboto',
+            '-apple-system',
+            'BlinkMacSystemFont',
+            '"Segoe UI"',
+            '"Helvetica Neue"',
+            'Arial',
+            'sans-serif',
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
+        ].join(','),
     },
 });
 
