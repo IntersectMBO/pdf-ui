@@ -83,7 +83,6 @@ const CreateGovernanceAction = () => {
     useEffect(() => {
         setProposalData((prev) => ({
             ...prev,
-            user_id: user?.user?.id,
         }));
     }, [user]);
 
