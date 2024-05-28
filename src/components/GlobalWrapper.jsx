@@ -17,12 +17,14 @@ const GlobalWrapper = ({ ...props }) => {
         locale: GovToolAssemblyLocale,
     } = props;
 
+    const clearStates = () => {
+        clearSession();
+        setWalletAPI(null);
+        setUser(null);
+    };
+
     const loginUserToApp = async (wallet) => {
         try {
-            clearSession();
-            setWalletAPI(null);
-            setUser(null);
-
             let walletAddress = await wallet?.getChangeAddress();
             const userResponse = await loginUser({
                 identifier: walletAddress,
@@ -37,18 +39,17 @@ const GlobalWrapper = ({ ...props }) => {
 
     useEffect(() => {
         if (!mounted) {
+            clearStates();
             setMounted(true);
         } else {
             if (GovToolAssemblyWalletAPI?.getChangeAddress) {
                 setWalletAPI(GovToolAssemblyWalletAPI);
                 loginUserToApp(GovToolAssemblyWalletAPI);
             } else {
-                clearSession();
-                setWalletAPI(null);
-                setUser(null);
+                clearStates();
             }
         }
-    }, [GovToolAssemblyWalletAPI, walletAPI, mounted]);
+    }, [GovToolAssemblyWalletAPI?.getChangeAddress, mounted]);
 
     useEffect(() => {
         if (GovToolAssemblyLocale) {
