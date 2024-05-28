@@ -32,7 +32,7 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CommentCard, Poll } from '../../../components';
+import { CommentCard, Poll, EditProposalDialog } from '../../../components';
 import { useAppContext } from '../../../context/context';
 import {
     createComment,
@@ -233,17 +233,16 @@ const SingleGovernanceAction = () => {
     return (
         <>
             {openEditDialog ? (
-                <div></div>
+                <EditProposalDialog
+                    proposal={proposal}
+                    openEditDialog={openEditDialog}
+                    handleCloseEditDialog={handleCloseEditDialog}
+                    handleClose={handleClose}
+                    governanceActionTypes={governanceActionTypes}
+                    setProposal={setProposal}
+                    setMounted={setMounted}
+                />
             ) : (
-                // <EditProposalDialog
-                //     proposal={proposal}
-                //     openEditDialog={openEditDialog}
-                //     handleCloseEditDialog={handleCloseEditDialog}
-                //     handleClose={handleClose}
-                //     governanceActionTypes={governanceActionTypes}
-                //     setProposal={setProposal}
-                //     setMounted={setMounted}
-                // />
                 <Box>
                     <Box mt={3}>
                         <Button
