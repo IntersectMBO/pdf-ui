@@ -2,14 +2,18 @@
 
 import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { RoutesWrapper } from '.';
 import { useAppContext } from '../context/context';
 import { loginUser } from '../lib/api';
 import { clearSession, saveDataInSession } from '../lib/utils';
+import {
+    CreateGovernanceAction,
+    ProposedGovernanceActions,
+    SingleGovernanceAction,
+} from '../pages';
 
 const GlobalWrapper = ({ ...props }) => {
-    const { walletAPI, setWalletAPI, setLocale, setUser, user } =
-        useAppContext();
+    const pathname = props?.pathname;
+    const { setWalletAPI, setLocale, setUser } = useAppContext();
     const [mounted, setMounted] = useState(false);
 
     const {
@@ -37,6 +41,17 @@ const GlobalWrapper = ({ ...props }) => {
         }
     };
 
+    function getProposalID(url) {
+        const parts = url.split('/');
+        const lastSegment = parts[parts.length - 1];
+
+        if (isNaN(lastSegment) || lastSegment.trim() === '') {
+            return null;
+        }
+
+        return lastSegment;
+    }
+
     useEffect(() => {
         if (!mounted) {
             clearStates();
@@ -57,6 +72,24 @@ const GlobalWrapper = ({ ...props }) => {
         }
     }, [GovToolAssemblyLocale]);
 
+    const renderComponentBasedOnPath = (path) => {
+        if (
+            path.includes('create-governance-action') &&
+            GovToolAssemblyWalletAPI?.getChangeAddress
+        ) {
+            return <CreateGovernanceAction />;
+        } else if (
+            path.includes('proposal_discussion/') &&
+            getProposalID(path)
+        ) {
+            return <SingleGovernanceAction id={getProposalID(path)} />;
+        } else if (path.includes('proposal_discussion')) {
+            return <ProposedGovernanceActions />;
+        } else {
+            return <CreateGovernanceAction />;
+        }
+    };
+
     return (
         <Box
             component='section'
@@ -64,7 +97,7 @@ const GlobalWrapper = ({ ...props }) => {
             flexDirection={'column'}
             flexGrow={1}
         >
-            <RoutesWrapper />
+            {renderComponentBasedOnPath(pathname)}
         </Box>
     );
 };

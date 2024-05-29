@@ -25,11 +25,10 @@ import {
 import { formatIsoDate, formatIsoTime } from '../../lib/utils';
 import { useEffect, useState } from 'react';
 import { getProposals } from '../../lib/api';
-import { useParams } from 'react-router-dom';
 
-const ReviewVersions = ({ open, onClose }) => {
+const ReviewVersions = ({ open, onClose, id }) => {
     const theme = useTheme();
-    const { id } = useParams();
+
     const [versions, setVersions] = useState(null);
     const [selectedVersion, setSelectedVersion] = useState(null);
     const [openVersionsList, setOpenVersionsList] = useState(false);
