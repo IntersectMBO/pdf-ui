@@ -32,7 +32,12 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CommentCard, Poll, EditProposalDialog } from '../../../components';
+import {
+    CommentCard,
+    Poll,
+    EditProposalDialog,
+    ReviewVersions,
+} from '../../../components';
 import { useAppContext } from '../../../context/context';
 import {
     createComment,
@@ -59,6 +64,7 @@ const SingleGovernanceAction = () => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [governanceActionTypes, setGovernanceActionTypes] = useState([]);
+    const [reviewVersionsOpen, setReviewVersionsOpen] = useState(false);
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -83,6 +89,9 @@ const SingleGovernanceAction = () => {
     const handleCloseDeleteModal = () => {
         setOpenDeleteModal(false);
     };
+
+    const handleOpenReviewVersions = () => setReviewVersionsOpen(true);
+    const handleCloseReviewVersions = () => setReviewVersionsOpen(false);
 
     const handleDeleteProposal = async () => {
         setLoading(true);
@@ -483,6 +492,7 @@ const SingleGovernanceAction = () => {
                                         {
                                             proposal?.attributes?.content
                                                 ?.attributes?.gov_action_type
+                                                ?.attributes
                                                 ?.gov_action_type_name
                                         }
                                     </Typography>
@@ -500,9 +510,9 @@ const SingleGovernanceAction = () => {
                                                 ?.attributes?.createdAt
                                         )}`}
                                     </Typography>
-                                    {user &&
-                                        user?.user?.id?.toString() ===
-                                            proposal?.attributes?.user_id?.toString() && (
+                                    {user?.user?.id?.toString() ===
+                                        proposal?.attributes?.user_id?.toString() && (
+                                        <Box>
                                             <Button
                                                 variant='outlined'
                                                 startIcon={
@@ -515,10 +525,21 @@ const SingleGovernanceAction = () => {
                                                         height='18'
                                                     />
                                                 }
+                                                onClick={
+                                                    handleOpenReviewVersions
+                                                }
                                             >
                                                 Review Versions
                                             </Button>
-                                        )}
+
+                                            <ReviewVersions
+                                                open={reviewVersionsOpen}
+                                                onClose={
+                                                    handleCloseReviewVersions
+                                                }
+                                            />
+                                        </Box>
+                                    )}
                                 </Box>
 
                                 <Box mt={4}>

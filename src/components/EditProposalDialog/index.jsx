@@ -175,10 +175,10 @@ const EditProposalDialog = ({
                         display: 'flex',
                         flexDirection: 'column',
                         flexGrow: 1,
-                        backgroundImage: `url('/svg/ellipse-1.svg'), url('/svg/ellipse-2.svg')`,
-                        backgroundRepeat: 'no-repeat, no-repeat',
-                        backgroundPosition: 'top left, bottom right',
-                        backgroundSize: 'auto, auto',
+                        // backgroundImage: `url('/svg/ellipse-1.svg'), url('/svg/ellipse-2.svg')`,
+                        // backgroundRepeat: 'no-repeat, no-repeat',
+                        // backgroundPosition: 'top left, bottom right',
+                        // backgroundSize: 'auto, auto',
                         overflow: 'auto',
                         minHeight: 0,
                     }}
@@ -689,6 +689,7 @@ const EditProposalDialog = ({
                                                         borderRadius: '20px',
                                                     }}
                                                     fullWidth
+                                                    disabled={isSaveDisabled}
                                                     onClick={async () => {
                                                         await handleSaveDraft();
                                                         handleOpenSaveDraftModal();
@@ -711,6 +712,7 @@ const EditProposalDialog = ({
                                                         whiteSpace: 'nowrap',
                                                     }}
                                                     fullWidth
+                                                    disabled={isSaveDisabled}
                                                     onClick={() => {
                                                         handleOpenPublishModal();
                                                     }}
