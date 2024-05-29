@@ -7,3 +7,4 @@ export { default as Poll } from './Poll';
 export { default as EditProposalDialog } from './EditProposalDialog';
 export { default as RoutesWrapper } from './RoutesWrapper.jsx';
 export { default as ThemeProviderWrapper } from './ThemeProviderWrapper';
+export { default as ReviewVersions } from './ReviewVersions';

@@ -18,7 +18,6 @@ import {
 } from '@mui/material/styles';
 import Loader from '../Loader';
 
-
 let theme = createTheme({
     palette: {
         primary: {
@@ -58,6 +57,9 @@ let theme = createTheme({
         },
         card: {
             footerGrey: '#F2F4F8',
+        },
+        highlight: {
+            blueGray: '#DBE1F8',
         },
     },
     components: {
