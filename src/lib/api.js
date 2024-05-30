@@ -245,3 +245,14 @@ export const closePoll = async ({ pollID }) => {
         throw error;
     }
 };
+export const updateUser = async (updateData) => {
+    try {
+        const { data } = await axiosInstance.put(`/api/users/edit`, {
+            ...updateData,
+        });
+        return data;
+    } catch (error) {
+        console.error(error);
+        throw error?.response?.data?.error;
+    }
+};

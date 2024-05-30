@@ -7,3 +7,4 @@ export { default as Poll } from './Poll';
 export { default as EditProposalDialog } from './EditProposalDialog';
 export { default as ThemeProviderWrapper } from './ThemeProviderWrapper';
 export { default as ReviewVersions } from './ReviewVersions';
+export { default as UsernameModal } from './UsernameModal';

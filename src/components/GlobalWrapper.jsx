@@ -10,11 +10,13 @@ import {
     ProposedGovernanceActions,
     SingleGovernanceAction,
 } from '../pages';
+import { UsernameModal } from '../components';
 
 const GlobalWrapper = ({ ...props }) => {
     const pathname = props?.pathname;
     const { setWalletAPI, setLocale, setUser } = useAppContext();
     const [mounted, setMounted] = useState(false);
+    const [openUsernameModal, setOpenUsernameModal] = useState(false);
 
     const {
         walletAPI: GovToolAssemblyWalletAPI,
@@ -36,6 +38,10 @@ const GlobalWrapper = ({ ...props }) => {
 
             saveDataInSession('pdfUserJwt', userResponse?.jwt);
             setUser(userResponse);
+
+            if (!userResponse?.user?.govtool_username) {
+                setOpenUsernameModal(true);
+            }
         } catch (error) {
             console.error(error);
         }
@@ -98,6 +104,10 @@ const GlobalWrapper = ({ ...props }) => {
             flexGrow={1}
         >
             {renderComponentBasedOnPath(pathname)}
+            <UsernameModal
+                open={openUsernameModal}
+                handleClose={() => setOpenUsernameModal(false)}
+            />
         </Box>
     );
 };
