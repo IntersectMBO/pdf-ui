@@ -86,7 +86,7 @@ const GlobalWrapper = ({ ...props }) => {
         } else if (path.includes('proposal_discussion')) {
             return <ProposedGovernanceActions />;
         } else {
-            return <CreateGovernanceAction />;
+            return <ProposedGovernanceActions />;
         }
     };
 

@@ -127,10 +127,10 @@ const ProposalsList = ({
                         )}
                     </Box>
                 ) : (
-                    <Box px={1.5}>
+                    <Box px={1.5} py={2}>
                         <Slider ref={sliderRef} {...settings}>
                             {proposalsList?.map((proposal, index) => (
-                                <Box paddingY={4} key={index} height={'100%'}>
+                                <Box key={index} height={'100%'}>
                                     <ProposalCard proposal={proposal} />
                                 </Box>
                             ))}
