@@ -16,6 +16,8 @@ const ProposalsList = ({
     governanceAction,
     searchText = '',
     sortType = 'desc',
+    isDraft = false,
+    startEdittinButtonClick = false,
 }) => {
     const sliderRef = useRef(null);
 
@@ -28,11 +30,16 @@ const ProposalsList = ({
 
     const fetchProposals = async (reset = true, page) => {
         try {
-            let query = `filters[$and][0][gov_action_type_id]=${
-                governanceAction?.id
-            }&filters[$and][1][prop_name][$containsi]=${
-                debouncedSearchValue || ''
-            }&pagination[page]=${page}&pagination[pageSize]=25&sort[createdAt]=${sortType}&populate[0]=proposal_links`;
+            let query = '';
+            if (isDraft) {
+                query = `filters[$and][2][is_draft]=true&pagination[page]=${page}&pagination[pageSize]=25&sort[createdAt]=${sortType}&populate[0]=proposal_links`;
+            } else {
+                query = `filters[$and][0][gov_action_type_id]=${
+                    governanceAction?.id
+                }&filters[$and][1][prop_name][$containsi]=${
+                    debouncedSearchValue || ''
+                }&pagination[page]=${page}&pagination[pageSize]=25&sort[createdAt]=${sortType}&populate[0]=proposal_links`;
+            }
             const { proposals, pgCount } = await getProposals(query);
             if (!proposals) return;
 
@@ -57,7 +64,7 @@ const ProposalsList = ({
         }
     }, [mounted, debouncedSearchValue, sortType]);
 
-    return (
+    return isDraft && proposalsList?.length === 0 ? null : (
         <Box overflow={'hidden'}>
             <Box
                 display={'flex'}
@@ -71,7 +78,10 @@ const ProposalsList = ({
                         color='text.black'
                         marginRight={2}
                     >
-                        {governanceAction?.attributes?.gov_action_type_name}
+                        {isDraft
+                            ? 'Unfinished Drafts'
+                            : governanceAction?.attributes
+                                  ?.gov_action_type_name}
                     </Typography>
                     {proposalsList?.length > 0 && (
                         <Button
@@ -104,7 +114,12 @@ const ProposalsList = ({
                         <Grid container spacing={2} paddingY={4}>
                             {proposalsList?.map((proposal, index) => (
                                 <Grid item key={index} xs={12} sm={6} md={4}>
-                                    <ProposalCard proposal={proposal} />
+                                    <ProposalCard
+                                        proposal={proposal}
+                                        startEdittinButtonClick={
+                                            startEdittinButtonClick
+                                        }
+                                    />
                                 </Grid>
                             ))}
                         </Grid>
@@ -131,7 +146,12 @@ const ProposalsList = ({
                         <Slider ref={sliderRef} {...settings}>
                             {proposalsList?.map((proposal, index) => (
                                 <Box key={index} height={'100%'}>
-                                    <ProposalCard proposal={proposal} />
+                                    <ProposalCard
+                                        proposal={proposal}
+                                        startEdittinButtonClick={
+                                            startEdittinButtonClick
+                                        }
+                                    />
                                 </Box>
                             ))}
 

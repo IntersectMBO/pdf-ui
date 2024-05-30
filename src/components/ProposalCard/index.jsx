@@ -24,7 +24,7 @@ import { Link } from 'react-router-dom';
 import { useAppContext } from '../../context/context';
 import { formatIsoDate } from '../../lib/utils';
 
-const ProposalCard = ({ proposal }) => {
+const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
     const { user } = useAppContext();
     const theme = useTheme();
 
@@ -179,11 +179,11 @@ const ProposalCard = ({ proposal }) => {
                                 color='text.black'
                             >
                                 {proposal?.attributes?.content?.attributes
-                                    ?.prop_rev_active
-                                    ? `Proposed on: ${formatIsoDate(
+                                    ?.is_draft
+                                    ? 'Not submitted'
+                                    : `Proposed on: ${formatIsoDate(
                                           proposal?.attributes?.createdAt
-                                      )}`
-                                    : 'Not submitted'}
+                                      )}`}
                             </Typography>
                         </Box>
                         <Box
@@ -192,7 +192,7 @@ const ProposalCard = ({ proposal }) => {
                             justifyContent={'space-between'}
                         >
                             {proposal?.attributes?.content?.attributes
-                                ?.prop_rev_active ? (
+                                ?.is_draft ? null : (
                                 <Box display={'flex'} gap={1}>
                                     <IconButton>
                                         <StyledBadge
@@ -213,21 +213,28 @@ const ProposalCard = ({ proposal }) => {
                                             </IconButton>
                                         )}
                                 </Box>
-                            ) : null}
-                            <Link to={`/proposal_discussion/${proposal?.id}`}>
+                            )}
+
+                            {proposal?.attributes?.content?.attributes
+                                ?.is_draft ? (
                                 <Button
                                     variant='contained'
-                                    fullWidth={
-                                        !proposal?.attributes?.content
-                                            ?.attributes?.prop_rev_active
+                                    fullWidth
+                                    onClick={() =>
+                                        startEdittinButtonClick(proposal)
                                     }
                                 >
-                                    {proposal?.attributes?.content?.attributes
-                                        ?.prop_rev_active
-                                        ? 'View Details'
-                                        : 'Start Editing'}
+                                    Start Editing
                                 </Button>
-                            </Link>
+                            ) : (
+                                <Link
+                                    to={`/proposal_discussion/${proposal?.id}`}
+                                >
+                                    <Button variant='contained'>
+                                        View Details
+                                    </Button>
+                                </Link>
+                            )}
                         </Box>
                     </Box>
                 </CardContent>
@@ -235,9 +242,7 @@ const ProposalCard = ({ proposal }) => {
         );
     };
 
-    return proposal?.attributes?.content?.attributes?.prop_rev_active ? (
-        <CardContentComponent proposal={proposal} />
-    ) : (
+    return proposal?.attributes?.content?.attributes?.is_draft ? (
         <CardStatusBadge
             badgeContent={'Draft'}
             aria-label='draft-badge'
@@ -245,6 +250,8 @@ const ProposalCard = ({ proposal }) => {
         >
             <CardContentComponent proposal={proposal} />
         </CardStatusBadge>
+    ) : (
+        <CardContentComponent proposal={proposal} />
     );
 };
 

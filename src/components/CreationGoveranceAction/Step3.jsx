@@ -11,8 +11,6 @@ import {
     Link,
     Typography,
 } from '@mui/material';
-import { useState } from 'react';
-import { Step3Modal } from '.';
 
 const Step3 = ({
     setStep,
@@ -22,15 +20,6 @@ const Step3 = ({
     handleSaveDraft,
 }) => {
     const theme = useTheme();
-    const [open, setOpen] = useState(false);
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     return (
         <Card
@@ -221,7 +210,7 @@ const Step3 = ({
                                 }}
                                 fullWidth
                                 onClick={() => {
-                                    handleSaveDraft(false, true);
+                                    handleSaveDraft(true);
                                 }}
                             >
                                 Save Draft
@@ -239,18 +228,13 @@ const Step3 = ({
                                     borderRadius: '20px',
                                 }}
                                 fullWidth
-                                onClick={handleOpen}
+                                onClick={() => handleSaveDraft(false)}
                             >
                                 Submit
                             </Button>
                         </Box>
                     </Box>
                 </Box>
-                <Step3Modal
-                    open={open}
-                    handleClose={handleClose}
-                    handleSaveDraft={handleSaveDraft}
-                />
             </CardContent>
         </Card>
     );

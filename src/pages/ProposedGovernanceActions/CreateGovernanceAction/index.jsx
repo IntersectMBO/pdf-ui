@@ -14,7 +14,7 @@ import { createProposal } from '../../../lib/api';
 const CreateGovernanceAction = () => {
     const navigate = useNavigate();
     const theme = useTheme();
-    const { user, setLoading, locale } = useAppContext();
+    const { user, setLoading } = useAppContext();
     const [step, setStep] = useState(1);
     const [proposalData, setProposalData] = useState({
         proposal_links: [],
@@ -49,7 +49,7 @@ const CreateGovernanceAction = () => {
         handleIsContinueDisabled();
     }, [handleIsContinueDisabled]); // Now handleIsContinueDisabled can be safely added to the dependency array
 
-    const handleSaveDraft = async (addPoll = false, shouldNavigate = false) => {
+    const handleCreateProposal = async (isDraft = false) => {
         setLoading(true);
         try {
             if (
@@ -58,17 +58,18 @@ const CreateGovernanceAction = () => {
                     proposalData?.proposal_content_id
                 )
             ) {
-                const { data } = await createProposal(proposalData, addPoll);
-
-                if (
-                    shouldNavigate &&
-                    data &&
-                    data?.attributes &&
-                    data?.attributes?.proposal_id
-                ) {
-                    navigate(
-                        `/proposal_discussion/${data?.attributes?.proposal_id}`
-                    );
+                const { data } = await createProposal({
+                    ...proposalData,
+                    is_draft: isDraft,
+                });
+                if (data && data?.attributes && data?.attributes?.proposal_id) {
+                    if (isDraft) {
+                        navigate(`/proposal_discussion`);
+                    } else {
+                        navigate(
+                            `/proposal_discussion/${data?.attributes?.proposal_id}`
+                        );
+                    }
                 }
 
                 return data?.attributes?.proposal_id;
@@ -114,9 +115,7 @@ const CreateGovernanceAction = () => {
                     {step === 1 && (
                         <Step1
                             setStep={setStep}
-                            isContinueDisabled={isContinueDisabled}
                             setProposalData={setProposalData}
-                            handleSaveDraft={handleSaveDraft}
                         />
                     )}
 
@@ -125,7 +124,7 @@ const CreateGovernanceAction = () => {
                             setStep={setStep}
                             proposalData={proposalData}
                             setProposalData={setProposalData}
-                            handleSaveDraft={handleSaveDraft}
+                            handleSaveDraft={handleCreateProposal}
                             governanceActionTypes={governanceActionTypes}
                             setGovernanceActionTypes={setGovernanceActionTypes}
                             isSmallScreen={isSmallScreen}
@@ -139,7 +138,7 @@ const CreateGovernanceAction = () => {
                             proposalData={proposalData}
                             governanceActionTypes={governanceActionTypes}
                             isSmallScreen={isSmallScreen}
-                            handleSaveDraft={handleSaveDraft}
+                            handleSaveDraft={handleCreateProposal}
                         />
                     )}
                 </Grid>

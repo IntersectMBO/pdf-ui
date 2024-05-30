@@ -43,12 +43,11 @@ export const getGovernanceActionTypes = async () => {
     }
 };
 
-export const createProposal = async (data, addPoll) => {
+export const createProposal = async (data) => {
     try {
         const response = await axiosInstance.post(`/api/proposals`, {
             data: {
                 ...data,
-                add_poll: addPoll,
             },
         });
 
