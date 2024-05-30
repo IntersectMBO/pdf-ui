@@ -120,10 +120,23 @@ const EditProposalDialog = ({
         }
     };
 
-    const handleSaveDraft = async (publish = false) => {
+    const handleUpdatePorposal = async (isDraft = false) => {
         setLoading(true);
+
+        let proposalConentObj = {};
+
+        if (isDraft === true) {
+            proposalConentObj.is_draft = true;
+            proposalConentObj.prop_rev_active = true;
+        } else {
+            proposalConentObj.prop_rev_active = true;
+        }
+
         try {
-            const response = await createProposalContent(flatProposal, publish);
+            const response = await createProposalContent({
+                ...flatProposal,
+                ...proposalConentObj,
+            });
             if (!response) return;
         } catch (error) {
             console.error('Failed to delete proposal:', error);
@@ -691,7 +704,9 @@ const EditProposalDialog = ({
                                                     fullWidth
                                                     disabled={isSaveDisabled}
                                                     onClick={async () => {
-                                                        await handleSaveDraft();
+                                                        await handleUpdatePorposal(
+                                                            true
+                                                        );
                                                         handleOpenSaveDraftModal();
                                                         setMounted(false);
                                                     }}
@@ -781,7 +796,7 @@ const EditProposalDialog = ({
 													}}
 													fullWidth
 													onClick={async () => {
-														await handleSaveDraft();
+														await handleUpdatePorposal();
 														handleOpenSaveDraftModal();
 													}}
 												>
@@ -930,7 +945,7 @@ const EditProposalDialog = ({
                                 variant='contained'
                                 fullWidth
                                 onClick={async () => {
-                                    await handleSaveDraft(true);
+                                    await handleUpdatePorposal(false);
                                     handleCloseSaveDraftModal();
                                     handleCloseEditDialog();
                                     handleClose();

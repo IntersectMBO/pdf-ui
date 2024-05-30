@@ -2,7 +2,6 @@ import { IconX } from '@intersect.mbo/intersectmbo.org-icons-set';
 import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppContext } from '../../context/context';
 
 const style = {
     position: 'absolute',
@@ -25,7 +24,6 @@ const ChildModal = ({
     setProposalData,
     handleClose,
 }) => {
-    const { locale } = useAppContext();
     const navigate = useNavigate();
     const [openChildModal, setOpenChildModal] = useState(false);
     const handleOpenChildModal = () => {
@@ -56,7 +54,7 @@ const ChildModal = ({
                     }}
                     disabled={isContinueDisabled}
                     onClick={() => {
-                        handleSaveDraft();
+                        handleSaveDraft(true);
                         handleOpenChildModal();
                     }}
                 >

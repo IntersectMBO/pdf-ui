@@ -338,7 +338,7 @@ const Step2 = ({
                             sx={{ borderRadius: '20px' }}
                             disabled={isContinueDisabled}
                             onClick={() => {
-                                handleSaveDraft(false, true);
+                                handleSaveDraft(true);
                             }}
                         >
                             Save Draft
