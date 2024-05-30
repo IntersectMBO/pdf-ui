@@ -14,7 +14,7 @@ function App({ ...props }) {
             }}
         >
             <AppContextProvider>
-                <BrowserRouter basename={`/${props.locale || 'en'}`}>
+                <BrowserRouter>
                     <ThemeProviderWrapper>
                         <GlobalWrapper {...props} />
                     </ThemeProviderWrapper>

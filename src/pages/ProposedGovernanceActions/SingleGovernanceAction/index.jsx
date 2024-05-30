@@ -31,7 +31,7 @@ import {
     alpha,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
     CommentCard,
     Poll,
@@ -51,8 +51,7 @@ import {
 } from '../../../lib/api';
 import { formatIsoDate } from '../../../lib/utils';
 
-const SingleGovernanceAction = () => {
-    const { id } = useParams();
+const SingleGovernanceAction = ({ id }) => {
     const navigate = useNavigate();
     const { user, setLoading } = useAppContext();
     const theme = useTheme();
@@ -537,6 +536,7 @@ const SingleGovernanceAction = () => {
                                                 onClose={
                                                     handleCloseReviewVersions
                                                 }
+                                                id={id}
                                             />
                                         </Box>
                                     )}
