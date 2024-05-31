@@ -64,6 +64,8 @@ const SingleGovernanceAction = ({ id }) => {
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [governanceActionTypes, setGovernanceActionTypes] = useState([]);
     const [reviewVersionsOpen, setReviewVersionsOpen] = useState(false);
+    const [commentsPageCount, setCommentsPageCount] = useState(0);
+    const [commentsCurrentPage, setCommentsCurrentPage] = useState(1);
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -141,14 +143,14 @@ const SingleGovernanceAction = ({ id }) => {
         }
     };
 
-    const fetchComments = async () => {
+    const fetchComments = async (page = 1) => {
         setLoading(true);
         try {
-            let query = `filters[$and][0][proposal_id]=${id}&filters[$and][1][comment_parent_id][$null]=true&sort[createdAt]=desc`;
-            const { comments } = await getComments(query);
+            const query = `filters[$and][0][proposal_id]=${id}&filters[$and][1][comment_parent_id][$null]=true&sort[createdAt]=desc&pagination[page]=${page}&pagination[pageSize]=25`;
+            const { comments, pgCount } = await getComments(query);
             if (!comments) return;
-
-            setCommentsList(comments);
+            setCommentsPageCount(pgCount);
+            setCommentsList((prev) => [...prev, ...comments]);
         } catch (error) {
             console.error(error);
         } finally {
@@ -167,7 +169,7 @@ const SingleGovernanceAction = ({ id }) => {
             if (!newComment) return;
             setNewCommentText('');
             fetchProposal(id);
-            fetchComments();
+            fetchComments(1);
         } catch (error) {
             console.error(error);
         } finally {
@@ -232,7 +234,7 @@ const SingleGovernanceAction = ({ id }) => {
             setMounted(true);
         } else {
             fetchProposal(id);
-            fetchComments();
+            fetchComments(1);
             if (user) fetchProposalVote(id);
         }
     }, [id, mounted, user]);
@@ -649,13 +651,13 @@ const SingleGovernanceAction = ({ id }) => {
                                                       proposal?.attributes?.user_id?.toString()
                                                         ? true
                                                         : userProposalVote
-                                                          ? userProposalVote
-                                                                ?.attributes
-                                                                ?.vote_result ===
-                                                            true
-                                                              ? true
-                                                              : false
-                                                          : false
+                                                        ? userProposalVote
+                                                              ?.attributes
+                                                              ?.vote_result ===
+                                                          true
+                                                            ? true
+                                                            : false
+                                                        : false
                                                     : true
                                             }
                                             onClick={() =>
@@ -725,13 +727,13 @@ const SingleGovernanceAction = ({ id }) => {
                                                       proposal?.attributes?.user_id?.toString()
                                                         ? true
                                                         : userProposalVote
-                                                          ? userProposalVote
-                                                                ?.attributes
-                                                                ?.vote_result ===
-                                                            false
-                                                              ? true
-                                                              : false
-                                                          : false
+                                                        ? userProposalVote
+                                                              ?.attributes
+                                                              ?.vote_result ===
+                                                          false
+                                                            ? true
+                                                            : false
+                                                        : false
                                                     : true
                                             }
                                             onClick={() =>
@@ -850,6 +852,11 @@ const SingleGovernanceAction = ({ id }) => {
                                     justifyContent={
                                         user ? 'flex-end' : 'space-between'
                                     }
+                                    flexDirection={{
+                                        xs: 'column',
+                                        sm: 'row',
+                                    }}
+                                    gap={2}
                                 >
                                     {!user && (
                                         <Typography variant='body2'>
@@ -886,6 +893,22 @@ const SingleGovernanceAction = ({ id }) => {
                             <CommentCard comment={comment} />
                         </Box>
                     ))}
+                    {commentsCurrentPage < commentsPageCount && (
+                        <Box
+                            marginY={2}
+                            display={'flex'}
+                            justifyContent={'flex-end'}
+                        >
+                            <Button
+                                onClick={() => {
+                                    fetchComments(commentsCurrentPage + 1);
+                                    setCommentsCurrentPage((prev) => prev + 1);
+                                }}
+                            >
+                                Load more comments
+                            </Button>
+                        </Box>
+                    )}
 
                     <Modal
                         open={openDeleteModal}
