@@ -70,15 +70,15 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                 display: 'flex',
                                 flexDirection: 'row',
                                 justifyContent: 'flex-start',
-                                gap: 1,
                                 borderBottom: `1px solid ${theme.palette.border.lightGray}`,
-                                pl: 2,
-                                pb: 1,
-                                m: 1,
+                                paddingBottom: 2,
+                                marginX: 2,
+                                marginTop: 2,
+                                gap: 2,
                             }}
                         >
                             <IconArchive height='24px' width='24px' />
-                            <Typography variant='subtitle1'>
+                            <Typography variant='h4' component='h1'>
                                 Versions
                             </Typography>
                         </Box>
@@ -141,10 +141,10 @@ const ReviewVersions = ({ open, onClose, id }) => {
                             display: 'flex',
                             flexDirection: 'column',
                             flexGrow: 1,
-                            // backgroundImage: `url('/svg/ellipse-version-1.svg'), url('/svg/ellipse-version-2.svg')`,
-                            // backgroundRepeat: 'no-repeat, no-repeat',
-                            // backgroundPosition: 'top left, bottom right',
-                            // backgroundSize: 'auto, auto',
+                            backgroundImage: `url('/svg/ellipse-version-1.svg'), url('/svg/ellipse-version-2.svg')`,
+                            backgroundRepeat: 'no-repeat, no-repeat',
+                            backgroundPosition: 'top left, bottom right',
+                            backgroundSize: 'auto, auto',
                             overflow: 'auto',
                             minHeight: 0,
                         }}
@@ -152,8 +152,8 @@ const ReviewVersions = ({ open, onClose, id }) => {
                         <Grid
                             item
                             sx={{
-                                paddingLeft: '20px',
                                 borderBottom: `1px solid ${theme.palette.border.gray}`,
+                                pl: 4,
                                 mt: 2,
                             }}
                         >
@@ -165,7 +165,7 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                 View Versions
                             </Typography>
                         </Grid>
-                        <Grid item mt={2} mb={2}>
+                        <Grid item m={2}>
                             <Button
                                 size='small'
                                 startIcon={
@@ -186,21 +186,31 @@ const ReviewVersions = ({ open, onClose, id }) => {
                             display='flex'
                             justifyContent='center'
                             alignContent='center'
+                            sx={{
+                                m: {
+                                    sm: 2,
+                                    md: 4,
+                                },
+                            }}
                         >
                             {isSmallScreen ? null : (
-                                <Grid item xs={12} md={4}>
-                                    <Card
-                                        sx={{
-                                            overflow: 'hidden',
-                                            boxShadow: 1,
-                                            borderRadius: '20px',
-                                            ml: 4,
-                                        }}
-                                    >
+                                <Grid
+                                    item
+                                    xs={12}
+                                    md={4}
+                                    sx={{
+                                        padding: 0,
+                                        marginY: 2,
+                                        marginRight: 0,
+                                        marginLeft: 2,
+                                    }}
+                                >
+                                    <Card variant='outlined'>
                                         <CardContent
                                             sx={{
-                                                p: 0,
+                                                padding: 0,
                                                 maxWidth: '200px',
+                                                width: '100%',
                                             }}
                                         >
                                             <Box
@@ -209,11 +219,11 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                                     flexDirection: 'row',
                                                     justifyContent:
                                                         'flex-start',
-                                                    gap: 1,
+                                                    alignContent: 'center',
                                                     borderBottom: `1px solid ${theme.palette.border.lightGray}`,
-                                                    pl: 2,
+                                                    gap: 2,
+                                                    m: 2,
                                                     pb: 1,
-                                                    m: 1,
                                                 }}
                                             >
                                                 <IconArchive
@@ -225,7 +235,7 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                                 </Typography>
                                             </Box>
                                             {/* Versions */}
-                                            <List>
+                                            <List sx={{ padding: 0 }}>
                                                 {versions?.map(
                                                     (version, index) => (
                                                         <ListItem
@@ -304,45 +314,76 @@ const ReviewVersions = ({ open, onClose, id }) => {
                             )}
                             {/* Selected version content */}
                             <Grid
-                                xs={8}
+                                xs={12}
                                 item
-                                zIndex={1}
-                                maxWidth='940px'
-                                width='100%'
-                                sx={{
-                                    mr: {
-                                        xs: 1,
-                                        md: 2,
-                                    },
-                                }}
+                                display='flex'
+                                justifyContent='center'
+                                alignContent='center'
                             >
-                                <Card
-                                    variant='outlined'
-                                    sx={{
-                                        boxShadow: 1,
-                                        borderRadius: '20px',
-                                        mb: 2,
-                                        ml: 2,
-                                        maxWidth: '910px',
-                                    }}
+                                <Grid
+                                    xs={11}
+                                    md={5}
+                                    item
+                                    zIndex={1}
+                                    maxWidth='910px'
+                                    width='100%'
+                                    m={2}
                                 >
-                                    <CardContent>
-                                        <Box
-                                            display='flex'
-                                            flexDirection='column'
-                                            gap={2}
-                                        >
-                                            <Typography
-                                                variant='h5'
-                                                gutterBottom
+                                    <Card variant='outlined'>
+                                        <CardContent>
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    textAlign: 'justify',
+                                                    gap: 2,
+                                                }}
                                             >
-                                                {
-                                                    selectedVersion?.attributes
-                                                        ?.content?.attributes
-                                                        ?.prop_name
-                                                }
-                                            </Typography>
-                                            {isSmallScreen ? (
+                                                <Typography
+                                                    variant='h5'
+                                                    gutterBottom
+                                                >
+                                                    {
+                                                        selectedVersion
+                                                            ?.attributes
+                                                            ?.content
+                                                            ?.attributes
+                                                            ?.prop_name
+                                                    }
+                                                </Typography>
+                                                {isSmallScreen ? (
+                                                    <Box>
+                                                        <Typography
+                                                            variant='body1'
+                                                            color={
+                                                                theme.palette
+                                                                    .text.grey
+                                                            }
+                                                        >
+                                                            Version Date
+                                                        </Typography>
+                                                        <Typography
+                                                            variant='body1'
+                                                            gutterBottom
+                                                        >
+                                                            {`${formatIsoDate(
+                                                                selectedVersion
+                                                                    ?.attributes
+                                                                    ?.content
+                                                                    ?.attributes
+                                                                    ?.createdAt
+                                                            )}${
+                                                                selectedVersion
+                                                                    ?.attributes
+                                                                    ?.content
+                                                                    ?.attributes
+                                                                    ?.prop_rev_active
+                                                                    ? ' (Live)'
+                                                                    : ''
+                                                            }`}
+                                                        </Typography>
+                                                    </Box>
+                                                ) : null}
                                                 <Box>
                                                     <Typography
                                                         variant='body1'
@@ -351,237 +392,223 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                                                 .grey
                                                         }
                                                     >
-                                                        Version Date
+                                                        Goverance Action Type
                                                     </Typography>
                                                     <Typography
                                                         variant='body1'
                                                         gutterBottom
                                                     >
-                                                        {`${formatIsoDate(
+                                                        {
                                                             selectedVersion
                                                                 ?.attributes
                                                                 ?.content
                                                                 ?.attributes
-                                                                ?.createdAt
-                                                        )}${
-                                                            selectedVersion
+                                                                ?.gov_action_type
                                                                 ?.attributes
-                                                                ?.content
-                                                                ?.attributes
-                                                                ?.prop_rev_active
-                                                                ? ' (Live)'
-                                                                : ''
-                                                        }`}
+                                                                ?.gov_action_type_name
+                                                        }
                                                     </Typography>
                                                 </Box>
-                                            ) : null}
-                                            <Box>
-                                                <Typography
-                                                    variant='body1'
-                                                    color={
-                                                        theme.palette.text.grey
-                                                    }
-                                                >
-                                                    Goverance Action Type
-                                                </Typography>
-                                                <Typography
-                                                    variant='body1'
-                                                    gutterBottom
-                                                >
-                                                    {
-                                                        selectedVersion
-                                                            ?.attributes
-                                                            ?.content
-                                                            ?.attributes
-                                                            ?.gov_action_type
-                                                            ?.attributes
-                                                            ?.gov_action_type_name
-                                                    }
-                                                </Typography>
-                                            </Box>
-                                            <Box>
-                                                <Typography
-                                                    variant='body1'
-                                                    color={
-                                                        theme.palette.text.grey
-                                                    }
-                                                >
-                                                    Abstract
-                                                </Typography>
-                                                <Typography
-                                                    variant='body1'
-                                                    gutterBottom
-                                                >
-                                                    {
-                                                        selectedVersion
-                                                            ?.attributes
-                                                            ?.content
-                                                            ?.attributes
-                                                            ?.prop_abstract
-                                                    }
-                                                </Typography>
-                                            </Box>
-                                            <Box>
-                                                <Typography
-                                                    variant='body1'
-                                                    color={
-                                                        theme.palette.text.grey
-                                                    }
-                                                >
-                                                    Motivation
-                                                </Typography>
-                                                <Typography
-                                                    variant='body1'
-                                                    gutterBottom
-                                                >
-                                                    {
-                                                        selectedVersion
-                                                            ?.attributes
-                                                            ?.content
-                                                            ?.attributes
-                                                            ?.prop_motivation
-                                                    }
-                                                </Typography>
-                                            </Box>
-                                            <Box>
-                                                <Typography
-                                                    variant='body1'
-                                                    color={
-                                                        theme.palette.text.grey
-                                                    }
-                                                >
-                                                    Rationale
-                                                </Typography>
-                                                <Typography
-                                                    variant='body1'
-                                                    gutterBottom
-                                                >
-                                                    {
-                                                        selectedVersion
-                                                            ?.attributes
-                                                            ?.content
-                                                            ?.attributes
-                                                            ?.prop_rationale
-                                                    }
-                                                </Typography>
-                                            </Box>
-                                            <Box>
-                                                <Typography
-                                                    variant='body1'
-                                                    color={
-                                                        theme.palette.text.grey
-                                                    }
-                                                >
-                                                    Supporting links
-                                                </Typography>
-                                                <Box
-                                                    display='flex'
-                                                    flexDirection={
-                                                        isSmallScreen
-                                                            ? 'column'
-                                                            : 'row'
-                                                    }
-                                                    flexWrap='wrap'
-                                                    gap={2}
-                                                >
-                                                    {selectedVersion?.attributes?.content?.attributes?.proposal_links?.map(
-                                                        (link, index) => (
-                                                            <Box
-                                                                key={index}
-                                                                display='flex'
-                                                                flexDirection='row'
-                                                                alignItems='center'
-                                                                component={Link}
-                                                                href={
-                                                                    link?.prop_link
-                                                                }
-                                                                target='_blank'
-                                                                rel='noopener noreferrer'
-                                                                sx={{
-                                                                    textDecoration:
-                                                                        'none',
-                                                                }}
-                                                            >
-                                                                <Box mr={0.5}>
-                                                                    <IconLink
-                                                                        fill={
-                                                                            theme
-                                                                                .palette
-                                                                                .primary
-                                                                                .main
-                                                                        }
-                                                                    />
-                                                                </Box>
-                                                                <Typography
-                                                                    variant='body1'
-                                                                    component='span'
-                                                                >
-                                                                    {
-                                                                        link?.prop_link_text
+                                                <Box>
+                                                    <Typography
+                                                        variant='body1'
+                                                        color={
+                                                            theme.palette.text
+                                                                .grey
+                                                        }
+                                                    >
+                                                        Abstract
+                                                    </Typography>
+                                                    <Typography
+                                                        variant='body1'
+                                                        gutterBottom
+                                                    >
+                                                        {
+                                                            selectedVersion
+                                                                ?.attributes
+                                                                ?.content
+                                                                ?.attributes
+                                                                ?.prop_abstract
+                                                        }
+                                                    </Typography>
+                                                </Box>
+                                                <Box>
+                                                    <Typography
+                                                        variant='body1'
+                                                        color={
+                                                            theme.palette.text
+                                                                .grey
+                                                        }
+                                                    >
+                                                        Motivation
+                                                    </Typography>
+                                                    <Typography
+                                                        variant='body1'
+                                                        gutterBottom
+                                                    >
+                                                        {
+                                                            selectedVersion
+                                                                ?.attributes
+                                                                ?.content
+                                                                ?.attributes
+                                                                ?.prop_motivation
+                                                        }
+                                                    </Typography>
+                                                </Box>
+                                                <Box>
+                                                    <Typography
+                                                        variant='body1'
+                                                        color={
+                                                            theme.palette.text
+                                                                .grey
+                                                        }
+                                                    >
+                                                        Rationale
+                                                    </Typography>
+                                                    <Typography
+                                                        variant='body1'
+                                                        gutterBottom
+                                                    >
+                                                        {
+                                                            selectedVersion
+                                                                ?.attributes
+                                                                ?.content
+                                                                ?.attributes
+                                                                ?.prop_rationale
+                                                        }
+                                                    </Typography>
+                                                </Box>
+                                                <Box>
+                                                    <Typography
+                                                        variant='body1'
+                                                        color={
+                                                            theme.palette.text
+                                                                .grey
+                                                        }
+                                                    >
+                                                        Supporting links
+                                                    </Typography>
+                                                    <Box
+                                                        display='flex'
+                                                        flexDirection={
+                                                            isSmallScreen
+                                                                ? 'column'
+                                                                : 'row'
+                                                        }
+                                                        flexWrap='wrap'
+                                                        gap={2}
+                                                    >
+                                                        {selectedVersion?.attributes?.content?.attributes?.proposal_links?.map(
+                                                            (link, index) => (
+                                                                <Box
+                                                                    key={index}
+                                                                    display='flex'
+                                                                    flexDirection='row'
+                                                                    alignItems='center'
+                                                                    component={
+                                                                        Link
                                                                     }
-                                                                </Typography>
-                                                            </Box>
-                                                        )
-                                                    )}
+                                                                    href={
+                                                                        link?.prop_link
+                                                                    }
+                                                                    target='_blank'
+                                                                    rel='noopener noreferrer'
+                                                                    sx={{
+                                                                        textDecoration:
+                                                                            'none',
+                                                                    }}
+                                                                >
+                                                                    <Box
+                                                                        mr={0.5}
+                                                                    >
+                                                                        <IconLink
+                                                                            fill={
+                                                                                theme
+                                                                                    .palette
+                                                                                    .primary
+                                                                                    .main
+                                                                            }
+                                                                        />
+                                                                    </Box>
+                                                                    <Typography
+                                                                        variant='body1'
+                                                                        component='span'
+                                                                    >
+                                                                        {
+                                                                            link?.prop_link_text
+                                                                        }
+                                                                    </Typography>
+                                                                </Box>
+                                                            )
+                                                        )}
+                                                    </Box>
                                                 </Box>
                                             </Box>
-                                        </Box>
 
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    flexDirection: isSmallScreen
+                                                        ? 'column'
+                                                        : 'row',
+                                                    justifyContent:
+                                                        'space-between',
+                                                    mt: 10,
+                                                }}
+                                            >
+                                                <Box>
+                                                    <Button
+                                                        variant='outlined'
+                                                        sx={{
+                                                            mb: {
+                                                                xs: 2,
+                                                                md: 0,
+                                                            },
+                                                        }}
+                                                        onClick={onClose}
+                                                    >
+                                                        Back to Proposal
+                                                    </Button>
+                                                </Box>
+                                            </Box>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+
+                                {isSmallScreen ? (
+                                    <Grid
+                                        xs={2}
+                                        item
+                                        sx={{
+                                            marginLeft: 0,
+                                            marginY: 2,
+                                            marginRight: 2,
+                                        }}
+                                    >
                                         <Box
                                             sx={{
                                                 display: 'flex',
-                                                flexDirection: isSmallScreen
-                                                    ? 'column'
-                                                    : 'row',
-                                                justifyContent: 'space-between',
-                                                mt: 10,
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                backgroundColor:
+                                                    theme.palette.iconButton
+                                                        .lightPeriwinkle,
+                                                borderRadius: '16px',
+                                                width: '40px',
+                                                height: '40px',
+                                                boxShadow:
+                                                    '0px 4px 15px 0px #DDE3F5',
                                             }}
                                         >
-                                            <Box>
-                                                <Button
-                                                    variant='outlined'
-                                                    sx={{
-                                                        borderRadius: '20px',
-                                                        mb: {
-                                                            xs: 2,
-                                                            md: 0,
-                                                        },
-                                                    }}
-                                                    onClick={onClose}
-                                                >
-                                                    Back to Proposal
-                                                </Button>
-                                            </Box>
+                                            <IconButton
+                                                onClick={handleOpenVersionsList}
+                                            >
+                                                <IconArchive />
+                                            </IconButton>
                                         </Box>
-                                    </CardContent>
-                                </Card>
+                                    </Grid>
+                                ) : null}
                             </Grid>
-
-                            {isSmallScreen ? (
-                                <Grid xs={2} item>
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            backgroundColor:
-                                                theme.palette.iconButton
-                                                    .lightPeriwinkle,
-                                            borderRadius: '16px',
-                                            width: '40px',
-                                            height: '40px',
-                                            mr: 2,
-                                            boxShadow: 2,
-                                        }}
-                                    >
-                                        <IconButton
-                                            onClick={handleOpenVersionsList}
-                                        >
-                                            <IconArchive />
-                                        </IconButton>
-                                    </Box>
-                                </Grid>
-                            ) : null}
                         </Grid>
                     </Grid>
                 )}

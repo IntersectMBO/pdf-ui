@@ -54,9 +54,9 @@ const EditProposalDialog = ({
     maxLength = 256,
 }) => {
     const navigate = useNavigate();
-    const { user, setLoading } = useAppContext();
+    const { setLoading } = useAppContext();
     const theme = useTheme();
-    const [flatProposal, setFlatProposal] = useState({});
+    const [draft, setDraft] = useState({});
     const [isSaveDisabled, setIsSaveDisabled] = useState(true);
     const [openSaveDraftModal, setOpenSaveDraftModal] = useState(false);
     const [openPublishftModal, setOpenPublishModal] = useState(false);
@@ -67,13 +67,13 @@ const EditProposalDialog = ({
 
     const handleIsSaveDisabled = () => {
         if (
-            flatProposal?.gov_action_type_id &&
-            flatProposal?.prop_name &&
-            flatProposal?.prop_abstract &&
-            flatProposal?.prop_motivation &&
-            flatProposal?.prop_rationale &&
-            flatProposal?.prop_receiving_address &&
-            flatProposal?.prop_amount
+            draft?.gov_action_type_id &&
+            draft?.prop_name &&
+            draft?.prop_abstract &&
+            draft?.prop_motivation &&
+            draft?.prop_rationale &&
+            draft?.prop_receiving_address &&
+            draft?.prop_amount
         ) {
             setIsSaveDisabled(false);
         } else {
@@ -81,8 +81,8 @@ const EditProposalDialog = ({
         }
     };
 
-    const flattenProposalData = (proposalData) => {
-        const flatProposal = {
+    const setDraftData = (proposalData) => {
+        const draft = {
             proposal_id: proposalData?.id,
             gov_action_type_id:
                 proposalData?.attributes?.content?.attributes
@@ -103,7 +103,7 @@ const EditProposalDialog = ({
                 proposalData?.attributes?.content?.attributes?.proposal_links,
         };
 
-        return flatProposal;
+        return draft;
     };
 
     const handleDeleteProposal = async () => {
@@ -134,7 +134,7 @@ const EditProposalDialog = ({
 
         try {
             const response = await createProposalContent({
-                ...flatProposal,
+                ...draft,
                 ...proposalConentObj,
             });
             if (!response) return;
@@ -162,19 +162,12 @@ const EditProposalDialog = ({
     };
 
     useEffect(() => {
-        setFlatProposal(flattenProposalData(proposal));
+        setDraft(setDraftData(proposal));
     }, [proposal]);
 
     useEffect(() => {
         handleIsSaveDisabled();
-    }, [flatProposal]);
-
-    useEffect(() => {
-        setFlatProposal((prev) => ({
-            ...prev,
-            user_id: user?.user?.id,
-        }));
-    }, [user]);
+    }, [draft]);
 
     return (
         <Box>
@@ -188,10 +181,10 @@ const EditProposalDialog = ({
                         display: 'flex',
                         flexDirection: 'column',
                         flexGrow: 1,
-                        // backgroundImage: `url('/svg/ellipse-1.svg'), url('/svg/ellipse-2.svg')`,
-                        // backgroundRepeat: 'no-repeat, no-repeat',
-                        // backgroundPosition: 'top left, bottom right',
-                        // backgroundSize: 'auto, auto',
+                        backgroundImage: `url('/svg/ellipse-1.svg'), url('/svg/ellipse-2.svg')`,
+                        backgroundRepeat: 'no-repeat, no-repeat',
+                        backgroundPosition: 'top left, bottom right',
+                        backgroundSize: 'auto, auto',
                         overflow: 'auto',
                         minHeight: 0,
                     }}
@@ -199,8 +192,8 @@ const EditProposalDialog = ({
                     <Grid
                         item
                         sx={{
-                            paddingLeft: '20px',
                             borderBottom: `1px solid ${theme.palette.border.gray}`,
+                            pl: 4,
                             mt: 2,
                         }}
                     >
@@ -208,7 +201,7 @@ const EditProposalDialog = ({
                             Edit Proposal
                         </Typography>
                     </Grid>
-                    <Grid item mt={2} mb={2}>
+                    <Grid item m={2}>
                         <Button
                             size='small'
                             startIcon={
@@ -232,31 +225,44 @@ const EditProposalDialog = ({
                         display='flex'
                         justifyContent='center'
                         alignContent='center'
+                        m={2}
                     >
-                        <Grid xs={11} md={5} item zIndex={1} maxWidth='940px'>
-                            <Card
-                                variant='outlined'
-                                sx={{
-                                    boxShadow: 1,
-                                    borderRadius: '20px',
-                                    mb: 2,
-                                    ml: 2,
-                                    mr: 2,
-                                    maxWidth: '910px',
-                                }}
-                            >
-                                <CardContent>
+                        <Grid
+                            xs={11}
+                            md={5}
+                            item
+                            zIndex={1}
+                            maxWidth='910px'
+                            width='100%'
+                        >
+                            <Card variant='outlined'>
+                                <CardContent
+                                    sx={{
+                                        ml: {
+                                            xs: 0,
+                                            sm: 5,
+                                            md: 5,
+                                            lg: 15,
+                                        },
+                                        mr: {
+                                            xs: 0,
+                                            sm: 5,
+                                            md: 5,
+                                            lg: 15,
+                                        },
+                                    }}
+                                >
                                     <Box
-                                        display='flex'
-                                        flexDirection='column'
-                                        gap={2}
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            gap: 2,
+                                        }}
                                     >
                                         <Box
                                             sx={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
+                                                align: 'center',
+                                                textAlign: 'center',
                                                 mt: 2,
                                             }}
                                         >
@@ -276,41 +282,49 @@ const EditProposalDialog = ({
                                             >
                                                 Proposal Details
                                             </Typography>
-
                                             <Typography
                                                 variant='subtitle'
+                                                color={(theme) =>
+                                                    theme.palette.text.grey
+                                                }
                                                 gutterBottom
                                             >
                                                 Subtext to describe something if
                                                 needed
                                             </Typography>
-                                            <Button
-                                                variant='outlined'
-                                                sx={{
-                                                    borderRadius: '20px',
-                                                    mt: 2,
-                                                    mb: 2,
-                                                    color: 'black',
-                                                    borderColor: (theme) =>
-                                                        theme.palette.primary
-                                                            .lightGray,
-                                                    '&:hover': {
-                                                        backgroundColor:
-                                                            'rgba(0, 0, 0, 0.08)',
-                                                        borderColor: 'black',
+
+                                            <Box>
+                                                <Button
+                                                    variant='outlined'
+                                                    sx={{
+                                                        mt: 2,
+                                                        mb: 2,
                                                         color: 'black',
-                                                    },
-                                                }}
-                                                startIcon={
-                                                    <IconTrash
-                                                        width='18'
-                                                        height='18'
-                                                    />
-                                                }
-                                                onClick={handleDeleteProposal}
-                                            >
-                                                Delete Proposal
-                                            </Button>
+                                                        borderColor: (theme) =>
+                                                            theme.palette
+                                                                .primary
+                                                                .lightGray,
+                                                        '&:hover': {
+                                                            backgroundColor:
+                                                                'rgba(0, 0, 0, 0.08)',
+                                                            borderColor:
+                                                                'black',
+                                                            color: 'black',
+                                                        },
+                                                    }}
+                                                    startIcon={
+                                                        <IconTrash
+                                                            width='18'
+                                                            height='18'
+                                                        />
+                                                    }
+                                                    onClick={
+                                                        handleDeleteProposal
+                                                    }
+                                                >
+                                                    Delete Proposal
+                                                </Button>
+                                            </Box>
                                         </Box>
 
                                         <Box
@@ -391,11 +405,10 @@ const EditProposalDialog = ({
                                             fullWidth
                                             required
                                             value={
-                                                flatProposal?.gov_action_type_id ||
-                                                ''
+                                                draft?.gov_action_type_id || ''
                                             }
                                             onChange={(e) => {
-                                                setFlatProposal((prev) => ({
+                                                setDraft((prev) => ({
                                                     ...prev,
                                                     gov_action_type_id:
                                                         e.target.value,
@@ -418,11 +431,9 @@ const EditProposalDialog = ({
                                             fullWidth
                                             label='Title'
                                             variant='outlined'
-                                            value={
-                                                flatProposal?.prop_name || ''
-                                            }
+                                            value={draft?.prop_name || ''}
                                             onChange={(e) =>
-                                                setFlatProposal((prev) => ({
+                                                setDraft((prev) => ({
                                                     ...prev,
                                                     prop_name: e.target.value,
                                                 }))
@@ -436,13 +447,10 @@ const EditProposalDialog = ({
                                             label='Abstract'
                                             placeholder='Summary...'
                                             multiline
-                                            rows={4}
-                                            value={
-                                                flatProposal?.prop_abstract ||
-                                                ''
-                                            }
+                                            rows={isSmallScreen ? 10 : 4}
+                                            value={draft?.prop_abstract || ''}
                                             onChange={(e) =>
-                                                setFlatProposal((prev) => ({
+                                                setDraft((prev) => ({
                                                     ...prev,
                                                     prop_abstract:
                                                         e.target.value,
@@ -460,8 +468,7 @@ const EditProposalDialog = ({
                                                         sx={{ float: 'right' }}
                                                     >
                                                         {`${
-                                                            flatProposal
-                                                                ?.prop_abstract
+                                                            draft?.prop_abstract
                                                                 ?.length || 0
                                                         }/${maxLength}`}
                                                     </Typography>
@@ -480,13 +487,10 @@ const EditProposalDialog = ({
                                             label='Motivation'
                                             placeholder='Problem this will solve'
                                             multiline
-                                            rows={4}
-                                            value={
-                                                flatProposal?.prop_motivation ||
-                                                ''
-                                            }
+                                            rows={isSmallScreen ? 10 : 4}
+                                            value={draft?.prop_motivation || ''}
                                             onChange={(e) =>
-                                                setFlatProposal((prev) => ({
+                                                setDraft((prev) => ({
                                                     ...prev,
                                                     prop_motivation:
                                                         e.target.value,
@@ -504,7 +508,7 @@ const EditProposalDialog = ({
                                                         sx={{ float: 'right' }}
                                                     >
                                                         {`${
-                                                            flatProposal
+                                                            draft
                                                                 ?.prop_motivation
                                                                 ?.length || 0
                                                         }/${maxLength}`}
@@ -524,13 +528,10 @@ const EditProposalDialog = ({
                                             label='Rationale'
                                             placeholder='Problem this will solve'
                                             multiline
-                                            rows={4}
-                                            value={
-                                                flatProposal?.prop_rationale ||
-                                                ''
-                                            }
+                                            rows={isSmallScreen ? 10 : 4}
+                                            value={draft?.prop_rationale || ''}
                                             onChange={(e) =>
-                                                setFlatProposal((prev) => ({
+                                                setDraft((prev) => ({
                                                     ...prev,
                                                     prop_rationale:
                                                         e.target.value,
@@ -548,7 +549,7 @@ const EditProposalDialog = ({
                                                         sx={{ float: 'right' }}
                                                     >
                                                         {`${
-                                                            flatProposal
+                                                            draft
                                                                 ?.prop_rationale
                                                                 ?.length || 0
                                                         }/${maxLength}`}
@@ -568,11 +569,11 @@ const EditProposalDialog = ({
                                             label='Receiving address'
                                             variant='outlined'
                                             value={
-                                                flatProposal?.prop_receiving_address ||
+                                                draft?.prop_receiving_address ||
                                                 ''
                                             }
                                             onChange={(e) =>
-                                                setFlatProposal((prev) => ({
+                                                setDraft((prev) => ({
                                                     ...prev,
                                                     prop_receiving_address:
                                                         e.target.value,
@@ -588,11 +589,9 @@ const EditProposalDialog = ({
                                             type='number'
                                             variant='outlined'
                                             placeholder='e.g. 2000'
-                                            value={
-                                                flatProposal?.prop_amount || ''
-                                            }
+                                            value={draft?.prop_amount || ''}
                                             onChange={(e) =>
-                                                setFlatProposal((prev) => ({
+                                                setDraft((prev) => ({
                                                     ...prev,
                                                     prop_amount: e.target.value,
                                                 }))
@@ -620,7 +619,7 @@ const EditProposalDialog = ({
                                             </Typography>
 
                                             <Typography
-                                                variant='h4'
+                                                variant='h5'
                                                 textAlign='center'
                                                 gutterBottom
                                             >
@@ -629,7 +628,7 @@ const EditProposalDialog = ({
                                             </Typography>
 
                                             <Typography
-                                                variant='subtitle'
+                                                variant='subtitle2'
                                                 textAlign='center'
                                                 color={(theme) =>
                                                     theme.palette.text.grey
@@ -642,8 +641,8 @@ const EditProposalDialog = ({
                                             </Typography>
                                         </Box>
                                         <LinkManager
-                                            proposalData={flatProposal}
-                                            setProposalData={setFlatProposal}
+                                            proposalData={draft}
+                                            setProposalData={setDraft}
                                         />
                                     </Box>
                                     <Box
@@ -668,7 +667,6 @@ const EditProposalDialog = ({
                                                     />
                                                 }
                                                 sx={{
-                                                    borderRadius: '20px',
                                                     mb: { xs: 2, md: 0 },
                                                 }}
                                                 fullWidth={isSmallScreen}
@@ -698,9 +696,6 @@ const EditProposalDialog = ({
                                             >
                                                 <Button
                                                     variant='text'
-                                                    sx={{
-                                                        borderRadius: '20px',
-                                                    }}
                                                     fullWidth
                                                     disabled={isSaveDisabled}
                                                     onClick={async () => {
@@ -716,14 +711,12 @@ const EditProposalDialog = ({
                                             </Box>
                                             <Box
                                                 sx={{
-                                                    borderRadius: '20px',
                                                     flexGrow: 1,
                                                 }}
                                             >
                                                 <Button
                                                     variant='contained'
                                                     sx={{
-                                                        borderRadius: '20px',
                                                         whiteSpace: 'nowrap',
                                                     }}
                                                     fullWidth
@@ -737,96 +730,6 @@ const EditProposalDialog = ({
                                             </Box>
                                         </Box>
                                     </Box>
-
-                                    {/* <Box
-										sx={{
-											display: 'flex',
-											flexDirection: isSmallScreen
-												? 'column'
-												: 'row',
-											justifyContent: 'space-between',
-											mt: 10,
-										}}
-									>
-										<Box>
-											<Button
-												variant="outlined"
-												startIcon={
-													<IconPencil
-														fill={
-															theme.palette
-																.primary.main
-														}
-													/>
-												}
-												sx={{
-													borderRadius: '20px',
-													mb: {
-														xs: 2,
-														md: 0,
-													},
-												}}
-												fullWidth={isSmallScreen}
-												onClick={() => {
-													handleCloseEditDialog();
-													handleClose();
-												}}
-											>
-												Back
-											</Button>
-										</Box>
-										<Box
-											sx={{
-												display: 'flex',
-												justifyContent: 'space-between',
-												gap: 2,
-											}}
-										>
-											<Box
-												sx={{
-													whiteSpace: 'wrap',
-													textTransform: 'none',
-													width: '100%',
-												}}
-											>
-												<Button
-													variant="text"
-													sx={{
-														borderRadius: '20px',
-													}}
-													fullWidth
-													onClick={async () => {
-														await handleUpdatePorposal();
-														handleOpenSaveDraftModal();
-													}}
-												>
-													Save Draft
-												</Button>
-											</Box>
-											<Box
-												sx={{
-													borderRadius: '20px',
-													width: '100%',
-													whiteSpace: 'wrap',
-													textTransform: 'none',
-												}}
-											>
-												<Button
-													variant="contained"
-													sx={{
-														borderRadius: '20px',
-														whiteSpace: 'nowrap', // Prevents text wrapping
-													}}
-													fullWidth
-													onClick={() => {
-														handleOpenPublishModal();
-													}}
-												>
-													Publish with new edits
-												</Button>
-											</Box>
-										</Box>
-									</Box> */}
                                 </CardContent>
                             </Card>
                         </Grid>
