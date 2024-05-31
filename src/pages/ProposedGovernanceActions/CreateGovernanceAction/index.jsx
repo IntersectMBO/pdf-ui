@@ -111,7 +111,14 @@ const CreateGovernanceAction = () => {
                 justifyContent='center'
                 alignContent='center'
             >
-                <Grid xs={11} md={5} item zIndex={1} maxWidth='940px'>
+                <Grid
+                    xs={11}
+                    md={5}
+                    item
+                    zIndex={1}
+                    maxWidth='910px'
+                    width='100%'
+                >
                     {step === 1 && (
                         <Step1
                             setStep={setStep}

@@ -47,24 +47,34 @@ const Step2 = ({
     }, []);
 
     return (
-        <Card
-            variant='outlined'
-            sx={{
-                boxShadow: 1,
-                borderRadius: '20px',
-                mb: 2,
-                ml: 2,
-                mr: 2,
-            }}
-        >
-            <CardContent>
-                <Box display='flex' flexDirection='column' gap={2}>
+        <Card variant='outlined'>
+            <CardContent
+                sx={{
+                    ml: {
+                        xs: 0,
+                        sm: 5,
+                        md: 5,
+                        lg: 15,
+                    },
+                    mr: {
+                        xs: 0,
+                        sm: 5,
+                        md: 5,
+                        lg: 15,
+                    },
+                }}
+            >
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                    }}
+                >
                     <Box
                         sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
+                            align: 'center',
+                            textAlign: 'center',
                             mt: 2,
                         }}
                     >
@@ -80,7 +90,11 @@ const Step2 = ({
                             Proposal Details
                         </Typography>
 
-                        <Typography variant='subtitle' gutterBottom>
+                        <Typography
+                            variant='subtitle2'
+                            color={(theme) => theme.palette.text.grey}
+                            gutterBottom
+                        >
                             Subtext to describe something if needed
                         </Typography>
                     </Box>
@@ -88,9 +102,9 @@ const Step2 = ({
                     <TextField
                         select
                         label='Governance Action Type'
-                        fullWidth
-                        required
                         value={proposalData?.gov_action_type_id || ''}
+                        required
+                        fullWidth
                         onChange={(e) => {
                             setProposalData((prev) => ({
                                 ...prev,
@@ -106,10 +120,10 @@ const Step2 = ({
                     </TextField>
 
                     <TextField
-                        fullWidth
                         label='Title'
                         variant='outlined'
                         value={proposalData?.prop_name || ''}
+                        fullWidth
                         onChange={(e) =>
                             setProposalData((prev) => ({
                                 ...prev,
@@ -125,7 +139,7 @@ const Step2 = ({
                         label='Abstract'
                         placeholder='Summary...'
                         multiline
-                        rows={4}
+                        rows={isSmallScreen ? 10 : 4}
                         value={proposalData?.prop_abstract || ''}
                         onChange={(e) =>
                             setProposalData((prev) => ({
@@ -162,7 +176,7 @@ const Step2 = ({
                         label='Motivation'
                         placeholder='Problem this will solve'
                         multiline
-                        rows={4}
+                        rows={isSmallScreen ? 10 : 4}
                         value={proposalData?.prop_motivation || ''}
                         onChange={(e) =>
                             setProposalData((prev) => ({
@@ -200,7 +214,7 @@ const Step2 = ({
                         label='Rationale'
                         placeholder='Problem this will solve'
                         multiline
-                        rows={4}
+                        rows={isSmallScreen ? 10 : 4}
                         value={proposalData?.prop_rationale || ''}
                         onChange={(e) =>
                             setProposalData((prev) => ({
@@ -233,11 +247,11 @@ const Step2 = ({
                     />
 
                     <TextField
-                        fullWidth
                         margin='normal'
                         label='Receiving address'
                         variant='outlined'
                         value={proposalData?.prop_receiving_address || ''}
+                        fullWidth
                         onChange={(e) =>
                             setProposalData((prev) => ({
                                 ...prev,
@@ -248,13 +262,13 @@ const Step2 = ({
                     />
 
                     <TextField
-                        fullWidth
                         margin='normal'
                         label='Amount'
                         type='number'
                         variant='outlined'
                         placeholder='e.g. 2000'
                         value={proposalData?.prop_amount || ''}
+                        fullWidth
                         onChange={(e) =>
                             setProposalData((prev) => ({
                                 ...prev,
@@ -266,10 +280,8 @@ const Step2 = ({
 
                     <Box
                         sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
+                            align: 'center',
+                            textAlign: 'center',
                             mt: 2,
                         }}
                     >
@@ -281,17 +293,12 @@ const Step2 = ({
                             OPTIONAL
                         </Typography>
 
-                        <Typography
-                            variant='h4'
-                            textAlign='center'
-                            gutterBottom
-                        >
+                        <Typography variant='h5' gutterBottom>
                             References and Supporting Information
                         </Typography>
 
                         <Typography
-                            variant='subtitle'
-                            textAlign='center'
+                            variant='subtitle2'
                             color={(theme) => theme.palette.text.grey}
                             gutterBottom
                         >
@@ -305,27 +312,29 @@ const Step2 = ({
                         setProposalData={setProposalData}
                     />
                 </Box>
-
                 <Box
                     sx={{
                         display: 'flex',
-                        justifyContent: isSmallScreen
-                            ? 'center'
-                            : 'space-between',
-                        mt: 2,
-                        gap: 2,
+                        flexDirection: isSmallScreen ? 'column' : 'row',
+                        justifyContent: 'space-between',
+                        mt: 10,
                     }}
                 >
                     <Box>
                         <Button
                             variant='outlined'
-                            sx={{ borderRadius: '20px' }}
+                            sx={{
+                                mb: {
+                                    xs: 2,
+                                    md: 0,
+                                },
+                            }}
+                            fullWidth={isSmallScreen}
                             onClick={() => setStep(1)}
                         >
                             Back
                         </Button>
                     </Box>
-
                     <Box
                         sx={{
                             display: 'flex',
@@ -333,25 +342,38 @@ const Step2 = ({
                             gap: 2,
                         }}
                     >
-                        <Button
-                            variant='text'
-                            sx={{ borderRadius: '20px' }}
-                            disabled={isContinueDisabled}
-                            onClick={() => {
-                                handleSaveDraft(true);
+                        <Box
+                            sx={{
+                                whiteSpace: 'nowrap',
+                                textTransform: 'none',
+                                width: '100%',
                             }}
                         >
-                            Save Draft
-                        </Button>
-
-                        <Button
-                            variant='contained'
-                            sx={{ borderRadius: '20px' }}
-                            disabled={isContinueDisabled}
-                            onClick={() => setStep(3)}
+                            <Button
+                                variant='text'
+                                fullWidth
+                                disabled={isContinueDisabled}
+                                onClick={() => {
+                                    handleSaveDraft(true);
+                                }}
+                            >
+                                Save Draft
+                            </Button>
+                        </Box>
+                        <Box
+                            sx={{
+                                width: '100%',
+                            }}
                         >
-                            Continue
-                        </Button>
+                            <Button
+                                variant='contained'
+                                fullWidth
+                                disabled={isContinueDisabled}
+                                onClick={() => setStep(3)}
+                            >
+                                Continue
+                            </Button>
+                        </Box>
                     </Box>
                 </Box>
             </CardContent>
