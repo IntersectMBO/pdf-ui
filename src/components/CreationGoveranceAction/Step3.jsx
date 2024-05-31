@@ -22,33 +22,48 @@ const Step3 = ({
     const theme = useTheme();
 
     return (
-        <Card
-            variant='outlined'
-            sx={{
-                boxShadow: 1,
-                borderRadius: '20px',
-                mb: 2,
-                ml: 2,
-                mr: 2,
-            }}
-        >
-            <CardContent>
-                <Box display='flex' flexDirection='column' gap={2}>
+        <Card variant='outlined'>
+            <CardContent
+                sx={{
+                    ml: {
+                        xs: 0,
+                        sm: 5,
+                        md: 5,
+                        lg: 15,
+                    },
+                    mr: {
+                        xs: 0,
+                        sm: 5,
+                        md: 5,
+                        lg: 15,
+                    },
+                }}
+            >
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        textAlign: 'justify',
+                        gap: 2,
+                    }}
+                >
                     <Box
                         sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
                             mt: 2,
                             mb: 4,
+                            alignContent: 'center',
+                            textAlign: 'center',
                         }}
                     >
                         <Typography variant='h4' gutterBottom>
                             Review Your Submission
                         </Typography>
 
-                        <Typography variant='subtitle' gutterBottom>
+                        <Typography
+                            variant='subtitle'
+                            color={(theme) => theme.palette.text.grey}
+                            gutterBottom
+                        >
                             Subtext to describe something if needed
                         </Typography>
                     </Box>
@@ -124,23 +139,27 @@ const Step3 = ({
                             Supporting links
                         </Typography>
                         <Box
-                            display='flex'
-                            flexDirection={isSmallScreen ? 'column' : 'row'}
-                            flexWrap='wrap'
-                            gap={2}
+                            sx={{
+                                display: 'flex',
+                                flexDirection: isSmallScreen ? 'column' : 'row',
+                                flexWrap: 'wrap',
+                                gap: 2,
+                            }}
                         >
                             {proposalData?.proposal_links?.map(
                                 (link, index) => (
                                     <Box
                                         key={index}
-                                        display='flex'
-                                        flexDirection='row'
-                                        alignItems='center'
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            textDecoration: 'none',
+                                        }}
                                         component={Link}
                                         href={link?.prop_link}
                                         target='_blank'
                                         rel='noopener noreferrer'
-                                        sx={{ textDecoration: 'none' }}
                                     >
                                         <Box mr={0.5}>
                                             <IconLink
@@ -177,7 +196,6 @@ const Step3 = ({
                                 <IconPencil fill={theme.palette.primary.main} />
                             }
                             sx={{
-                                borderRadius: '20px',
                                 mb: {
                                     xs: 2,
                                     md: 0,
@@ -205,9 +223,6 @@ const Step3 = ({
                         >
                             <Button
                                 variant='text'
-                                sx={{
-                                    borderRadius: '20px',
-                                }}
                                 fullWidth
                                 onClick={() => {
                                     handleSaveDraft(true);
@@ -218,15 +233,11 @@ const Step3 = ({
                         </Box>
                         <Box
                             sx={{
-                                borderRadius: '20px',
                                 width: '100%',
                             }}
                         >
                             <Button
                                 variant='contained'
-                                sx={{
-                                    borderRadius: '20px',
-                                }}
                                 fullWidth
                                 onClick={() => handleSaveDraft(false)}
                             >

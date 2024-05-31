@@ -48,66 +48,68 @@ const LinkManager = ({ maxLinks = 7, proposalData, setProposalData }) => {
                     key={index}
                     display='flex'
                     flexDirection='row'
-                    p={2}
                     mb={2}
                     backgroundColor={(theme) => theme.palette.primary.lightGray}
                     position='relative'
                 >
-                    <Box
-                        display='flex'
-                        flexDirection='column'
-                        flexGrow={1}
-                        gap={2}
-                    >
+                    <Box display='flex' flexDirection='column' flexGrow={1}>
                         <Box display={'flex'} justifyContent={'flex-end'}>
                             <IconButton onClick={() => handleRemoveLink(index)}>
                                 <IconX width='16px' height='16px' />
                             </IconButton>
                         </Box>
-                        <TextField
-                            label={`Link #${index + 1} URL`}
-                            variant='outlined'
-                            fullWidth
-                            value={link.prop_link || ''}
-                            onChange={(e) =>
-                                handleLinkChange(
-                                    index,
-                                    'prop_link',
-                                    e.target.value
-                                )
-                            }
-                            placeholder='https://website.com'
+                        <Box
                             sx={{
-                                background: '#fff',
-                                '& .MuiOutlinedInput-root': {
-                                    '& fieldset': {
-                                        borderColor: `${theme.palette.border.lightGray}`,
-                                    },
-                                },
+                                paddingX: 2,
                             }}
-                        />
-                        <TextField
-                            label={`Link #${index + 1} Text`}
-                            variant='outlined'
-                            fullWidth
-                            value={link.prop_link_text || ''}
-                            onChange={(e) =>
-                                handleLinkChange(
-                                    index,
-                                    'prop_link_text',
-                                    e.target.value
-                                )
-                            }
-                            placeholder='Text'
-                            sx={{
-                                background: '#fff',
-                                '& .MuiOutlinedInput-root': {
-                                    '& fieldset': {
-                                        borderColor: `${theme.palette.border.lightGray}`,
+                        >
+                            <TextField
+                                label={`Link #${index + 1} URL`}
+                                variant='outlined'
+                                fullWidth
+                                value={link.prop_link || ''}
+                                onChange={(e) =>
+                                    handleLinkChange(
+                                        index,
+                                        'prop_link',
+                                        e.target.value
+                                    )
+                                }
+                                placeholder='https://website.com'
+                                sx={{
+                                    mb: 2,
+                                    background: '#fff',
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                            borderColor: `${theme.palette.border.lightGray}`,
+                                        },
                                     },
-                                },
-                            }}
-                        />
+                                }}
+                            />
+                            <TextField
+                                label={`Link #${index + 1} Text`}
+                                variant='outlined'
+                                fullWidth
+                                value={link.prop_link_text || ''}
+                                onChange={(e) =>
+                                    handleLinkChange(
+                                        index,
+                                        'prop_link_text',
+                                        e.target.value
+                                    )
+                                }
+                                placeholder='Text'
+                                sx={{
+                                    mb: 2,
+                                    background: '#fff',
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                            borderColor: `${theme.palette.border.lightGray}`,
+                                        },
+                                    },
+                                }}
+                            />
+                        </Box>
                     </Box>
                 </Box>
             ))}

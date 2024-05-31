@@ -79,6 +79,14 @@ let theme = createTheme({
                 },
             },
         },
+        MuiFormHelperText: {
+            styleOverrides: {
+                root: {
+                    marginRight: 0,
+                    display: 'block',
+                },
+            },
+        },
     },
     typography: {
         fontFamily: [
