@@ -11,6 +11,7 @@ const CommentCard = ({ comment }) => {
     const theme = useTheme();
     const maxLength = 128;
     const sliceString = (str) => {
+        if (!str) return '';
         if (str.length > maxLength) {
             return str.slice(0, maxLength - 3) + '...';
         }
