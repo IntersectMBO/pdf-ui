@@ -141,7 +141,9 @@ const CommentCard = ({ comment }) => {
                         width: '100%',
                     }}
                 >
-                    <Typography variant='h6'>@Authourusername</Typography>
+                    <Typography variant='h6'>
+                        @{comment?.attributes?.user_govtool_username || ''}
+                    </Typography>
                     <Typography variant='overline'>
                         {formatPollDateDisplay(comment?.attributes?.createdAt)}
                     </Typography>
