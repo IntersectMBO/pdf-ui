@@ -8,10 +8,10 @@ import {
     ListItem,
 } from '@mui/material';
 import { ProposalsList } from '..';
-import { useRouter } from '@/navigation';
+import { useNavigate } from 'react-router-dom';
 
 const Step1 = ({ setStep, setProposalData }) => {
-    const router = useRouter();
+    const navigate = useNavigate();
 
     return (
         <Box display='flex' flexDirection='column'>
@@ -117,9 +117,7 @@ const Step1 = ({ setStep, setProposalData }) => {
                             <Button
                                 variant='outlined'
                                 sx={{ float: 'left' }}
-                                onClick={() =>
-                                    router.push('/proposal_discussion')
-                                }
+                                onClick={() => navigate('/proposal_discussion')}
                             >
                                 Cancel
                             </Button>
