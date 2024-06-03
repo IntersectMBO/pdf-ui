@@ -1,15 +1,15 @@
-import {
-    Modal,
-    Box,
-    Typography,
-    IconButton,
-    TextField,
-    Button,
-} from '@mui/material';
 import { IconX } from '@intersect.mbo/intersectmbo.org-icons-set';
+import {
+    Box,
+    Button,
+    IconButton,
+    Modal,
+    TextField,
+    Typography,
+} from '@mui/material';
 import { useState } from 'react';
-import { updateUser } from '../../lib/api';
 import { useAppContext } from '../../context/context';
+import { updateUser } from '../../lib/api';
 
 const style = {
     position: 'absolute',
