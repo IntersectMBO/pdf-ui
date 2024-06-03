@@ -31,9 +31,8 @@ const GlobalWrapper = ({ ...props }) => {
 
     const loginUserToApp = async (wallet) => {
         try {
-            let walletAddress = await wallet?.getChangeAddress();
             const userResponse = await loginUser({
-                identifier: walletAddress,
+                identifier: wallet.address,
             });
 
             saveDataInSession('pdfUserJwt', userResponse?.jwt);
@@ -63,14 +62,14 @@ const GlobalWrapper = ({ ...props }) => {
             clearStates();
             setMounted(true);
         } else {
-            if (GovToolAssemblyWalletAPI?.getChangeAddress) {
+            if (GovToolAssemblyWalletAPI?.address) {
                 setWalletAPI(GovToolAssemblyWalletAPI);
                 loginUserToApp(GovToolAssemblyWalletAPI);
             } else {
                 clearStates();
             }
         }
-    }, [GovToolAssemblyWalletAPI?.getChangeAddress, mounted]);
+    }, [GovToolAssemblyWalletAPI?.address, mounted]);
 
     useEffect(() => {
         if (GovToolAssemblyLocale) {
