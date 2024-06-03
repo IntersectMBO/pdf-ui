@@ -1,6 +1,6 @@
 'use client';
 
-import { BrowserRouter } from 'react-router-dom';
+import './index.scss';
 import { GlobalWrapper, ThemeProviderWrapper } from './components';
 import { AppContextProvider } from './context/context';
 
@@ -14,11 +14,9 @@ function App({ ...props }) {
             }}
         >
             <AppContextProvider>
-                <BrowserRouter>
-                    <ThemeProviderWrapper>
-                        <GlobalWrapper {...props} />
-                    </ThemeProviderWrapper>
-                </BrowserRouter>
+                <ThemeProviderWrapper>
+                    <GlobalWrapper {...props} />
+                </ThemeProviderWrapper>
             </AppContextProvider>
         </div>
     );
