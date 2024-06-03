@@ -70,23 +70,36 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                         </IconButton>
                     }
                     title={
-                        <Typography
-                            variant='h6'
-                            component='h3'
-                            sx={{
-                                display: '-webkit-box',
-                                WebkitBoxOrient: 'vertical',
-                                WebkitLineClamp: 2,
-                                lineClamp: 2,
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                            }}
-                        >
-                            {
-                                proposal?.attributes?.content?.attributes
-                                    ?.prop_name
-                            }
-                        </Typography>
+                        <>
+                            <Typography
+                                variant='h6'
+                                component='h3'
+                                sx={{
+                                    display: '-webkit-box',
+                                    WebkitBoxOrient: 'vertical',
+                                    WebkitLineClamp: 2,
+                                    lineClamp: 2,
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                }}
+                            >
+                                {
+                                    proposal?.attributes?.content?.attributes
+                                        ?.prop_name
+                                }
+                            </Typography>
+                            <Typography
+                                variant='body2'
+                                component={'h5'}
+                                sx={{
+                                    color: (theme) =>
+                                        theme?.palette?.text?.darkPurple,
+                                }}
+                                mt={1}
+                            >
+                                @{proposal?.attributes?.user_govtool_username}
+                            </Typography>
+                        </>
                     }
                 />
                 <CardContent
