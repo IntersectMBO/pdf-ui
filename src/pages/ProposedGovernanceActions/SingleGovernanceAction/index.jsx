@@ -66,12 +66,14 @@ const SingleGovernanceAction = ({ id }) => {
     const [reviewVersionsOpen, setReviewVersionsOpen] = useState(false);
     const [commentsPageCount, setCommentsPageCount] = useState(0);
     const [commentsCurrentPage, setCommentsCurrentPage] = useState(1);
+    const [commentsSortType, setCommentsSortType] = useState('desc');
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
+
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -146,11 +148,16 @@ const SingleGovernanceAction = ({ id }) => {
     const fetchComments = async (page = 1) => {
         setLoading(true);
         try {
-            const query = `filters[$and][0][proposal_id]=${id}&filters[$and][1][comment_parent_id][$null]=true&sort[createdAt]=desc&pagination[page]=${page}&pagination[pageSize]=25`;
+            const query = `filters[$and][0][proposal_id]=${id}&filters[$and][1][comment_parent_id][$null]=true&sort[createdAt]=${commentsSortType}&pagination[page]=${page}&pagination[pageSize]=25`;
             const { comments, pgCount } = await getComments(query);
             if (!comments) return;
             setCommentsPageCount(pgCount);
-            setCommentsList((prev) => [...prev, ...comments]);
+
+            if (page !== commentsCurrentPage) {
+                setCommentsList((prev) => [...prev, ...comments]);
+            } else {
+                setCommentsList(comments);
+            }
         } catch (error) {
             console.error(error);
         } finally {
@@ -235,9 +242,21 @@ const SingleGovernanceAction = ({ id }) => {
         } else {
             fetchProposal(id);
             fetchComments(1);
+        }
+    }, [id, mounted]);
+
+    useEffect(() => {
+        if (mounted && user) {
             if (user) fetchProposalVote(id);
         }
-    }, [id, mounted, user]);
+    }, [user, mounted, id]);
+
+    useEffect(() => {
+        if (mounted) {
+            fetchComments(1);
+        }
+    }, [commentsSortType]);
+
     return (
         <>
             {openEditDialog ? (
@@ -826,6 +845,11 @@ const SingleGovernanceAction = ({ id }) => {
                                 width: 40,
                                 height: 40,
                             }}
+                            onClick={() =>
+                                setCommentsSortType((prev) =>
+                                    prev === 'desc' ? 'asc' : 'desc'
+                                )
+                            }
                         >
                             <IconSort
                                 width='24'
