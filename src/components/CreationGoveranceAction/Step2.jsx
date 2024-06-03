@@ -1,16 +1,16 @@
 import {
     Box,
+    Button,
     Card,
     CardContent,
-    Typography,
-    Button,
-    TextField,
     MenuItem,
+    TextField,
+    Typography,
 } from '@mui/material';
-import { getGovernanceActionTypes } from '../../lib/api';
 import { useEffect } from 'react';
 import { LinkManager } from '.';
 import { useAppContext } from '../../context/context';
+import { getGovernanceActionTypes } from '../../lib/api';
 const Step2 = ({
     setStep,
     proposalData,

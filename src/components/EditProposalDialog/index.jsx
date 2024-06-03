@@ -1,33 +1,33 @@
 'use client';
 
+import { useTheme } from '@emotion/react';
 import {
-    Dialog,
+    IconCheveronLeft,
+    IconInformationCircle,
+    IconPencil,
+    IconTrash,
+    IconX,
+} from '@intersect.mbo/intersectmbo.org-icons-set';
+import {
     Box,
     Button,
     Card,
     CardContent,
-    TextField,
-    Typography,
+    Dialog,
     Grid,
+    IconButton,
     MenuItem,
     Modal,
-    IconButton,
+    TextField,
+    Typography,
+    useMediaQuery,
 } from '@mui/material';
-import { useMediaQuery } from '@mui/material';
-import { useTheme } from '@emotion/react';
-import {
-    IconCheveronLeft,
-    IconTrash,
-    IconInformationCircle,
-    IconX,
-    IconPencil,
-} from '@intersect.mbo/intersectmbo.org-icons-set';
-import { formatIsoDate } from '../../lib/utils';
 import { useEffect, useState } from 'react';
-import { LinkManager } from '../CreationGoveranceAction';
-import { deleteProposal, createProposalContent } from '../../lib/api';
-import { useAppContext } from '../../context/context';
 import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../context/context';
+import { createProposalContent, deleteProposal } from '../../lib/api';
+import { formatIsoDate } from '../../lib/utils';
+import { LinkManager } from '../CreationGoveranceAction';
 
 const style = {
     position: 'absolute',

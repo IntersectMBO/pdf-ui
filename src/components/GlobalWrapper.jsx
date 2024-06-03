@@ -2,6 +2,7 @@
 
 import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { UsernameModal } from '../components';
 import { useAppContext } from '../context/context';
 import { loginUser } from '../lib/api';
 import { clearSession, saveDataInSession } from '../lib/utils';
@@ -10,7 +11,6 @@ import {
     ProposedGovernanceActions,
     SingleGovernanceAction,
 } from '../pages';
-import { UsernameModal } from '../components';
 
 const GlobalWrapper = ({ ...props }) => {
     const pathname = props?.pathname;
