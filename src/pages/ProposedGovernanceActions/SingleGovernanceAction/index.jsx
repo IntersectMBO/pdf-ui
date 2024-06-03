@@ -34,8 +34,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     CommentCard,
-    Poll,
     EditProposalDialog,
+    Poll,
     ReviewVersions,
 } from '../../../components';
 import { useAppContext } from '../../../context/context';
@@ -361,6 +361,21 @@ const SingleGovernanceAction = ({ id }) => {
                                                     ?.attributes?.prop_name
                                             }
                                         </Typography>
+                                        <Typography
+                                            variant='body2'
+                                            component={'h5'}
+                                            sx={{
+                                                color: (theme) =>
+                                                    theme?.palette?.text?.black,
+                                                mt: 1,
+                                            }}
+                                        >
+                                            @
+                                            {
+                                                proposal?.attributes
+                                                    ?.user_govtool_username
+                                            }
+                                        </Typography>
                                     </Grid>
 
                                     {user &&
@@ -651,13 +666,13 @@ const SingleGovernanceAction = ({ id }) => {
                                                       proposal?.attributes?.user_id?.toString()
                                                         ? true
                                                         : userProposalVote
-                                                        ? userProposalVote
-                                                              ?.attributes
-                                                              ?.vote_result ===
-                                                          true
-                                                            ? true
-                                                            : false
-                                                        : false
+                                                          ? userProposalVote
+                                                                ?.attributes
+                                                                ?.vote_result ===
+                                                            true
+                                                              ? true
+                                                              : false
+                                                          : false
                                                     : true
                                             }
                                             onClick={() =>
@@ -727,13 +742,13 @@ const SingleGovernanceAction = ({ id }) => {
                                                       proposal?.attributes?.user_id?.toString()
                                                         ? true
                                                         : userProposalVote
-                                                        ? userProposalVote
-                                                              ?.attributes
-                                                              ?.vote_result ===
-                                                          false
-                                                            ? true
-                                                            : false
-                                                        : false
+                                                          ? userProposalVote
+                                                                ?.attributes
+                                                                ?.vote_result ===
+                                                            false
+                                                              ? true
+                                                              : false
+                                                          : false
                                                     : true
                                             }
                                             onClick={() =>
@@ -824,6 +839,9 @@ const SingleGovernanceAction = ({ id }) => {
                         <Poll
                             proposalID={id}
                             proposalUserId={proposal?.attributes?.user_id}
+                            proposalAuthorUsername={
+                                proposal?.attributes?.user_govtool_username
+                            }
                         />
                     </Box>
 

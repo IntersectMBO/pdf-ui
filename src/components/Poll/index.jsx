@@ -23,7 +23,7 @@ import {
 } from '../../lib/api';
 import { formatPollDateDisplay } from '../../lib/utils';
 
-const Poll = ({ proposalID, proposalUserId }) => {
+const Poll = ({ proposalID, proposalUserId, proposalAuthorUsername }) => {
     const { user, setLoading } = useAppContext();
     const [poll, setPoll] = useState(null);
     const [userPollVote, setUserPollVote] = useState(null);
@@ -183,7 +183,7 @@ const Poll = ({ proposalID, proposalUserId }) => {
                             sx={{ display: 'flex', flexDirection: 'column' }}
                         >
                             <Typography variant='body2'>
-                                @Authorusername
+                                @{proposalAuthorUsername}
                             </Typography>
                             <Typography
                                 variant='caption'
@@ -220,7 +220,9 @@ const Poll = ({ proposalID, proposalUserId }) => {
                     <CardContent
                         sx={{ display: 'flex', flexDirection: 'column' }}
                     >
-                        <Typography variant='body2'>@Authorusername</Typography>
+                        <Typography variant='body2'>
+                            @{proposalAuthorUsername}
+                        </Typography>
                         <Typography
                             variant='caption'
                             sx={{
