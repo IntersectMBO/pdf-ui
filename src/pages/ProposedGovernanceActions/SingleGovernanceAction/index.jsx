@@ -1,54 +1,58 @@
 import { useTheme } from '@emotion/react';
-import {
-    IconChatAlt,
-    IconCheveronLeft,
-    IconDotsVertical,
-    IconInformationCircle,
-    IconLink,
-    IconPencilAlt,
-    IconReply,
-    IconSort,
-    IconThumbDown,
-    IconThumbUp,
-    IconTrash,
-    IconX,
-} from '@intersect.mbo/intersectmbo.org-icons-set';
-import {
-    Badge,
-    Box,
-    Button,
-    Card,
-    CardContent,
-    CardHeader,
-    Grid,
-    IconButton,
-    Menu,
-    MenuItem,
-    Modal,
-    Stack,
-    TextField,
-    Typography,
-    alpha,
-} from '@mui/material';
+import
+    {
+        IconChatAlt,
+        IconCheveronLeft,
+        IconDotsVertical,
+        IconInformationCircle,
+        IconLink,
+        IconPencilAlt,
+        IconReply,
+        IconSort,
+        IconThumbDown,
+        IconThumbUp,
+        IconTrash,
+        IconX,
+    } from '@intersect.mbo/intersectmbo.org-icons-set';
+import
+    {
+        Badge,
+        Box,
+        Button,
+        Card,
+        CardContent,
+        CardHeader,
+        Grid,
+        IconButton,
+        Menu,
+        MenuItem,
+        Modal,
+        Stack,
+        TextField,
+        Typography,
+        alpha,
+    } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-    CommentCard,
-    EditProposalDialog,
-    Poll,
-    ReviewVersions,
-} from '../../../components';
+import
+    {
+        CommentCard,
+        EditProposalDialog,
+        Poll,
+        ReviewVersions,
+    } from '../../../components';
 import { useAppContext } from '../../../context/context';
-import {
-    createComment,
-    createProposalLikeOrDislike,
-    deleteProposal,
-    getComments,
-    getGovernanceActionTypes,
-    getSingleProposal,
-    getUserProposalVote,
-    updateProposalLikesOrDislikes,
-} from '../../../lib/api';
+import
+    {
+        createComment,
+        createProposalLikeOrDislike,
+        deleteProposal,
+        getComments,
+        getGovernanceActionTypes,
+        getSingleProposal,
+        getUserProposalVote,
+        updateProposalLikesOrDislikes,
+    } from '../../../lib/api';
 import { formatIsoDate } from '../../../lib/utils';
 
 const SingleGovernanceAction = ({ id }) => {
@@ -153,9 +157,12 @@ const SingleGovernanceAction = ({ id }) => {
             if (!comments) return;
             setCommentsPageCount(pgCount);
 
-            if (page !== commentsCurrentPage) {
+            if (page > commentsCurrentPage) {
                 setCommentsList((prev) => [...prev, ...comments]);
             } else {
+                if (page === 1){
+                    setCommentsCurrentPage(1)
+                }
                 setCommentsList(comments);
             }
         } catch (error) {
