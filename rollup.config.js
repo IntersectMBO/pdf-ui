@@ -37,7 +37,7 @@ module.exports = [
                 include: 'node_modules/**',
                 exclude: ['node_modules/@babel/runtime/**'],
             }),
-            postcss({ extract: true, use: 'sass' }),
+            postcss({ extract: true, inject: true, use: 'sass' }),
             json(),
             terser(),
         ],

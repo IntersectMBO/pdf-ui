@@ -10,8 +10,16 @@
         "./cjs": {
             "import": "./dist/app.cjs.js",
             "require": "./dist/app.cjs.js"
+        },
+        "./style": {
+            "import": "./dist/app.cjs.css",
+            "require": "./dist/app.cjs.css"
         }
     },
+    "files": [
+        "dist",
+        "src"
+    ],
     "scripts": {
         "build:rollup": "rollup -c",
         "prepublishOnly": "npm run build:rollup"
