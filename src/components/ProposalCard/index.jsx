@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import {
     IconChatAlt,
     IconInformationCircle,
@@ -23,10 +24,23 @@ import { useTheme } from '@emotion/react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../../context/context';
 import { formatIsoDate } from '../../lib/utils';
+import EditProposalDialog from '../EditProposalDialog';
+import { useNavigate } from 'react-router-dom';
 
 const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
     const { user } = useAppContext();
+    const navigate = useNavigate();
     const theme = useTheme();
+
+    const [openEditDialog, setOpenEditDialog] = useState(false);
+
+    const handleEditProposal = () => {
+        setOpenEditDialog(true);
+    };
+
+    const handleCloseEditDialog = () => {
+        setOpenEditDialog(false);
+    };
 
     const CardStatusBadge = styled(Badge)(({ theme }) => ({
         width: '100%',
@@ -207,7 +221,7 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                             {proposal?.attributes?.content?.attributes
                                 ?.is_draft ? null : (
                                 <Box display={'flex'} gap={1}>
-                                    <IconButton>
+                                    <IconButton disabled={true}>
                                         <StyledBadge
                                             badgeContent={
                                                 proposal?.attributes
@@ -221,7 +235,10 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                                     {user &&
                                         user?.user?.id?.toString() ===
                                             proposal?.attributes?.user_id?.toString() && (
-                                            <IconButton aria-label='edit'>
+                                            <IconButton
+                                                aria-label='edit'
+                                                onClick={handleEditProposal}
+                                            >
                                                 <IconPencilAlt />
                                             </IconButton>
                                         )}
@@ -264,7 +281,21 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
             <CardContentComponent proposal={proposal} />
         </CardStatusBadge>
     ) : (
-        <CardContentComponent proposal={proposal} />
+        <Box>
+            <CardContentComponent proposal={proposal} />
+
+            {openEditDialog && (
+                <EditProposalDialog
+                    proposal={proposal}
+                    openEditDialog={openEditDialog}
+                    handleCloseEditDialog={handleCloseEditDialog}
+                    setMounted={() => {}}
+                    onUpdate={() =>
+                        navigate(`/proposal_discussion/${proposal?.id}`)
+                    }
+                />
+            )}
+        </Box>
     );
 };
 
