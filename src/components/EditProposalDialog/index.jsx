@@ -25,7 +25,11 @@ import {
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/context';
-import { createProposalContent, deleteProposal } from '../../lib/api';
+import {
+    createProposalContent,
+    deleteProposal,
+    getGovernanceActionTypes,
+} from '../../lib/api';
 import { formatIsoDate } from '../../lib/utils';
 import { LinkManager } from '../CreationGoveranceAction';
 
@@ -48,10 +52,9 @@ const EditProposalDialog = ({
     proposal,
     openEditDialog,
     handleCloseEditDialog,
-    handleClose,
-    governanceActionTypes,
     setMounted,
     maxLength = 256,
+    onUpdate = false,
 }) => {
     const navigate = useNavigate();
     const { setLoading } = useAppContext();
@@ -60,6 +63,7 @@ const EditProposalDialog = ({
     const [isSaveDisabled, setIsSaveDisabled] = useState(true);
     const [openSaveDraftModal, setOpenSaveDraftModal] = useState(false);
     const [openPublishftModal, setOpenPublishModal] = useState(false);
+    const [governanceActionTypes, setGovernanceActionTypes] = useState([]);
 
     const isSmallScreen = useMediaQuery((theme) =>
         theme.breakpoints.down('sm')
@@ -138,6 +142,10 @@ const EditProposalDialog = ({
                 ...proposalConentObj,
             });
             if (!response) return;
+
+            if (onUpdate) {
+                onUpdate();
+            }
         } catch (error) {
             console.error('Failed to delete proposal:', error);
         } finally {
@@ -160,6 +168,28 @@ const EditProposalDialog = ({
     const handleClosePublishModal = () => {
         setOpenPublishModal(false);
     };
+
+    const fetchGovernanceActionTypes = async () => {
+        setLoading(true);
+        try {
+            const governanceActionTypeList = await getGovernanceActionTypes();
+
+            const mappedData = governanceActionTypeList?.data?.map((item) => ({
+                value: item?.id,
+                label: item?.attributes?.gov_action_type_name,
+            }));
+
+            setGovernanceActionTypes(mappedData);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchGovernanceActionTypes();
+    }, []);
 
     useEffect(() => {
         setDraft(setDraftData(proposal));
@@ -213,7 +243,6 @@ const EditProposalDialog = ({
                             }
                             onClick={() => {
                                 handleCloseEditDialog();
-                                handleClose();
                             }}
                         >
                             Back
@@ -672,7 +701,6 @@ const EditProposalDialog = ({
                                                 fullWidth={isSmallScreen}
                                                 onClick={() => {
                                                     handleCloseEditDialog();
-                                                    handleClose();
                                                 }}
                                             >
                                                 Back
@@ -767,7 +795,7 @@ const EditProposalDialog = ({
                                     onClick={() => {
                                         handleCloseSaveDraftModal();
                                         handleCloseEditDialog();
-                                        handleClose();
+
                                         setMounted(false);
                                     }}
                                 >
@@ -789,7 +817,6 @@ const EditProposalDialog = ({
                                 onClick={() => {
                                     handleCloseSaveDraftModal();
                                     handleCloseEditDialog();
-                                    handleClose();
                                 }}
                             >
                                 Close
@@ -851,7 +878,6 @@ const EditProposalDialog = ({
                                     await handleUpdatePorposal(false);
                                     handleCloseSaveDraftModal();
                                     handleCloseEditDialog();
-                                    handleClose();
                                     setMounted(false);
                                 }}
                             >

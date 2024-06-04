@@ -1,58 +1,53 @@
 import { useTheme } from '@emotion/react';
-import
-    {
-        IconChatAlt,
-        IconCheveronLeft,
-        IconDotsVertical,
-        IconInformationCircle,
-        IconLink,
-        IconPencilAlt,
-        IconReply,
-        IconSort,
-        IconThumbDown,
-        IconThumbUp,
-        IconTrash,
-        IconX,
-    } from '@intersect.mbo/intersectmbo.org-icons-set';
-import
-    {
-        Badge,
-        Box,
-        Button,
-        Card,
-        CardContent,
-        CardHeader,
-        Grid,
-        IconButton,
-        Menu,
-        MenuItem,
-        Modal,
-        Stack,
-        TextField,
-        Typography,
-        alpha,
-    } from '@mui/material';
+import {
+    IconChatAlt,
+    IconCheveronLeft,
+    IconDotsVertical,
+    IconInformationCircle,
+    IconLink,
+    IconPencilAlt,
+    IconReply,
+    IconSort,
+    IconThumbDown,
+    IconThumbUp,
+    IconTrash,
+    IconX,
+} from '@intersect.mbo/intersectmbo.org-icons-set';
+import {
+    Badge,
+    Box,
+    Button,
+    Card,
+    CardContent,
+    CardHeader,
+    Grid,
+    IconButton,
+    Menu,
+    MenuItem,
+    Modal,
+    Stack,
+    TextField,
+    Typography,
+    alpha,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import
-    {
-        CommentCard,
-        EditProposalDialog,
-        Poll,
-        ReviewVersions,
-    } from '../../../components';
+import {
+    CommentCard,
+    EditProposalDialog,
+    Poll,
+    ReviewVersions,
+} from '../../../components';
 import { useAppContext } from '../../../context/context';
-import
-    {
-        createComment,
-        createProposalLikeOrDislike,
-        deleteProposal,
-        getComments,
-        getGovernanceActionTypes,
-        getSingleProposal,
-        getUserProposalVote,
-        updateProposalLikesOrDislikes,
-    } from '../../../lib/api';
+import {
+    createComment,
+    createProposalLikeOrDislike,
+    deleteProposal,
+    getComments,
+    getSingleProposal,
+    getUserProposalVote,
+    updateProposalLikesOrDislikes,
+} from '../../../lib/api';
 import { formatIsoDate } from '../../../lib/utils';
 
 const SingleGovernanceAction = ({ id }) => {
@@ -66,7 +61,6 @@ const SingleGovernanceAction = ({ id }) => {
     const [userProposalVote, setUserProposalVote] = useState(null);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [openEditDialog, setOpenEditDialog] = useState(false);
-    const [governanceActionTypes, setGovernanceActionTypes] = useState([]);
     const [reviewVersionsOpen, setReviewVersionsOpen] = useState(false);
     const [commentsPageCount, setCommentsPageCount] = useState(0);
     const [commentsCurrentPage, setCommentsCurrentPage] = useState(1);
@@ -82,11 +76,13 @@ const SingleGovernanceAction = ({ id }) => {
         setAnchorEl(null);
     };
 
-    const handleOpenEditDialog = () => {
+    const handleEditProposal = () => {
         setOpenEditDialog(true);
     };
+
     const handleCloseEditDialog = () => {
         setOpenEditDialog(false);
+        setAnchorEl(null);
     };
 
     const handleOpenDeleteModal = () => {
@@ -113,10 +109,6 @@ const SingleGovernanceAction = ({ id }) => {
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleEditProposal = () => {
-        handleOpenEditDialog();
     };
 
     const fetchProposal = async (id) => {
@@ -160,8 +152,8 @@ const SingleGovernanceAction = ({ id }) => {
             if (page > commentsCurrentPage) {
                 setCommentsList((prev) => [...prev, ...comments]);
             } else {
-                if (page === 1){
-                    setCommentsCurrentPage(1)
+                if (page === 1) {
+                    setCommentsCurrentPage(1);
                 }
                 setCommentsList(comments);
             }
@@ -221,28 +213,6 @@ const SingleGovernanceAction = ({ id }) => {
         }
     };
 
-    const fetchGovernanceActionTypes = async () => {
-        setLoading(true);
-        try {
-            const governanceActionTypeList = await getGovernanceActionTypes();
-
-            const mappedData = governanceActionTypeList?.data?.map((item) => ({
-                value: item?.id,
-                label: item?.attributes?.gov_action_type_name,
-            }));
-
-            setGovernanceActionTypes(mappedData);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchGovernanceActionTypes();
-    }, []);
-
     useEffect(() => {
         if (!mounted) {
             setMounted(true);
@@ -271,9 +241,6 @@ const SingleGovernanceAction = ({ id }) => {
                     proposal={proposal}
                     openEditDialog={openEditDialog}
                     handleCloseEditDialog={handleCloseEditDialog}
-                    handleClose={handleClose}
-                    governanceActionTypes={governanceActionTypes}
-                    setProposal={setProposal}
                     setMounted={setMounted}
                 />
             ) : (
@@ -692,13 +659,13 @@ const SingleGovernanceAction = ({ id }) => {
                                                       proposal?.attributes?.user_id?.toString()
                                                         ? true
                                                         : userProposalVote
-                                                          ? userProposalVote
-                                                                ?.attributes
-                                                                ?.vote_result ===
-                                                            true
-                                                              ? true
-                                                              : false
-                                                          : false
+                                                        ? userProposalVote
+                                                              ?.attributes
+                                                              ?.vote_result ===
+                                                          true
+                                                            ? true
+                                                            : false
+                                                        : false
                                                     : true
                                             }
                                             onClick={() =>
@@ -768,13 +735,13 @@ const SingleGovernanceAction = ({ id }) => {
                                                       proposal?.attributes?.user_id?.toString()
                                                         ? true
                                                         : userProposalVote
-                                                          ? userProposalVote
-                                                                ?.attributes
-                                                                ?.vote_result ===
-                                                            false
-                                                              ? true
-                                                              : false
-                                                          : false
+                                                        ? userProposalVote
+                                                              ?.attributes
+                                                              ?.vote_result ===
+                                                          false
+                                                            ? true
+                                                            : false
+                                                        : false
                                                     : true
                                             }
                                             onClick={() =>
