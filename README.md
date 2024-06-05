@@ -1,70 +1,103 @@
-# Getting Started with Create React App
+# @intersect.mbo/pdf-ui
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The `@intersect.mbo/pdf-ui` is a React.js package that includes all the necessary logic and UI components required for the operation of a proposal discussion forum.
 
-## Available Scripts
+## Table of content:
 
-In the project directory, you can run:
+-   [Installation](#installation)
+-   [Usage](#usage)
+-   [Project Structure](#project-structure)
+-   [Prerequisites](#prerequisites)
+-   [Running locally](#running-locally)
 
-### `npm start`
+## Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+To install this pacakge, use npm or yarn:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### `npm install @intersect.mbo/pdf-ui`
 
-### `npm test`
+or
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `yarn add @intersect.mbo/pdf-ui`
 
-### `npm run build`
+## Usage
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+After installation, you can import the component and use it in your project. This is an example of implementing a package in a [NextJs](https://nextjs.org/) application:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```jsx
+'use client';
+import dynamic from 'next/dynamic';
+import { useWalletContext } from '@/context/walletProvider';
+import { localePrefix, defaultLocale } from '@/constants';
+import { usePathname } from 'next/navigation';
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+const ProposalDiscussion = dynamic(() => import('@intersect.mbo/pdf-ui'), {
+    ssr: false,
+});
 
-### `npm run eject`
+export default function Page({ params: { locale } }) {
+    const pathname = usePathname();
+    const {
+        disableWallet,
+        enableError,
+        enableWallet,
+        isEnableLoading,
+        walletAPI,
+        address,
+        network,
+    } = useWalletContext();
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    return (
+        <ProposalDiscussion
+            locale={locale}
+            localePrefix={localePrefix}
+            defaultLocale={defaultLocale}
+            pathname={pathname}
+            walletAPI={{
+                disableWallet,
+                enableError,
+                enableWallet,
+                isEnableLoading,
+                address,
+                network,
+                ...walletAPI,
+            }}
+        />
+    );
+}
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Project Structure
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```pdf-ui
+├── node_modules
+├── src
+│   ├── components
+│   ├── context
+│   ├── lib
+│   ├── pages
+│   ├── styles
+│   └── App.jsx
+│   └── index.js
+└── rollup.config.js
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+-   **components/**: The `@intersect.mbo/pdf-ui` components.
+-   **context/**: Context for global application state.
+-   **lib/**: Libraries and helper functions.
+-   **pages/**: Application pages.
+-   **styles/**: SCSS files for styling the application.
+-   **index.js**: Main application file.
+-   **rollup.config.js**: Configuration for the Rollup bundler.
 
-## Learn More
+## Prerequisites
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Before starting, please ensure you have the following:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+-   Node.js and npm - Latest versions. You can download them from [here](https://nodejs.org/en/download/).
 
-### Code Splitting
+## Running locally
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+To launch the package, it is necessary to have an application (for example, a Next.js app) into which this package is imported. This wrapper application must provide wallet connectivity to supply the wallet API to the package.
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+In the wrapper application, you need to add the `NEXT_PUBLIC_PROPOSAL_DISCUSSION_API_URL` environment variable to the .env file, with the URL of the proposal discussion backend.
