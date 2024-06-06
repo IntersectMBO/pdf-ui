@@ -5,6 +5,7 @@ import {
     IconFilter,
     IconSearch,
     IconSort,
+    IconPlusCircle
 } from '@intersect.mbo/intersectmbo.org-icons-set';
 import {
     Box,
@@ -17,13 +18,18 @@ import {
     MenuItem,
     TextField,
     Typography,
+    Button
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { ProposalsList } from '../../components';
 import { getGovernanceActionTypes } from '../../lib/api';
+import { useAppContext } from '../../context/context';
+import { useNavigate } from 'react-router-dom';
 
 const ProposedGovernanceActions = () => {
     const theme = useTheme();
+    const { user } = useAppContext();
+    const navigate = useNavigate();
     const [proposalSearchText, setProposalSearchText] = useState('');
     const [sortType, setSortType] = useState('desc');
     const [governanceActionTypeList, setGovernanceActionTypeList] = useState(
@@ -94,6 +100,22 @@ const ProposedGovernanceActions = () => {
                         justifyContent={'space-between'}
                         spacing={1}
                     >
+                        <Grid item xs={12} paddingBottom={2}>
+                            {user && (
+                                <Button
+                                    variant="contained"
+                                    onClick={() =>
+                                        navigate(
+                                            '/proposal_discussion/create-governance-action'
+                                        )
+                                    }
+                                    startIcon={<IconPlusCircle fill="white" />}
+                                >
+                                    Propose a Governance Action
+                                </Button>
+                            )}
+				
+                        </Grid>
                         <Grid item md={6} sx={{ flexGrow: { xs: 1 } }}>
                             <TextField
                                 fullWidth
