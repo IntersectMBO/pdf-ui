@@ -11,6 +11,7 @@ import {
     ProposedGovernanceActions,
     SingleGovernanceAction,
 } from '../pages';
+import { format } from 'date-fns';
 
 const GlobalWrapper = ({ ...props }) => {
     const pathname = props?.pathname;
@@ -29,12 +30,25 @@ const GlobalWrapper = ({ ...props }) => {
         setUser(null);
     };
 
+    function utf8ToHex(str) {
+        return Array.from(str)
+            .map((char) => char.charCodeAt(0).toString(16).padStart(2, '0'))
+            .join('');
+    }
+
     const loginUserToApp = async (wallet) => {
         try {
+            const changeAddrHex = await wallet.getChangeAddress();
+            const messageUtf = `Please sign this message to verify your identity at ${format(new Date(), 'd MMMM yyyy HH:mm:ss')}`;
+            const messageHex = utf8ToHex(messageUtf);
+            const signedData = await wallet.signData(changeAddrHex, messageHex);
+
             const userResponse = await loginUser({
-                identifier: wallet.address,
+                identifier: changeAddrHex,
+                signedData,
             });
 
+            if (!userResponse) return;
             saveDataInSession('pdfUserJwt', userResponse?.jwt);
             setUser(userResponse);
 
