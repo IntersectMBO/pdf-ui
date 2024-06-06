@@ -7,6 +7,7 @@ import {
     IconLink,
     IconPencilAlt,
     IconReply,
+    IconShare,
     IconSort,
     IconThumbDown,
     IconThumbUp,
@@ -65,6 +66,25 @@ const SingleGovernanceAction = ({ id }) => {
     const [commentsPageCount, setCommentsPageCount] = useState(0);
     const [commentsCurrentPage, setCommentsCurrentPage] = useState(1);
     const [commentsSortType, setCommentsSortType] = useState('desc');
+    const [proposalLink, setProposalLink] = useState('');
+    const [disableShare, setDisableShare] = useState(false);
+
+    useEffect(() => {
+        let domain = new URL(window.location.href);
+        let origin = domain.origin;
+        setProposalLink(`${origin}/proposal_discussion/`);
+    }, [proposalLink]);
+
+    const disableShareClick = () => {
+        setDisableShare(true);
+        setTimeout(() => {
+            setDisableShare(false);
+        }, 2000);
+    };
+
+    function copyToClipboard(value) {
+        navigator.clipboard.writeText(value);
+    }
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -74,6 +94,16 @@ const SingleGovernanceAction = ({ id }) => {
 
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const [shareAnchorEl, setShareAnchorEl] = useState(null);
+    const openShare = Boolean(shareAnchorEl);
+    const handleShareClick = (event) => {
+        setShareAnchorEl(event.currentTarget);
+    };
+
+    const handleShareClose = () => {
+        setShareAnchorEl(null);
     };
 
     const handleEditProposal = () => {
@@ -347,7 +377,16 @@ const SingleGovernanceAction = ({ id }) => {
                         <Card>
                             <CardContent>
                                 <Grid container>
-                                    <Grid item xs={11}>
+                                    <Grid
+                                        item
+                                        xs={
+                                            user &&
+                                            user?.user?.id?.toString() ===
+                                                proposal?.attributes?.user_id?.toString()
+                                                ? 10
+                                                : 11
+                                        }
+                                    >
                                         <Typography variant='h4' component='h2'>
                                             {
                                                 proposal?.attributes?.content
@@ -369,6 +408,147 @@ const SingleGovernanceAction = ({ id }) => {
                                                     ?.user_govtool_username
                                             }
                                         </Typography>
+                                    </Grid>
+
+                                    {/* SHARE BUTTON */}
+                                    <Grid
+                                        item
+                                        xs={1}
+                                        display='flex'
+                                        justifyContent='flex-end'
+                                    >
+                                        <IconButton
+                                            id='share-button'
+                                            sx={{
+                                                width: 40,
+                                                height: 40,
+                                            }}
+                                            aria-controls={
+                                                openShare
+                                                    ? 'share-menu'
+                                                    : undefined
+                                            }
+                                            aria-haspopup='true'
+                                            aria-expanded={
+                                                openShare ? 'true' : undefined
+                                            }
+                                            onClick={handleShareClick}
+                                        >
+                                            <IconShare
+                                                width='24'
+                                                height='24'
+                                                fill={
+                                                    openShare
+                                                        ? theme?.palette
+                                                              ?.primary?.main
+                                                        : theme?.palette
+                                                              ?.primary?.icons
+                                                              ?.black
+                                                }
+                                            />
+                                        </IconButton>
+                                        <Menu
+                                            id='share-menu'
+                                            anchorEl={shareAnchorEl}
+                                            open={openShare}
+                                            onClose={handleShareClose}
+                                            MenuListProps={{
+                                                'aria-labelledby':
+                                                    'share-button',
+                                                sx: {
+                                                    width: '155px',
+                                                    height: '135px',
+                                                    maxWidth: '155px',
+                                                    maxHeight: '135px',
+                                                    py: 1.5,
+                                                },
+                                            }}
+                                            slotProps={{
+                                                paper: {
+                                                    elevation: 4,
+                                                    sx: {
+                                                        overflow: 'visible',
+                                                        mt: 1,
+                                                        width: '155px',
+                                                        height: '135px',
+                                                        maxWidth: '155px',
+                                                        maxHeight: '135px',
+                                                    },
+                                                },
+                                            }}
+                                            transformOrigin={{
+                                                horizontal: 'right',
+                                                vertical: 'top',
+                                            }}
+                                            anchorOrigin={{
+                                                horizontal: 'right',
+                                                vertical: 'bottom',
+                                            }}
+                                        >
+                                            <Stack
+                                                direction={'column'}
+                                                spacing={2}
+                                                px={3}
+                                                gap={2}
+                                            >
+                                                <Typography
+                                                    variant='h6'
+                                                    component={'p'}
+                                                >
+                                                    Share
+                                                </Typography>
+                                                <Stack
+                                                    direction={'column'}
+                                                    alignItems={'center'}
+                                                    sx={{
+                                                        marginTop:
+                                                            '0 !important',
+                                                    }}
+                                                >
+                                                    <IconButton
+                                                        onClick={() => {
+                                                            copyToClipboard(
+                                                                `${proposalLink}${id}`
+                                                            ),
+                                                                disableShareClick();
+                                                        }}
+                                                        color='primary'
+                                                        disabled={disableShare}
+                                                    >
+                                                        <IconLink
+                                                            fill={
+                                                                !disableShare
+                                                                    ? theme
+                                                                          ?.palette
+                                                                          ?.primary
+                                                                          ?.main
+                                                                    : theme
+                                                                          ?.palette
+                                                                          ?.primary
+                                                                          ?.icons
+                                                                          ?.grey
+                                                            }
+                                                            height={24}
+                                                            width={24}
+                                                        />
+                                                    </IconButton>
+                                                    <Typography
+                                                        variant='caption'
+                                                        component={'p'}
+                                                        sx={{
+                                                            color: (theme) =>
+                                                                theme.palette
+                                                                    .text
+                                                                    .darkPurple,
+                                                        }}
+                                                    >
+                                                        {disableShare
+                                                            ? 'Link copied'
+                                                            : 'Click to copy link'}
+                                                    </Typography>
+                                                </Stack>
+                                            </Stack>
+                                        </Menu>
                                     </Grid>
 
                                     {user &&
@@ -659,13 +839,13 @@ const SingleGovernanceAction = ({ id }) => {
                                                       proposal?.attributes?.user_id?.toString()
                                                         ? true
                                                         : userProposalVote
-                                                        ? userProposalVote
-                                                              ?.attributes
-                                                              ?.vote_result ===
-                                                          true
-                                                            ? true
-                                                            : false
-                                                        : false
+                                                          ? userProposalVote
+                                                                ?.attributes
+                                                                ?.vote_result ===
+                                                            true
+                                                              ? true
+                                                              : false
+                                                          : false
                                                     : true
                                             }
                                             onClick={() =>
@@ -735,13 +915,13 @@ const SingleGovernanceAction = ({ id }) => {
                                                       proposal?.attributes?.user_id?.toString()
                                                         ? true
                                                         : userProposalVote
-                                                        ? userProposalVote
-                                                              ?.attributes
-                                                              ?.vote_result ===
-                                                          false
-                                                            ? true
-                                                            : false
-                                                        : false
+                                                          ? userProposalVote
+                                                                ?.attributes
+                                                                ?.vote_result ===
+                                                            false
+                                                              ? true
+                                                              : false
+                                                          : false
                                                     : true
                                             }
                                             onClick={() =>
