@@ -64,6 +64,8 @@ const EditProposalDialog = ({
     const [openSaveDraftModal, setOpenSaveDraftModal] = useState(false);
     const [openPublishftModal, setOpenPublishModal] = useState(false);
     const [governanceActionTypes, setGovernanceActionTypes] = useState([]);
+    const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal] =
+        useState(false);
 
     const isSmallScreen = useMediaQuery((theme) =>
         theme.breakpoints.down('sm')
@@ -116,7 +118,7 @@ const EditProposalDialog = ({
             const response = await deleteProposal(proposal?.id);
             if (!response) return;
 
-            navigate(`/proposal_discussion`);
+            setOpenDeleteConfirmationModal(true);
         } catch (error) {
             console.error('Failed to delete proposal:', error);
         } finally {
@@ -784,11 +786,7 @@ const EditProposalDialog = ({
                                 justifyContent='space-between'
                                 alignItems={'center'}
                             >
-                                <Typography
-                                    id='modal-modal-title'
-                                    variant='h6'
-                                    component='h2'
-                                >
+                                <Typography variant='h6' component='h2'>
                                     Proposal saved to drafts
                                 </Typography>
                                 <IconButton
@@ -845,11 +843,7 @@ const EditProposalDialog = ({
                                 justifyContent='space-between'
                                 alignItems={'center'}
                             >
-                                <Typography
-                                    id='modal-modal-title'
-                                    variant='h6'
-                                    component='h2'
-                                >
+                                <Typography variant='h6' component='h2'>
                                     Please confirm applied changes
                                 </Typography>
                                 <IconButton
@@ -896,6 +890,63 @@ const EditProposalDialog = ({
                     </Box>
                 </Modal>
             </Dialog>
+            <Modal
+                open={openDeleteConfirmationModal}
+                onClose={() => {
+                    handleCloseEditDialog();
+                    navigate('/proposal_discussion');
+                }}
+            >
+                <Box sx={style}>
+                    <Box
+                        pt={2}
+                        pl={2}
+                        pr={2}
+                        pb={1}
+                        borderBottom={1}
+                        borderColor={(theme) => theme.palette.border.lightGray}
+                    >
+                        <Box
+                            display='flex'
+                            flexDirection='row'
+                            justifyContent='space-between'
+                            alignItems={'center'}
+                        >
+                            <Typography variant='h6' component='h2'>
+                                Proposal Deleted
+                            </Typography>
+                            <IconButton
+                                onClick={() => {
+                                    setOpenDeleteConfirmationModal(false);
+                                    handleCloseEditDialog();
+                                    navigate('/proposal_discussion');
+                                }}
+                            >
+                                <IconX width='24px' height='24px' />
+                            </IconButton>
+                        </Box>
+                        <Typography
+                            mt={2}
+                            color={(theme) => theme.palette.text.grey}
+                        >
+                            The proposal has been deleted successfully.
+                        </Typography>
+                    </Box>
+                    <Box display='flex' flexDirection='column' m={2}>
+                        <Button
+                            variant='contained'
+                            fullWidth
+                            onClick={() => {
+                                setOpenDeleteConfirmationModal(false);
+                                handleCloseEditDialog();
+                                navigate('/proposal_discussion');
+                            }}
+                        >
+                            Go to Proposal Discussion
+                        </Button>
+                    </Box>
+                </Box>
+            </Modal>
         </Box>
     );
 };
