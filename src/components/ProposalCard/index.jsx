@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import {
     IconChatAlt,
     IconInformationCircle,
+    IconLink,
     IconPencilAlt,
     IconShare,
 } from '@intersect.mbo/intersectmbo.org-icons-set';
@@ -15,17 +15,19 @@ import {
     CardContent,
     CardHeader,
     IconButton,
+    Menu,
+    Stack,
     Typography,
     alpha,
     styled,
 } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 import { useTheme } from '@emotion/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/context';
 import { formatIsoDate } from '../../lib/utils';
 import EditProposalDialog from '../EditProposalDialog';
-import { useNavigate } from 'react-router-dom';
 
 const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
     const { user } = useAppContext();
@@ -33,6 +35,14 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
     const theme = useTheme();
 
     const [openEditDialog, setOpenEditDialog] = useState(false);
+
+    const [proposalLink, setProposalLink] = useState('');
+
+    useEffect(() => {
+        let domain = new URL(window.location.href);
+        let origin = domain.origin;
+        setProposalLink(`${origin}/proposal_discussion/`);
+    }, [proposalLink]);
 
     const handleEditProposal = () => {
         setOpenEditDialog(true);
@@ -65,6 +75,27 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
     }));
 
     const CardContentComponent = ({ proposal }) => {
+        const disableShareClick = () => {
+            setDisableShare(true);
+            setTimeout(() => {
+                setDisableShare(false);
+            }, 2000);
+        };
+
+        function copyToClipboard(value) {
+            navigator.clipboard.writeText(value);
+        }
+
+        const [shareAnchorEl, setShareAnchorEl] = useState(null);
+        const [disableShare, setDisableShare] = useState(false);
+        const openShare = Boolean(shareAnchorEl);
+        const handleShareClick = (event) => {
+            setShareAnchorEl(event.currentTarget);
+        };
+
+        const handleShareClose = () => {
+            setShareAnchorEl(null);
+        };
         return (
             <Card
                 raised
@@ -79,9 +110,122 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
             >
                 <CardHeader
                     action={
-                        <IconButton aria-label='settings'>
-                            <IconShare />
-                        </IconButton>
+                        <>
+                            <IconButton
+                                id='share-button-card'
+                                sx={{
+                                    width: 40,
+                                    height: 40,
+                                }}
+                                aria-controls={
+                                    openShare ? 'share-menu-card' : undefined
+                                }
+                                aria-haspopup='true'
+                                aria-expanded={openShare ? 'true' : undefined}
+                                onClick={handleShareClick}
+                            >
+                                <IconShare
+                                    width='24'
+                                    height='24'
+                                    fill={
+                                        openShare
+                                            ? theme?.palette?.primary?.main
+                                            : theme?.palette?.primary?.icons
+                                                  ?.black
+                                    }
+                                />
+                            </IconButton>
+                            <Menu
+                                id='share-menu-card'
+                                anchorEl={shareAnchorEl}
+                                open={openShare}
+                                onClose={handleShareClose}
+                                MenuListProps={{
+                                    'aria-labelledby': 'share-button-card',
+                                    sx: {
+                                        width: '155px',
+                                        height: '135px',
+                                        maxWidth: '155px',
+                                        maxHeight: '135px',
+                                        py: 1.5,
+                                    },
+                                }}
+                                slotProps={{
+                                    paper: {
+                                        elevation: 4,
+                                        sx: {
+                                            overflow: 'visible',
+                                            mt: 1,
+                                            width: '155px',
+                                            height: '135px',
+                                            maxWidth: '155px',
+                                            maxHeight: '135px',
+                                        },
+                                    },
+                                }}
+                                transformOrigin={{
+                                    horizontal: 'right',
+                                    vertical: 'top',
+                                }}
+                                anchorOrigin={{
+                                    horizontal: 'right',
+                                    vertical: 'bottom',
+                                }}
+                            >
+                                <Stack
+                                    direction={'column'}
+                                    spacing={2}
+                                    px={3}
+                                    gap={2}
+                                >
+                                    <Typography variant='h6' component={'p'}>
+                                        Share
+                                    </Typography>
+                                    <Stack
+                                        direction={'column'}
+                                        alignItems={'center'}
+                                        sx={{ marginTop: '0 !important' }}
+                                    >
+                                        <IconButton
+                                            onClick={() => {
+                                                copyToClipboard(
+                                                    `${proposalLink}${proposal?.id}`
+                                                ),
+                                                    disableShareClick();
+                                            }}
+                                            color='primary'
+                                            disabled={disableShare}
+                                        >
+                                            <IconLink
+                                                fill={
+                                                    !disableShare
+                                                        ? theme?.palette
+                                                              ?.primary?.main
+                                                        : theme?.palette
+                                                              ?.primary?.icons
+                                                              ?.grey
+                                                }
+                                                height={24}
+                                                width={24}
+                                            />
+                                        </IconButton>
+                                        <Typography
+                                            variant='caption'
+                                            component={'p'}
+                                            sx={{
+                                                color: (theme) =>
+                                                    theme.palette.text
+                                                        .darkPurple,
+                                            }}
+                                        >
+                                            {disableShare
+                                                ? 'Link copied'
+                                                : 'Click to copy link'}
+                                        </Typography>
+                                    </Stack>
+                                </Stack>
+                            </Menu>
+                        </>
                     }
                     title={
                         <>
