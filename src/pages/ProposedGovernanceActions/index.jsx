@@ -100,8 +100,8 @@ const ProposedGovernanceActions = () => {
                         justifyContent={'space-between'}
                         spacing={1}
                     >
-                        <Grid item xs={12} paddingBottom={2}>
-                            {user && (
+                        {user && (
+                            <Grid item xs={12} paddingBottom={2}>
                                 <Button
                                     variant="contained"
                                     onClick={() =>
@@ -113,9 +113,8 @@ const ProposedGovernanceActions = () => {
                                 >
                                     Propose a Governance Action
                                 </Button>
-                            )}
-				
                         </Grid>
+                               )}
                         <Grid item md={6} sx={{ flexGrow: { xs: 1 } }}>
                             <TextField
                                 fullWidth
