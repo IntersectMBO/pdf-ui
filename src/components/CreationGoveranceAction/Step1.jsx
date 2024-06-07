@@ -39,28 +39,13 @@ const Step1 = ({ setStep, setProposalData }) => {
             <Box>
                 {draftsEnabled ? 
                   <Card variant='outlined'>
-                        <CardContent
-                            sx={{
-                                ml: {
-                                    xs: 0,
-                                    sm: 5,
-                                    md: 5,
-                                    lg: 15,
-                                },
-                                mr: {
-                                    xs: 0,
-                                    sm: 5,
-                                    md: 5,
-                                    lg: 15,
-                                },
-                            }}
-                        >
+                        <CardContent>
                             <Box
                                 sx={{
                                     mt: 2,
                                 }}
                             >
-                                <Typography variant='h5' gutterBottom>
+                                <Typography variant='h4' gutterBottom>
                                    Decide if you want to use Existing Draft or Create new proposal
                                 </Typography>
                             </Box>
@@ -68,7 +53,7 @@ const Step1 = ({ setStep, setProposalData }) => {
                             <Box color={(theme) => theme.palette.text.grey}>
                                     <Typography variant='body1' gutterBottom>
                                            Existing Drafts can save you some time and effort or simply start from stratch.
-                                        </Typography>
+                                    </Typography>
                             </Box>
                             <Box
                                 sx={{
@@ -86,8 +71,7 @@ const Step1 = ({ setStep, setProposalData }) => {
                         </CardContent>
                     </Card>:
                     <Card variant='outlined'>
-                        <CardContent
-                            sx={{
+                        <CardContent  sx={{
                                 ml: {
                                     xs: 0,
                                     sm: 5,
@@ -100,8 +84,7 @@ const Step1 = ({ setStep, setProposalData }) => {
                                     md: 5,
                                     lg: 15,
                                 },
-                            }}
-                        >
+                            }}>
                             <Box
                                 sx={{
                                     align: 'center',
@@ -109,7 +92,7 @@ const Step1 = ({ setStep, setProposalData }) => {
                                     mt: 2,
                                 }}
                             >
-                                <Typography variant='h6' gutterBottom>
+                                <Typography variant='h4' gutterBottom>
                                     Step to submit a Governance action
                                 </Typography>
                             </Box>
