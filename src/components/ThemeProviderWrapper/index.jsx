@@ -52,6 +52,7 @@ let theme = createTheme({
         border: {
             gray: '#E5DFE3',
             lightGray: '#CAC4D0',
+            lightBlue: '#D6E2FF',
         },
         button: {
             primary: '#3052F5',
@@ -79,6 +80,12 @@ let theme = createTheme({
                     borderRadius: '16px',
                 },
             },
+            variants: [
+                {
+                    props: { variant: 'outlined' },
+                    style: { boxShadow: 'none', border: '1px solid #D6E2FF' },
+                },
+            ],
         },
         MuiFormHelperText: {
             styleOverrides: {
