@@ -4,7 +4,17 @@ import {
     IconCheveronLeft,
     IconCheveronRight,
 } from '@intersect.mbo/intersectmbo.org-icons-set';
-import { Box, Button, Grid, IconButton, Typography } from '@mui/material';
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Grid,
+    IconButton,
+    Stack,
+    Typography,
+    alpha,
+} from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import Slider from 'react-slick';
 import { ProposalCard } from '..';
@@ -163,9 +173,35 @@ const ProposalsList = ({
                     </Box>
                 )
             ) : (
-                <Typography variant='h6' mt={3} mb={4}>
-                    No proposals found
-                </Typography>
+                <Card
+                    variant='outlined'
+                    sx={{
+                        backgroundColor: alpha('#FFFFFF', 0.3),
+                        my: 3,
+                        mx: 1,
+                    }}
+                >
+                    <CardContent>
+                        <Stack
+                            display={'flex'}
+                            direction={'column'}
+                            alignItems={'center'}
+                            justifyContent={'center'}
+                            gap={1}
+                        >
+                            <Typography
+                                variant='h6'
+                                color='text.black'
+                                fontWeight={600}
+                            >
+                                No proposals found
+                            </Typography>
+                            <Typography variant='body1' color='text.black'>
+                                Please try a different search
+                            </Typography>
+                        </Stack>
+                    </CardContent>
+                </Card>
             )}
         </Box>
     );
