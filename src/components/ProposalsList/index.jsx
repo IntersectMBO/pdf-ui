@@ -97,6 +97,7 @@ const ProposalsList = ({
                         <Button
                             variant='outlined'
                             onClick={() => setShowAll((prev) => !prev)}
+                            data-testid='show-all-button'
                         >
                             {showAll ? 'Show less' : 'Show all'}
                         </Button>
