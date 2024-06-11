@@ -107,7 +107,11 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                     backgroundColor: alpha('#FFFFFF', 0.3),
                     minHeight: '400px',
                 }}
-                data-testid={`proposal-${proposal?.id}`}
+                data-testid={
+                    proposal?.attributes?.content?.attributes?.is_draft
+                        ? `draft-${proposal?.id}-card`
+                        : `proposal-${proposal?.id}`
+                }
             >
                 <CardHeader
                     action={
@@ -404,6 +408,7 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                                     onClick={() =>
                                         startEdittinButtonClick(proposal)
                                     }
+                                    data-testid={`draft-${proposal?.id}-start-editing`}
                                 >
                                     Start Editing
                                 </Button>

@@ -735,6 +735,7 @@ const EditProposalDialog = ({
                                                         handleOpenSaveDraftModal();
                                                         setMounted(false);
                                                     }}
+                                                    data-testid='save-draft-button'
                                                 >
                                                     Save Draft
                                                 </Button>
