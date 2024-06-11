@@ -363,7 +363,10 @@ const SingleGovernanceAction = ({ id }) => {
                                             </Box>
 
                                             <Box>
-                                                <Button variant='outlined'>
+                                                <Button
+                                                    variant='outlined'
+                                                    data-testid='submit-as-GA-button'
+                                                >
                                                     Submit as Governance Action
                                                 </Button>
                                             </Box>
@@ -578,6 +581,7 @@ const SingleGovernanceAction = ({ id }) => {
                                                             : undefined
                                                     }
                                                     onClick={handleClick}
+                                                    data-testid='menu-button'
                                                 >
                                                     <IconDotsVertical
                                                         width='24'
@@ -611,11 +615,13 @@ const SingleGovernanceAction = ({ id }) => {
                                                         horizontal: 'right',
                                                         vertical: 'bottom',
                                                     }}
+                                                    data-testid='proposal-menu'
                                                 >
                                                     <MenuItem
                                                         onClick={
                                                             handleEditProposal
                                                         }
+                                                        data-testid='edit-proposal'
                                                     >
                                                         <Stack
                                                             direction={'row'}
@@ -644,6 +650,7 @@ const SingleGovernanceAction = ({ id }) => {
                                                         onClick={
                                                             handleOpenDeleteModal
                                                         }
+                                                        data-testid='delete-proposal'
                                                     >
                                                         <Stack
                                                             direction={'row'}
@@ -717,6 +724,7 @@ const SingleGovernanceAction = ({ id }) => {
                                                 onClick={
                                                     handleOpenReviewVersions
                                                 }
+                                                data-testid='review-version'
                                             >
                                                 Review Versions
                                             </Button>
@@ -804,7 +812,7 @@ const SingleGovernanceAction = ({ id }) => {
                                     flexDirection={'row'}
                                     justifyContent={'space-between'}
                                 >
-                                    <IconButton>
+                                    <IconButton data-testid='comment-count'>
                                         <Badge
                                             badgeContent={
                                                 proposal?.attributes
@@ -833,6 +841,7 @@ const SingleGovernanceAction = ({ id }) => {
                                                 border: (theme) =>
                                                     `1px solid ${theme.palette.iconButton.outlineLightColor}`,
                                             }}
+                                            data-testid='like-button'
                                             disabled={
                                                 user
                                                     ? user?.user?.id?.toString() ===
@@ -863,6 +872,7 @@ const SingleGovernanceAction = ({ id }) => {
                                                     proposal?.attributes
                                                         ?.prop_likes || 0
                                                 }
+                                                data-testid='like-count'
                                                 showZero
                                                 aria-label='proposal likes'
                                                 sx={{
@@ -909,6 +919,7 @@ const SingleGovernanceAction = ({ id }) => {
                                                 border: (theme) =>
                                                     `1px solid ${theme.palette.iconButton.outlineLightColor}`,
                                             }}
+                                            data-testid='dislike-button'
                                             disabled={
                                                 user
                                                     ? user?.user?.id?.toString() ===
@@ -938,6 +949,7 @@ const SingleGovernanceAction = ({ id }) => {
                                                     proposal?.attributes
                                                         ?.prop_dislikes || 0
                                                 }
+                                                data-testid='dislike-count'
                                                 showZero
                                                 aria-label='proposal dislikes'
                                                 sx={{
@@ -1004,6 +1016,7 @@ const SingleGovernanceAction = ({ id }) => {
                                     prev === 'desc' ? 'asc' : 'desc'
                                 )
                             }
+                            data-testid='sort-comments'
                         >
                             <IconSort
                                 width='24'
@@ -1040,6 +1053,7 @@ const SingleGovernanceAction = ({ id }) => {
                                     onChange={(e) =>
                                         setNewCommentText(e.target.value)
                                     }
+                                    data-testid='comment-input'
                                 />
 
                                 <Box
@@ -1076,6 +1090,7 @@ const SingleGovernanceAction = ({ id }) => {
                                                 }
                                             />
                                         }
+                                        data-testid='comment-button'
                                     >
                                         Comment
                                     </Button>
@@ -1109,6 +1124,7 @@ const SingleGovernanceAction = ({ id }) => {
                     <Modal
                         open={openDeleteModal}
                         onClose={handleCloseDeleteModal}
+                        data-testid='delete-proposal-modal'
                     >
                         <Box
                             sx={{
@@ -1179,6 +1195,7 @@ const SingleGovernanceAction = ({ id }) => {
                                         borderRadius: '20px',
                                     }}
                                     onClick={handleCloseDeleteModal}
+                                    data-testid='delete-proposal-no-button'
                                 >
                                     I don't want to delete
                                 </Button>
@@ -1189,6 +1206,7 @@ const SingleGovernanceAction = ({ id }) => {
                                         borderRadius: '20px',
                                     }}
                                     onClick={handleDeleteProposal}
+                                    data-testid='delete-proposal-yes-button'
                                 >
                                     Yes, delete my proposal completely
                                 </Button>
