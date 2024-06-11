@@ -366,6 +366,11 @@ const SingleGovernanceAction = ({ id }) => {
                                                 <Button
                                                     variant='outlined'
                                                     data-testid='submit-as-GA-button'
+                                                    onClick={() =>
+                                                        navigate(
+                                                            '/submit-governance-action'
+                                                        )
+                                                    }
                                                 >
                                                     Submit as Governance Action
                                                 </Button>
