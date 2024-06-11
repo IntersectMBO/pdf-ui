@@ -103,22 +103,24 @@ const ProposedGovernanceActions = () => {
                         {user && (
                             <Grid item xs={12} paddingBottom={2}>
                                 <Button
-                                    variant="contained"
+                                    variant='contained'
                                     onClick={() =>
                                         navigate(
                                             '/proposal_discussion/create-governance-action'
                                         )
                                     }
-                                    startIcon={<IconPlusCircle fill="white" />}
+                                    startIcon={<IconPlusCircle fill='white' />}
+                                    data-testid='propose-a-governance-action-button'
                                 >
                                     Propose a Governance Action
                                 </Button>
-                        </Grid>
-                               )}
+                            </Grid>
+                        )}
                         <Grid item md={6} sx={{ flexGrow: { xs: 1 } }}>
                             <TextField
                                 fullWidth
                                 id='outlined-basic'
+                                data-testid='search-input'
                                 placeholder='Search...'
                                 variant='outlined'
                                 value={proposalSearchText || ''}
@@ -158,6 +160,7 @@ const ProposedGovernanceActions = () => {
                             <Box gap={1} display={'flex'}>
                                 <IconButton
                                     id='filters-button'
+                                    data-testid='filter-button'
                                     sx={{
                                         width: 40,
                                         height: 40,
@@ -211,6 +214,8 @@ const ProposedGovernanceActions = () => {
                                                     (filter) =>
                                                         filter?.id === ga?.id
                                                 )}
+                                                id={`${ga?.attributes?.gov_action_type_name}-radio-wrapper`}
+                                                data-testid={`${ga?.attributes?.gov_action_type_name}-radio-wrapper`}
                                             >
                                                 <FormControlLabel
                                                     control={
@@ -225,6 +230,8 @@ const ProposedGovernanceActions = () => {
                                                                     filter?.id ===
                                                                     ga?.id
                                                             )}
+                                                            id={`${ga?.attributes?.gov_action_type_name}-radio`}
+                                                            data-testid={`${ga?.attributes?.gov_action_type_name}-radio`}
                                                         />
                                                     }
                                                     label={
@@ -235,13 +242,18 @@ const ProposedGovernanceActions = () => {
                                             </MenuItem>
                                         )
                                     )}
-                                    <MenuItem onClick={() => resetFilters()}>
+                                    <MenuItem
+                                        onClick={() => resetFilters()}
+                                        data-testid='reset-filters'
+                                    >
                                         <Typography color={'primary'}>
                                             Reset filters
                                         </Typography>
                                     </MenuItem>
                                 </Menu>
                                 <IconButton
+                                    id='sort-button'
+                                    data-testid='sort-button'
                                     onClick={() =>
                                         setSortType((prev) =>
                                             prev === 'desc' ? 'asc' : 'desc'

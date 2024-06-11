@@ -125,6 +125,7 @@ const CommentCard = ({ comment }) => {
                 sx={{
                     position: 'relative',
                 }}
+                data-testid={`subcomment-${comment?.id}-content`}
             >
                 <Box
                     sx={{
@@ -172,8 +173,9 @@ const CommentCard = ({ comment }) => {
             sx={{
                 position: 'relative',
             }}
+            data-testid={`comment-${comment?.id}-card`}
         >
-            <CardContent>
+            <CardContent data-testid={`comment-${comment?.id}-content`}>
                 <Box
                     display='flex'
                     mt={2}
@@ -333,6 +335,7 @@ const CommentCard = ({ comment }) => {
                                     onClick={() =>
                                         setShowReply((prev) => !prev)
                                     }
+                                    data-testid='reply-button'
                                 >
                                     {showReply ? 'Cancel' : 'Reply'}
                                 </Button>
@@ -377,6 +380,7 @@ const CommentCard = ({ comment }) => {
                                             maxLength: subcommentMaxLength,
                                         },
                                     }}
+                                    data-testid='reply-input'
                                 />
 
                                 <Box
@@ -399,6 +403,7 @@ const CommentCard = ({ comment }) => {
                                                 }
                                             />
                                         }
+                                        data-testid='reply-comment-button'
                                     >
                                         Comment
                                     </Button>

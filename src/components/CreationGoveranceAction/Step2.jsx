@@ -356,6 +356,7 @@ const Step2 = ({
                                 onClick={() => {
                                     handleSaveDraft(true);
                                 }}
+                                data-testid='save-draft-button'
                             >
                                 Save Draft
                             </Button>

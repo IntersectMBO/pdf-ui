@@ -107,6 +107,11 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                     backgroundColor: alpha('#FFFFFF', 0.3),
                     minHeight: '400px',
                 }}
+                data-testid={
+                    proposal?.attributes?.content?.attributes?.is_draft
+                        ? `draft-${proposal?.id}-card`
+                        : `proposal-${proposal?.id}`
+                }
             >
                 <CardHeader
                     action={
@@ -123,6 +128,7 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                                 aria-haspopup='true'
                                 aria-expanded={openShare ? 'true' : undefined}
                                 onClick={handleShareClick}
+                                data-testid={`proposal-${proposal?.id}-share-button`}
                             >
                                 <IconShare
                                     width='24'
@@ -240,6 +246,7 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                 }}
+                                data-testid={`proposal-${proposal?.id}-title`}
                             >
                                 {
                                     proposal?.attributes?.content?.attributes
@@ -365,7 +372,10 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                             {proposal?.attributes?.content?.attributes
                                 ?.is_draft ? null : (
                                 <Box display={'flex'} gap={1}>
-                                    <IconButton disabled={true}>
+                                    <IconButton
+                                        data-testid={`proposal-${proposal?.id}-comment-count`}
+                                        disabled={true}
+                                    >
                                         <StyledBadge
                                             badgeContent={
                                                 proposal?.attributes
@@ -382,6 +392,7 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                                             <IconButton
                                                 aria-label='edit'
                                                 onClick={handleEditProposal}
+                                                data-testid={`proposal-${proposal?.id}-edit-button`}
                                             >
                                                 <IconPencilAlt />
                                             </IconButton>
@@ -397,14 +408,19 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                                     onClick={() =>
                                         startEdittinButtonClick(proposal)
                                     }
+                                    data-testid={`draft-${proposal?.id}-start-editing`}
                                 >
                                     Start Editing
                                 </Button>
                             ) : (
                                 <Link
                                     to={`/proposal_discussion/${proposal?.id}`}
+                                    data-testid={`proposal-${proposal?.id}-view-details-link-wrapper`}
                                 >
-                                    <Button variant='contained'>
+                                    <Button
+                                        variant='contained'
+                                        data-testid={`proposal-${proposal?.id}-view-details`}
+                                    >
                                         View Details
                                     </Button>
                                 </Link>

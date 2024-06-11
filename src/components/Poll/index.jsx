@@ -178,6 +178,7 @@ const Poll = ({ proposalID, proposalUserId, proposalAuthorUsername }) => {
                             mb: 3,
                             backgroundColor: alpha('#FFFFFF', 0.3),
                         }}
+                        data-testid='poll-vote-card'
                     >
                         <CardContent
                             sx={{ display: 'flex', flexDirection: 'column' }}
@@ -204,19 +205,21 @@ const Poll = ({ proposalID, proposalUserId, proposalAuthorUsername }) => {
                                 variant='outlined'
                                 sx={{ mb: 1 }}
                                 onClick={() => handlePollVote({ vote: true })}
+                                data-testid='poll-yes-button'
                             >
                                 Yes
                             </Button>
                             <Button
                                 variant='outlined'
                                 onClick={() => handlePollVote({ vote: false })}
+                                data-testid='poll-no-button'
                             >
                                 No
                             </Button>
                         </CardContent>
                     </Card>
                 ) : null}
-                <Card>
+                <Card data-testid='poll-result-card'>
                     <CardContent
                         sx={{ display: 'flex', flexDirection: 'column' }}
                     >
@@ -280,6 +283,7 @@ const Poll = ({ proposalID, proposalUserId, proposalAuthorUsername }) => {
                                     userPollVote?.attributes?.vote_result ===
                                         true && 600
                                 }
+                                data-testid='poll-yes-count'
                             >
                                 {`Yes: (${
                                     totalVotesGreaterThanZero(poll)
@@ -327,6 +331,7 @@ const Poll = ({ proposalID, proposalUserId, proposalAuthorUsername }) => {
                                     userPollVote?.attributes?.vote_result ===
                                         false && 600
                                 }
+                                data-testid='poll-no-count'
                             >
                                 {`No: (${
                                     totalVotesGreaterThanZero(poll)
@@ -361,6 +366,7 @@ const Poll = ({ proposalID, proposalUserId, proposalAuthorUsername }) => {
                                     <Button
                                         variant='outlined'
                                         onClick={toggleClosePollModal}
+                                        data-testid='close-poll-button'
                                     >
                                         Close Poll
                                     </Button>
@@ -378,6 +384,7 @@ const Poll = ({ proposalID, proposalUserId, proposalAuthorUsername }) => {
                                     <Button
                                         variant='outlined'
                                         onClick={toggleChangeVoteModal}
+                                        data-testid='change-vote-button'
                                     >
                                         Change Vote
                                     </Button>
@@ -388,6 +395,7 @@ const Poll = ({ proposalID, proposalUserId, proposalAuthorUsername }) => {
                 <Modal
                     open={showChangeVoteModal}
                     onClose={toggleChangeVoteModal}
+                    data-testid='change-poll-vote-modal'
                 >
                     <Box
                         sx={{
@@ -461,6 +469,7 @@ const Poll = ({ proposalID, proposalUserId, proposalAuthorUsername }) => {
                                     borderRadius: '20px',
                                 }}
                                 onClick={toggleChangeVoteModal}
+                                data-testid='change-poll-vote-no-button'
                             >
                                 I don't want to change
                             </Button>
@@ -471,6 +480,7 @@ const Poll = ({ proposalID, proposalUserId, proposalAuthorUsername }) => {
                                     borderRadius: '20px',
                                 }}
                                 onClick={handlePollVoteChange}
+                                data-testid='change-poll-vote-yes-button'
                             >
                                 Yes, change my Poll Vote
                             </Button>
@@ -563,7 +573,7 @@ const Poll = ({ proposalID, proposalUserId, proposalAuthorUsername }) => {
     }
 
     return user && user?.user?.id === +proposalUserId ? (
-        <Card>
+        <Card data-testid='add-poll-card'>
             <CardContent>
                 <Typography variant='body1' fontWeight={600}>
                     Do you want to check if your proposal is ready to be
@@ -578,7 +588,11 @@ const Poll = ({ proposalID, proposalUserId, proposalAuthorUsername }) => {
                 </Typography>
 
                 <Box mt={2} display='flex' justifyContent='flex-end'>
-                    <Button variant='contained' onClick={addPoll}>
+                    <Button
+                        variant='contained'
+                        onClick={addPoll}
+                        data-testid='add-poll-button'
+                    >
                         Add Poll
                     </Button>
                 </Box>
