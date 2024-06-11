@@ -3,20 +3,17 @@ import {
     IconExclamation,
     IconX,
 } from '@intersect.mbo/intersectmbo.org-icons-set';
-import {
-    Box,
-    Button,
-    IconButton,
-    Link,
-    Modal,
-    Typography,
-} from '@mui/material';
+import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
 import React from 'react';
 
-const UrlErrorModal = ({ open, onClose, onSubmit }) => {
+const CancelRegistrationModal = ({ open, onClose, onSubmit }) => {
     const theme = useTheme();
     return (
-        <Modal open={open} onClose={onClose} data-testid='url-error-modal'>
+        <Modal
+            open={open}
+            onClose={onClose}
+            data-testid='cancel-registration-modal'
+        >
             <Box
                 sx={{
                     position: 'absolute',
@@ -48,7 +45,7 @@ const UrlErrorModal = ({ open, onClose, onSubmit }) => {
                     >
                         <IconButton
                             onClick={onClose}
-                            data-testid='url-error-modal-close-button'
+                            data-testid='cancel-registration-modal-close-button'
                         >
                             <IconX width='24px' height='24px' />
                         </IconButton>
@@ -78,39 +75,26 @@ const UrlErrorModal = ({ open, onClose, onSubmit }) => {
                         </IconButton>
                     </Box>
                     <Typography
-                        id='url-error-modal-title'
-                        data-testid='url-error-modal-title'
+                        id='cancel-registration-modal-title'
+                        data-testid='cancel-registration-modal-title'
                         mt={2}
                         color={(theme) => theme.palette.text.darkPurple}
                         variant='h5'
                         component={'h5'}
                     >
-                        The URL You Entered Cannot be Found
+                        Do You Want to Cancel Registration?
                     </Typography>
                     <Typography
-                        id='url-error-modal-description'
-                        data-testid='url-error-modal-description'
+                        id='cancel-registration-modal-description-1'
+                        data-testid='cancel-registration-modal-description-1'
                         mt={2}
                         color={(theme) => theme.palette.text.darkPurple}
                         variant='body1'
                         component={'p'}
                     >
-                        GovTool cannot find the URL that you entered. Please
-                        check it and re-enter.
+                        If you return to the Dashboard, your information will
+                        not be saved.
                     </Typography>
-                    <Link
-                        sx={{
-                            color: (theme) => theme?.palette?.primary?.main,
-                            mt: 2,
-                        }}
-                        component={'button'}
-                        variant='body1'
-                        onClick={() => console.log('Learn More')}
-                        id='url-error-modal-learn-more-link'
-                        data-testid='url-error-modal-learn-more-link'
-                    >
-                        Learn More about self-hosting
-                    </Link>
                 </Box>
                 <Box display='flex' flexDirection='column' padding={2} gap={2}>
                     <Button
@@ -119,32 +103,10 @@ const UrlErrorModal = ({ open, onClose, onSubmit }) => {
                         sx={{
                             borderRadius: '20px',
                         }}
-                        onClick={() => console.log('Go to Data Edit Screen')}
-                        data-testid='url-error-modal-go-to-data-button'
+                        onClick={() => console.log('Back to Dashboard')}
+                        data-testid='cancel-registration-modal-back-button'
                     >
-                        Go to Data Edit Screen
-                    </Button>
-                    <Button
-                        variant='outlined'
-                        fullWidth
-                        sx={{
-                            borderRadius: '20px',
-                        }}
-                        onClick={() => console.log('Cancel registration')}
-                        data-testid='url-error-modal-cancel-button'
-                    >
-                        Cancel registration
-                    </Button>
-                    <Button
-                        variant='text'
-                        fullWidth
-                        sx={{
-                            borderRadius: '20px',
-                        }}
-                        onClick={() => console.log('Feedback')}
-                        data-testid='url-error-modal-feedback-button'
-                    >
-                        Feedback
+                        Back to Dashboard
                     </Button>
                 </Box>
             </Box>
@@ -152,4 +114,4 @@ const UrlErrorModal = ({ open, onClose, onSubmit }) => {
     );
 };
 
-export default UrlErrorModal;
+export default CancelRegistrationModal;
