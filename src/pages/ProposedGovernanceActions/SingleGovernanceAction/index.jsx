@@ -363,7 +363,14 @@ const SingleGovernanceAction = ({ id }) => {
                                             </Box>
 
                                             <Box>
-                                                <Button variant='outlined'>
+                                                <Button
+                                                    variant='outlined'
+                                                    onClick={() =>
+                                                        navigate(
+                                                            '/submit-governance-action'
+                                                        )
+                                                    }
+                                                >
                                                     Submit as Governance Action
                                                 </Button>
                                             </Box>

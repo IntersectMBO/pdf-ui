@@ -10,6 +10,7 @@ import {
     CreateGovernanceAction,
     ProposedGovernanceActions,
     SingleGovernanceAction,
+    SubmissionGovernanceAction,
 } from '../pages';
 import { format } from 'date-fns';
 
@@ -93,6 +94,11 @@ const GlobalWrapper = ({ ...props }) => {
 
     const renderComponentBasedOnPath = (path) => {
         if (
+            path.includes('submit-governance-action') &&
+            GovToolAssemblyWalletAPI?.getChangeAddress
+        ) {
+            return <SubmissionGovernanceAction />;
+        } else if (
             path.includes('create-governance-action') &&
             GovToolAssemblyWalletAPI?.getChangeAddress
         ) {
