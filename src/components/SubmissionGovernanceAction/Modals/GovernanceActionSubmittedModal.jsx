@@ -1,8 +1,5 @@
 import { useTheme } from '@emotion/react';
-import {
-    IconExclamation,
-    IconX,
-} from '@intersect.mbo/intersectmbo.org-icons-set';
+import { IconCheck, IconX } from '@intersect.mbo/intersectmbo.org-icons-set';
 import {
     Box,
     Button,
@@ -13,10 +10,10 @@ import {
 } from '@mui/material';
 import React from 'react';
 
-const UrlErrorModal = ({ open, onClose, onSubmit }) => {
+const GovernanceActionSubmittedModal = ({ open, onClose, onSubmit }) => {
     const theme = useTheme();
     return (
-        <Modal open={open} onClose={onClose} data-testid='url-error-modal'>
+        <Modal open={open} onClose={onClose} data-testid='ga-submitted-modal'>
             <Box
                 sx={{
                     position: 'absolute',
@@ -48,7 +45,7 @@ const UrlErrorModal = ({ open, onClose, onSubmit }) => {
                     >
                         <IconButton
                             onClick={onClose}
-                            data-testid='url-error-modal-close-button'
+                            data-testid='ga-submitted-modal-close-button'
                         >
                             <IconX width='24px' height='24px' />
                         </IconButton>
@@ -63,54 +60,41 @@ const UrlErrorModal = ({ open, onClose, onSubmit }) => {
                             sx={{
                                 ':disabled': {
                                     backgroundColor: (theme) =>
-                                        theme?.palette?.iconButton?.error_50,
+                                        theme?.palette?.iconButton?.success_100,
                                 },
                                 width: '100px',
                                 height: '100px',
                             }}
                             disabled
                         >
-                            <IconExclamation
+                            <IconCheck
                                 width='54px'
                                 height='54px'
-                                fill={theme?.palette?.iconButton?.error_200}
+                                fill={theme?.palette?.iconButton?.success_300}
                             />
                         </IconButton>
                     </Box>
                     <Typography
-                        id='url-error-modal-title'
-                        data-testid='url-error-modal-title'
+                        id='ga-submitted-modal-title'
+                        data-testid='ga-submitted-modal-title'
                         mt={2}
                         color={(theme) => theme.palette.text.darkPurple}
                         variant='h5'
                         component={'h5'}
                     >
-                        The URL You Entered Cannot be Found
+                        Governance Action submitted!
                     </Typography>
                     <Typography
-                        id='url-error-modal-description'
-                        data-testid='url-error-modal-description'
+                        id='ga-submitted-modal-description-1'
+                        data-testid='ga-submitted-modal-description-1'
                         mt={2}
                         color={(theme) => theme.palette.text.darkPurple}
                         variant='body1'
                         component={'p'}
                     >
-                        GovTool cannot find the URL that you entered. Please
-                        check it and re-enter.
+                        Your Governance Action may take a little time to submit
+                        to the chain.
                     </Typography>
-                    <Link
-                        sx={{
-                            color: (theme) => theme?.palette?.primary?.main,
-                            mt: 2,
-                        }}
-                        component={'button'}
-                        variant='body1'
-                        onClick={() => console.log('Learn More')}
-                        id='url-error-modal-learn-more-link'
-                        data-testid='url-error-modal-learn-more-link'
-                    >
-                        Learn More about self-hosting
-                    </Link>
                 </Box>
                 <Box display='flex' flexDirection='column' padding={2} gap={2}>
                     <Button
@@ -119,10 +103,10 @@ const UrlErrorModal = ({ open, onClose, onSubmit }) => {
                         sx={{
                             borderRadius: '20px',
                         }}
-                        onClick={() => console.log('Go to Data Edit Screen')}
-                        data-testid='url-error-modal-go-to-data-button'
+                        onClick={() => console.log('Go to Dashboard')}
+                        data-testid='ga-submitted-modal-new-ga-button'
                     >
-                        Go to Data Edit Screen
+                        Go to the new GA
                     </Button>
                     <Button
                         variant='outlined'
@@ -130,21 +114,10 @@ const UrlErrorModal = ({ open, onClose, onSubmit }) => {
                         sx={{
                             borderRadius: '20px',
                         }}
-                        onClick={() => console.log('Cancel registration')}
-                        data-testid='url-error-modal-cancel-button'
+                        onClick={() => console.log('Go to Dashboard')}
+                        data-testid='ga-submitted-modal-dashboard-button'
                     >
-                        Cancel registration
-                    </Button>
-                    <Button
-                        variant='text'
-                        fullWidth
-                        sx={{
-                            borderRadius: '20px',
-                        }}
-                        onClick={() => console.log('Feedback')}
-                        data-testid='url-error-modal-feedback-button'
-                    >
-                        Feedback
+                        Go to Dashboard
                     </Button>
                 </Box>
             </Box>
@@ -152,4 +125,4 @@ const UrlErrorModal = ({ open, onClose, onSubmit }) => {
     );
 };
 
-export default UrlErrorModal;
+export default GovernanceActionSubmittedModal;

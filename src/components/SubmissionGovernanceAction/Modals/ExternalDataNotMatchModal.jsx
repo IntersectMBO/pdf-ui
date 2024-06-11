@@ -3,20 +3,13 @@ import {
     IconExclamation,
     IconX,
 } from '@intersect.mbo/intersectmbo.org-icons-set';
-import {
-    Box,
-    Button,
-    IconButton,
-    Link,
-    Modal,
-    Typography,
-} from '@mui/material';
+import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
 import React from 'react';
 
-const UrlErrorModal = ({ open, onClose, onSubmit }) => {
+const ExternalDataNotMatchModal = ({ open, onClose, onSubmit }) => {
     const theme = useTheme();
     return (
-        <Modal open={open} onClose={onClose} data-testid='url-error-modal'>
+        <Modal open={open} onClose={onClose} data-testid='data-not-match-modal'>
             <Box
                 sx={{
                     position: 'absolute',
@@ -48,7 +41,7 @@ const UrlErrorModal = ({ open, onClose, onSubmit }) => {
                     >
                         <IconButton
                             onClick={onClose}
-                            data-testid='url-error-modal-close-button'
+                            data-testid='data-not-match-modal-close-button'
                         >
                             <IconX width='24px' height='24px' />
                         </IconButton>
@@ -78,39 +71,39 @@ const UrlErrorModal = ({ open, onClose, onSubmit }) => {
                         </IconButton>
                     </Box>
                     <Typography
-                        id='url-error-modal-title'
-                        data-testid='url-error-modal-title'
+                        id='data-not-match-modal-title'
+                        data-testid='data-not-match-modal-title'
                         mt={2}
                         color={(theme) => theme.palette.text.darkPurple}
                         variant='h5'
                         component={'h5'}
                     >
-                        The URL You Entered Cannot be Found
+                        Your External Data Does Not Match the Original File.
                     </Typography>
                     <Typography
-                        id='url-error-modal-description'
-                        data-testid='url-error-modal-description'
+                        id='data-not-match-modal-description-1'
+                        data-testid='data-not-match-modal-description-1'
                         mt={2}
                         color={(theme) => theme.palette.text.darkPurple}
                         variant='body1'
                         component={'p'}
                     >
-                        GovTool cannot find the URL that you entered. Please
-                        check it and re-enter.
+                        GovTool checks the URL you entered to see if the JSON
+                        file that you self-host matches the one that was
+                        generated in GovTool. To complete registration, this
+                        match must be exact.
                     </Typography>
-                    <Link
-                        sx={{
-                            color: (theme) => theme?.palette?.primary?.main,
-                            mt: 2,
-                        }}
-                        component={'button'}
+                    <Typography
+                        id='data-not-match-modal-description-2'
+                        data-testid='data-not-match-modal-description-2'
+                        mt={2}
+                        color={(theme) => theme.palette.text.darkPurple}
                         variant='body1'
-                        onClick={() => console.log('Learn More')}
-                        id='url-error-modal-learn-more-link'
-                        data-testid='url-error-modal-learn-more-link'
+                        component={'p'}
                     >
-                        Learn More about self-hosting
-                    </Link>
+                        In this case, there is a mismatch. You can go back to
+                        the data edit screen and try the process again.
+                    </Typography>
                 </Box>
                 <Box display='flex' flexDirection='column' padding={2} gap={2}>
                     <Button
@@ -120,7 +113,7 @@ const UrlErrorModal = ({ open, onClose, onSubmit }) => {
                             borderRadius: '20px',
                         }}
                         onClick={() => console.log('Go to Data Edit Screen')}
-                        data-testid='url-error-modal-go-to-data-button'
+                        data-testid='data-not-match-modal-go-to-data-button'
                     >
                         Go to Data Edit Screen
                     </Button>
@@ -131,7 +124,7 @@ const UrlErrorModal = ({ open, onClose, onSubmit }) => {
                             borderRadius: '20px',
                         }}
                         onClick={() => console.log('Cancel registration')}
-                        data-testid='url-error-modal-cancel-button'
+                        data-testid='data-not-match-modal-cancel-button'
                     >
                         Cancel registration
                     </Button>
@@ -142,7 +135,7 @@ const UrlErrorModal = ({ open, onClose, onSubmit }) => {
                             borderRadius: '20px',
                         }}
                         onClick={() => console.log('Feedback')}
-                        data-testid='url-error-modal-feedback-button'
+                        data-testid='data-not-match-modal-feedback-button'
                     >
                         Feedback
                     </Button>
@@ -152,4 +145,4 @@ const UrlErrorModal = ({ open, onClose, onSubmit }) => {
     );
 };
 
-export default UrlErrorModal;
+export default ExternalDataNotMatchModal;

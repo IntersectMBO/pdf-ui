@@ -42,6 +42,10 @@ let theme = createTheme({
         iconButton: {
             outlineLightColor: alpha('#BFC8D9', 0.38),
             lightPeriwinkle: '#D7D8FF',
+            error_200: '#EDACAC',
+            error_50: '#FBEBEB',
+            success_100: '#E0F2DC',
+            success_300: '#A1D797',
         },
         text: {
             grey: '#506288',
