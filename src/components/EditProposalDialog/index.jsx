@@ -78,11 +78,21 @@ const EditProposalDialog = ({
             draft?.prop_name &&
             draft?.prop_abstract &&
             draft?.prop_motivation &&
-            draft?.prop_rationale &&
-            draft?.prop_receiving_address &&
-            draft?.prop_amount
+            draft?.prop_rationale
         ) {
-            setIsSaveDisabled(false);
+            const selectedLabel = governanceActionTypes.find(
+                (option) => option?.value === draft?.gov_action_type_id
+            )?.label;
+
+            if (selectedLabel === 'Treasury') {
+                if (draft?.prop_receiving_address && draft?.prop_amount) {
+                    setIsSaveDisabled(false);
+                } else {
+                    setIsSaveDisabled(true);
+                }
+            } else {
+                setIsSaveDisabled(false);
+            }
         } else {
             setIsSaveDisabled(true);
         }
