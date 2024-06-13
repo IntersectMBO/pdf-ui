@@ -34,11 +34,24 @@ const CreateGovernanceAction = () => {
             proposalData?.prop_name &&
             proposalData?.prop_abstract &&
             proposalData?.prop_motivation &&
-            proposalData?.prop_rationale &&
-            proposalData?.prop_receiving_address &&
-            proposalData?.prop_amount
+            proposalData?.prop_rationale
         ) {
-            setIsContinueDisabled(false);
+            const selectedLabel = governanceActionTypes.find(
+                (option) => option?.value === proposalData?.gov_action_type_id
+            )?.label;
+
+            if (selectedLabel === 'Treasury') {
+                if (
+                    proposalData?.prop_receiving_address &&
+                    proposalData?.prop_amount
+                ) {
+                    setIsContinueDisabled(false);
+                } else {
+                    setIsContinueDisabled(true);
+                }
+            } else {
+                setIsContinueDisabled(false);
+            }
         } else {
             setIsContinueDisabled(true);
         }
