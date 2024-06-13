@@ -21,6 +21,22 @@ const InformationStorageStep = ({ proposal }) => {
     const [fileURL, setFileURL] = useState('');
 
     const handleCreateGAJsonLD = async () => {
+        const referencesList = [];
+
+        if (
+            proposal?.attributes?.content?.attributes?.proposal_links?.length >
+            0
+        ) {
+            proposal?.attributes?.content?.attributes?.proposal_links?.map(
+                (reference) => {
+                    referencesList.push({
+                        label: reference?.prop_link_text || 'Label',
+                        uri: reference?.prop_link,
+                    });
+                }
+            );
+        }
+
         const jsonLd = await walletAPI.createGovernanceActionJsonLD({
             title: proposal?.attributes?.content?.attributes?.prop_name,
             abstract: proposal?.attributes?.content?.attributes?.prop_abstract,
@@ -28,6 +44,7 @@ const InformationStorageStep = ({ proposal }) => {
                 proposal?.attributes?.content?.attributes?.prop_motivation,
             rationale:
                 proposal?.attributes?.content?.attributes?.prop_rationale,
+            references: referencesList,
         });
 
         if (!jsonLd) return;
@@ -36,32 +53,67 @@ const InformationStorageStep = ({ proposal }) => {
         setHashData(hash);
     };
 
+    const replaceApiWithMetadataValidation = (url) => {
+        return url.replace('api', 'metadata-validation');
+    };
+
     const METADATA_API = axios.create({
-        baseURL:
-            'https://dev-sanchonet.govtool.byron.network/metadata-validation',
+        baseURL: process.env.NEXT_PUBLIC_BASE_URL
+            ? replaceApiWithMetadataValidation(process.env.NEXT_PUBLIC_BASE_URL)
+            : replaceApiWithMetadataValidation(
+                  'https://dev-sanchonet.govtool.byron.network/api'
+              ),
         timeout: 30000,
     });
 
-    const handleValidation = async () => {
-        const response = await METADATA_API.post(`/validate`, {
-            url: fileURL,
-            hash: hashData,
-        });
-        if (response?.data?.valid) {
-            const govActionBuilder =
-                await walletAPI.buildNewInfoGovernanceAction({
-                    hash: hashData,
-                    url: fileURL,
-                });
+    const handleGASubmission = async () => {
+        try {
+            const response = await METADATA_API.post(`/validate`, {
+                url: fileURL,
+                hash: hashData,
+            });
 
-            if (govActionBuilder) {
-                const tx = await walletAPI.buildSignSubmitConwayCertTx({
-                    govActionBuilder: govActionBuilder,
-                    type: 'createGovAction',
-                });
+            if (response?.data?.valid) {
+                let govActionBuilder = null;
+                if (
+                    proposal?.attributes?.content?.attributes?.gov_action_type
+                        ?.attributes?.gov_action_type_name === 'Info'
+                ) {
+                    govActionBuilder =
+                        await walletAPI.buildNewInfoGovernanceAction({
+                            hash: hashData,
+                            url: fileURL,
+                        });
+                } else if (
+                    proposal?.attributes?.content?.attributes?.gov_action_type
+                        ?.attributes?.gov_action_type_name === 'Treasury'
+                ) {
+                    govActionBuilder =
+                        await walletAPI.buildTreasuryGovernanceAction({
+                            hash: hashData,
+                            url: fileURL,
+                            amount: proposal?.attributes?.content?.attributes
+                                ?.prop_amount,
+                            receivingAddress:
+                                proposal?.attributes?.content?.attributes
+                                    ?.prop_receiving_address,
+                        });
+                }
 
-                //console.log(tx);
+                if (govActionBuilder) {
+                    const tx = await walletAPI.buildSignSubmitConwayCertTx({
+                        govActionBuilder: govActionBuilder,
+                        type: 'createGovAction',
+                    });
+
+                    //console.log(tx);
+                    if (tx) {
+                        navigate('/proposal_discussion');
+                    }
+                }
             }
+        } catch (error) {
+            console.error(error);
         }
     };
 
@@ -148,7 +200,7 @@ const InformationStorageStep = ({ proposal }) => {
                                     sx={{ ml: 2 }}
                                     onClick={() => handleDownloadJsonLD()}
                                 >
-                                    [file_name].jsonld
+                                    data.jsonld
                                 </Button>
                             </Box>
 
@@ -203,7 +255,7 @@ const InformationStorageStep = ({ proposal }) => {
                             </Button>
                             <Button
                                 variant='contained'
-                                onClick={handleValidation}
+                                onClick={handleGASubmission}
                             >
                                 Submit
                             </Button>
