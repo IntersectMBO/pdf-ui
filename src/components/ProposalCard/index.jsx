@@ -17,6 +17,7 @@ import {
     IconButton,
     Menu,
     Stack,
+    Tooltip,
     Typography,
     alpha,
     styled,
@@ -116,31 +117,37 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                 <CardHeader
                     action={
                         <>
-                            <IconButton
-                                id='share-button-card'
-                                sx={{
-                                    width: 40,
-                                    height: 40,
-                                }}
-                                aria-controls={
-                                    openShare ? 'share-menu-card' : undefined
-                                }
-                                aria-haspopup='true'
-                                aria-expanded={openShare ? 'true' : undefined}
-                                onClick={handleShareClick}
-                                data-testid={`proposal-${proposal?.id}-share-button`}
-                            >
-                                <IconShare
-                                    width='24'
-                                    height='24'
-                                    fill={
+                            <Tooltip title='Share'>
+                                <IconButton
+                                    id='share-button-card'
+                                    sx={{
+                                        width: 40,
+                                        height: 40,
+                                    }}
+                                    aria-controls={
                                         openShare
-                                            ? theme?.palette?.primary?.main
-                                            : theme?.palette?.primary?.icons
-                                                  ?.black
+                                            ? 'share-menu-card'
+                                            : undefined
                                     }
-                                />
-                            </IconButton>
+                                    aria-haspopup='true'
+                                    aria-expanded={
+                                        openShare ? 'true' : undefined
+                                    }
+                                    onClick={handleShareClick}
+                                    data-testid={`proposal-${proposal?.id}-share-button`}
+                                >
+                                    <IconShare
+                                        width='24'
+                                        height='24'
+                                        fill={
+                                            openShare
+                                                ? theme?.palette?.primary?.main
+                                                : theme?.palette?.primary?.icons
+                                                      ?.black
+                                        }
+                                    />
+                                </IconButton>
+                            </Tooltip>
                             <Menu
                                 id='share-menu-card'
                                 anchorEl={shareAnchorEl}
@@ -390,13 +397,15 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                                     {user &&
                                         user?.user?.id?.toString() ===
                                             proposal?.attributes?.user_id?.toString() && (
-                                            <IconButton
-                                                aria-label='edit'
-                                                onClick={handleEditProposal}
-                                                data-testid={`proposal-${proposal?.id}-edit-button`}
-                                            >
-                                                <IconPencilAlt />
-                                            </IconButton>
+                                            <Tooltip title='Edit'>
+                                                <IconButton
+                                                    aria-label='edit'
+                                                    onClick={handleEditProposal}
+                                                    data-testid={`proposal-${proposal?.id}-edit-button`}
+                                                >
+                                                    <IconPencilAlt />
+                                                </IconButton>
+                                            </Tooltip>
                                         )}
                                 </Box>
                             )}
