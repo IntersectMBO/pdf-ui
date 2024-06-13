@@ -368,6 +368,7 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                             display={'flex'}
                             flexDirection={'row'}
                             justifyContent={'space-between'}
+                            gap={2}
                         >
                             {proposal?.attributes?.content?.attributes
                                 ?.is_draft ? null : (
@@ -413,17 +414,20 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                                     Start Editing
                                 </Button>
                             ) : (
-                                <Link
-                                    to={`/proposal_discussion/${proposal?.id}`}
-                                    data-testid={`proposal-${proposal?.id}-view-details-link-wrapper`}
-                                >
-                                    <Button
-                                        variant='contained'
-                                        data-testid={`proposal-${proposal?.id}-view-details`}
+                                <Box flexGrow={1}>
+                                    <Link
+                                        to={`/proposal_discussion/${proposal?.id}`}
+                                        data-testid={`proposal-${proposal?.id}-view-details-link-wrapper`}
                                     >
-                                        View Details
-                                    </Button>
-                                </Link>
+                                        <Button
+                                            variant='contained'
+                                            data-testid={`proposal-${proposal?.id}-view-details`}
+                                            fullWidth
+                                        >
+                                            View Details
+                                        </Button>
+                                    </Link>
+                                </Box>
                             )}
                         </Box>
                     </Box>
