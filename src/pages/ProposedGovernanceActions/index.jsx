@@ -18,7 +18,8 @@ import {
     MenuItem,
     TextField,
     Typography,
-    Button
+    Button,
+    Tooltip,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { ProposalsList } from '../../components';
@@ -158,28 +159,33 @@ const ProposedGovernanceActions = () => {
                         </Grid>
                         <Grid item>
                             <Box gap={1} display={'flex'}>
-                                <IconButton
-                                    id='filters-button'
-                                    data-testid='filter-button'
-                                    sx={{
-                                        width: 40,
-                                        height: 40,
-                                    }}
-                                    aria-controls={
-                                        openFilters ? 'filters-menu' : undefined
-                                    }
-                                    aria-haspopup='true'
-                                    aria-expanded={
-                                        openFilters ? 'true' : undefined
-                                    }
-                                    onClick={handleFiltersClick}
-                                >
-                                    <IconFilter
-                                        color={
-                                            theme.palette.primary.icons.black
+                                <Tooltip title='Filters'>
+                                    <IconButton
+                                        id='filters-button'
+                                        data-testid='filter-button'
+                                        sx={{
+                                            width: 40,
+                                            height: 40,
+                                        }}
+                                        aria-controls={
+                                            openFilters
+                                                ? 'filters-menu'
+                                                : undefined
                                         }
-                                    />
-                                </IconButton>
+                                        aria-haspopup='true'
+                                        aria-expanded={
+                                            openFilters ? 'true' : undefined
+                                        }
+                                        onClick={handleFiltersClick}
+                                    >
+                                        <IconFilter
+                                            color={
+                                                theme.palette.primary.icons
+                                                    .black
+                                            }
+                                        />
+                                    </IconButton>
+                                </Tooltip>
                                 <Menu
                                     id='filters-menu'
                                     anchorEl={filtersAnchorEl}
@@ -251,21 +257,24 @@ const ProposedGovernanceActions = () => {
                                         </Typography>
                                     </MenuItem>
                                 </Menu>
-                                <IconButton
-                                    id='sort-button'
-                                    data-testid='sort-button'
-                                    onClick={() =>
-                                        setSortType((prev) =>
-                                            prev === 'desc' ? 'asc' : 'desc'
-                                        )
-                                    }
-                                >
-                                    <IconSort
-                                        color={
-                                            theme.palette.primary.icons.black
+                                <Tooltip title='Sort'>
+                                    <IconButton
+                                        id='sort-button'
+                                        data-testid='sort-button'
+                                        onClick={() =>
+                                            setSortType((prev) =>
+                                                prev === 'desc' ? 'asc' : 'desc'
+                                            )
                                         }
-                                    />
-                                </IconButton>
+                                    >
+                                        <IconSort
+                                            color={
+                                                theme.palette.primary.icons
+                                                    .black
+                                            }
+                                        />
+                                    </IconButton>
+                                </Tooltip>
                             </Box>
                         </Grid>
                     </Grid>

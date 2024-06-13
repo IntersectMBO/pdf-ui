@@ -67,7 +67,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
         switch (step) {
             case 1:
                 return (
-                    <Box p={2}>
+                    <Box p={3}>
                         <Box
                             sx={{
                                 display: 'flex',
@@ -76,7 +76,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
                                 alignItems: 'center',
                             }}
                         >
-                            <Typography variant='h6' component='h2'>
+                            <Typography variant='h6' component='h3'>
                                 Hey, setup your username
                             </Typography>
                             <IconButton onClick={handleClose}>
@@ -88,7 +88,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
                             variant='body2'
                             sx={{
                                 mt: 2,
-                                mb: 2,
+                                mb: 3,
                             }}
                             color={(theme) => theme.palette.text.grey}
                         >
@@ -119,7 +119,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
                 );
             case 2:
                 return (
-                    <Box p={2}>
+                    <Box p={3}>
                         <Box
                             sx={{
                                 display: 'flex',
@@ -128,7 +128,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
                                 alignItems: 'center',
                             }}
                         >
-                            <Typography variant='h6' component='h2'>
+                            <Typography variant='h6' component='h3'>
                                 Are you sure you want to use "{username}"?
                             </Typography>
                             <IconButton onClick={handleClose}>
@@ -139,7 +139,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
                             variant='body2'
                             sx={{
                                 mt: 2,
-                                mb: 2,
+                                mb: 3,
                             }}
                             color={(theme) => theme.palette.text.grey}
                         >
@@ -171,7 +171,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
                                 Proceed with this username
                             </Button>
                             <Button
-                                variant='text'
+                                variant='outlined'
                                 fullWidth
                                 onClick={handleBack}
                             >
@@ -184,7 +184,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
                 return (
                     <>
                         <Box
-                            p={2}
+                            p={3}
                             borderBottom={1}
                             borderColor={(theme) =>
                                 theme.palette.border.lightGray
@@ -196,7 +196,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
                                 justifyContent='space-between'
                                 alignItems={'center'}
                             >
-                                <Typography variant='h6' component='h2'>
+                                <Typography variant='h6' component='h3'>
                                     Username submitted!
                                 </Typography>
                                 <IconButton onClick={handleClose}>
