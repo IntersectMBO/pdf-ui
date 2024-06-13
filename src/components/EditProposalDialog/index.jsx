@@ -213,10 +213,6 @@ const EditProposalDialog = ({
                         display: 'flex',
                         flexDirection: 'column',
                         flexGrow: 1,
-                        backgroundImage: `url('/svg/ellipse-1.svg'), url('/svg/ellipse-2.svg')`,
-                        backgroundRepeat: 'no-repeat, no-repeat',
-                        backgroundPosition: 'top left, bottom right',
-                        backgroundSize: 'auto, auto',
                         overflow: 'auto',
                         minHeight: 0,
                     }}

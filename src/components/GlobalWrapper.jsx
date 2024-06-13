@@ -10,7 +10,6 @@ import {
     CreateGovernanceAction,
     ProposedGovernanceActions,
     SingleGovernanceAction,
-    SubmissionGovernanceAction,
 } from '../pages';
 import { format } from 'date-fns';
 
@@ -39,14 +38,14 @@ const GlobalWrapper = ({ ...props }) => {
 
     const loginUserToApp = async (wallet) => {
         try {
-            const changeAddrHex = await wallet.getChangeAddress();
+            const changeAddrHex = await wallet?.address;
             const messageUtf = `Please sign this message to verify your identity at ${format(new Date(), 'd MMMM yyyy HH:mm:ss')}`;
             const messageHex = utf8ToHex(messageUtf);
             const signedData = await wallet.signData(changeAddrHex, messageHex);
 
             const userResponse = await loginUser({
                 identifier: changeAddrHex,
-                signedData,
+                signedData: signedData,
             });
 
             if (!userResponse) return;
@@ -94,11 +93,6 @@ const GlobalWrapper = ({ ...props }) => {
 
     const renderComponentBasedOnPath = (path) => {
         if (
-            path.includes('submit-governance-action') &&
-            GovToolAssemblyWalletAPI?.getChangeAddress
-        ) {
-            return <SubmissionGovernanceAction />;
-        } else if (
             path.includes('create-governance-action') &&
             GovToolAssemblyWalletAPI?.getChangeAddress
         ) {
