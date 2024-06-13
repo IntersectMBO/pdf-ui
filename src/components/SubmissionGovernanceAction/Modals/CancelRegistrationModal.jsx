@@ -5,9 +5,11 @@ import {
 } from '@intersect.mbo/intersectmbo.org-icons-set';
 import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const CancelRegistrationModal = ({ open, onClose, onSubmit }) => {
+const CancelRegistrationModal = ({ open, onClose }) => {
     const theme = useTheme();
+    const navigate = useNavigate();
     return (
         <Modal
             open={open}
@@ -103,7 +105,7 @@ const CancelRegistrationModal = ({ open, onClose, onSubmit }) => {
                         sx={{
                             borderRadius: '20px',
                         }}
-                        onClick={() => console.log('Back to Dashboard')}
+                        onClick={() => navigate(`/proposal_discussion`)}
                         data-testid='cancel-registration-modal-back-button'
                     >
                         Back to Dashboard

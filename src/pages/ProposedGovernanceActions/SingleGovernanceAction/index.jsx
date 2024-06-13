@@ -1224,7 +1224,7 @@ const SingleGovernanceAction = ({ id }) => {
                     <ProposalSubmissionDialog
                         proposal={proposal}
                         openEditDialog={openGASubmissionDialog}
-                        handleCloseEditDialog={() =>
+                        handleCloseSubmissionDialog={() =>
                             setOpenGASubmissionDialog(false)
                         }
                     />

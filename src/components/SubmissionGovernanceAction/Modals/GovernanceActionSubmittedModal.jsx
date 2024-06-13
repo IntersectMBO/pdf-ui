@@ -1,17 +1,12 @@
 import { useTheme } from '@emotion/react';
 import { IconCheck, IconX } from '@intersect.mbo/intersectmbo.org-icons-set';
-import {
-    Box,
-    Button,
-    IconButton,
-    Link,
-    Modal,
-    Typography,
-} from '@mui/material';
+import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const GovernanceActionSubmittedModal = ({ open, onClose, onSubmit }) => {
+const GovernanceActionSubmittedModal = ({ open, onClose }) => {
     const theme = useTheme();
+    const navigate = useNavigate();
     return (
         <Modal open={open} onClose={onClose} data-testid='ga-submitted-modal'>
             <Box
@@ -98,23 +93,12 @@ const GovernanceActionSubmittedModal = ({ open, onClose, onSubmit }) => {
                 </Box>
                 <Box display='flex' flexDirection='column' padding={2} gap={2}>
                     <Button
-                        variant='contained'
-                        fullWidth
-                        sx={{
-                            borderRadius: '20px',
-                        }}
-                        onClick={() => console.log('Go to Dashboard')}
-                        data-testid='ga-submitted-modal-new-ga-button'
-                    >
-                        Go to the new GA
-                    </Button>
-                    <Button
                         variant='outlined'
                         fullWidth
                         sx={{
                             borderRadius: '20px',
                         }}
-                        onClick={() => console.log('Go to Dashboard')}
+                        onClick={() => navigate('/proposal_discussion')}
                         data-testid='ga-submitted-modal-dashboard-button'
                     >
                         Go to Dashboard
