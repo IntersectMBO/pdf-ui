@@ -66,6 +66,7 @@ const EditProposalDialog = ({
     const [governanceActionTypes, setGovernanceActionTypes] = useState([]);
     const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal] =
         useState(false);
+    const [selectedGovActionName, setSelectedGovActionName] = useState('');
 
     const isSmallScreen = useMediaQuery((theme) =>
         theme.breakpoints.down('sm')
@@ -187,6 +188,22 @@ const EditProposalDialog = ({
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleChange = (e) => {
+        const selectedValue = e.target.value;
+        const selectedLabel = governanceActionTypes.find(
+            (option) => option?.value === selectedValue
+        )?.label;
+
+        setDraft((prev) => ({
+            ...prev,
+            gov_action_type_id: selectedValue,
+            prop_receiving_address: null,
+            prop_amount: null,
+        }));
+
+        setSelectedGovActionName(selectedLabel);
     };
 
     useEffect(() => {
@@ -372,9 +389,9 @@ const EditProposalDialog = ({
                                                             'center',
                                                         alignItems: 'center',
                                                         borderTopLeftRadius:
-                                                            '16px',
+                                                            '8px',
                                                         borderTopRightRadius:
-                                                            '16px',
+                                                            '8px',
                                                         borderBottomLeftRadius: 0,
                                                         borderBottomRightRadius: 0,
                                                         gap: 1,
@@ -402,9 +419,9 @@ const EditProposalDialog = ({
                                                         borderTopLeftRadius: 0,
                                                         borderTopRightRadius: 0,
                                                         borderBottomLeftRadius:
-                                                            '16px',
+                                                            '8px',
                                                         borderBottomRightRadius:
-                                                            '16px',
+                                                            '8px',
                                                         gap: 1,
                                                         backgroundColor:
                                                             '#F3F4F8',
@@ -434,13 +451,7 @@ const EditProposalDialog = ({
                                             value={
                                                 draft?.gov_action_type_id || ''
                                             }
-                                            onChange={(e) => {
-                                                setDraft((prev) => ({
-                                                    ...prev,
-                                                    gov_action_type_id:
-                                                        e.target.value,
-                                                }));
-                                            }}
+                                            onChange={handleChange}
                                         >
                                             {governanceActionTypes?.map(
                                                 (option) => (
@@ -590,41 +601,49 @@ const EditProposalDialog = ({
                                             }}
                                         />
 
-                                        <TextField
-                                            fullWidth
-                                            margin='normal'
-                                            label='Receiving address'
-                                            variant='outlined'
-                                            value={
-                                                draft?.prop_receiving_address ||
-                                                ''
-                                            }
-                                            onChange={(e) =>
-                                                setDraft((prev) => ({
-                                                    ...prev,
-                                                    prop_receiving_address:
-                                                        e.target.value,
-                                                }))
-                                            }
-                                            required
-                                        />
+                                        {selectedGovActionName ===
+                                        'Treasury' ? (
+                                            <>
+                                                <TextField
+                                                    fullWidth
+                                                    margin='normal'
+                                                    label='Receiving address'
+                                                    variant='outlined'
+                                                    value={
+                                                        draft?.prop_receiving_address ||
+                                                        ''
+                                                    }
+                                                    onChange={(e) =>
+                                                        setDraft((prev) => ({
+                                                            ...prev,
+                                                            prop_receiving_address:
+                                                                e.target.value,
+                                                        }))
+                                                    }
+                                                    required
+                                                />
 
-                                        <TextField
-                                            fullWidth
-                                            margin='normal'
-                                            label='Amount'
-                                            type='number'
-                                            variant='outlined'
-                                            placeholder='e.g. 2000'
-                                            value={draft?.prop_amount || ''}
-                                            onChange={(e) =>
-                                                setDraft((prev) => ({
-                                                    ...prev,
-                                                    prop_amount: e.target.value,
-                                                }))
-                                            }
-                                            required
-                                        />
+                                                <TextField
+                                                    fullWidth
+                                                    margin='normal'
+                                                    label='Amount'
+                                                    type='number'
+                                                    variant='outlined'
+                                                    placeholder='e.g. 2000'
+                                                    value={
+                                                        draft?.prop_amount || ''
+                                                    }
+                                                    onChange={(e) =>
+                                                        setDraft((prev) => ({
+                                                            ...prev,
+                                                            prop_amount:
+                                                                e.target.value,
+                                                        }))
+                                                    }
+                                                    required
+                                                />
+                                            </>
+                                        ) : null}
 
                                         <Box
                                             sx={{
