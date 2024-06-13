@@ -7,7 +7,7 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { LinkManager } from '.';
 import { useAppContext } from '../../context/context';
 import { getGovernanceActionTypes } from '../../lib/api';
@@ -23,6 +23,23 @@ const Step2 = ({
 }) => {
     const maxLength = 256;
     const { setLoading } = useAppContext();
+    const [selectedGovActionName, setSelectedGovActionName] = useState('');
+
+    const handleChange = (e) => {
+        const selectedValue = e.target.value;
+        const selectedLabel = governanceActionTypes.find(
+            (option) => option?.value === selectedValue
+        )?.label;
+
+        setProposalData((prev) => ({
+            ...prev,
+            gov_action_type_id: selectedValue,
+            prop_receiving_address: null,
+            prop_amount: null,
+        }));
+
+        setSelectedGovActionName(selectedLabel);
+    };
 
     const fetchGovernanceActionTypes = async () => {
         setLoading(true);
@@ -105,14 +122,9 @@ const Step2 = ({
                         value={proposalData?.gov_action_type_id || ''}
                         required
                         fullWidth
-                        onChange={(e) => {
-                            setProposalData((prev) => ({
-                                ...prev,
-                                gov_action_type_id: e.target.value,
-                            }));
-                        }}
+                        onChange={handleChange}
                     >
-                        {governanceActionTypes?.map((option) => (
+                        {governanceActionTypes?.map((option, index) => (
                             <MenuItem key={option?.value} value={option?.value}>
                                 {option?.label}
                             </MenuItem>
@@ -246,37 +258,43 @@ const Step2 = ({
                         }}
                     />
 
-                    <TextField
-                        margin='normal'
-                        label='Receiving address'
-                        variant='outlined'
-                        value={proposalData?.prop_receiving_address || ''}
-                        fullWidth
-                        onChange={(e) =>
-                            setProposalData((prev) => ({
-                                ...prev,
-                                prop_receiving_address: e.target.value,
-                            }))
-                        }
-                        required
-                    />
+                    {selectedGovActionName === 'Treasury' ? (
+                        <>
+                            <TextField
+                                margin='normal'
+                                label='Receiving address'
+                                variant='outlined'
+                                value={
+                                    proposalData?.prop_receiving_address || ''
+                                }
+                                fullWidth
+                                onChange={(e) =>
+                                    setProposalData((prev) => ({
+                                        ...prev,
+                                        prop_receiving_address: e.target.value,
+                                    }))
+                                }
+                                required
+                            />
 
-                    <TextField
-                        margin='normal'
-                        label='Amount'
-                        type='number'
-                        variant='outlined'
-                        placeholder='e.g. 2000'
-                        value={proposalData?.prop_amount || ''}
-                        fullWidth
-                        onChange={(e) =>
-                            setProposalData((prev) => ({
-                                ...prev,
-                                prop_amount: e.target.value,
-                            }))
-                        }
-                        required
-                    />
+                            <TextField
+                                margin='normal'
+                                label='Amount'
+                                type='number'
+                                variant='outlined'
+                                placeholder='e.g. 2000'
+                                value={proposalData?.prop_amount || ''}
+                                fullWidth
+                                onChange={(e) =>
+                                    setProposalData((prev) => ({
+                                        ...prev,
+                                        prop_amount: e.target.value,
+                                    }))
+                                }
+                                required
+                            />
+                        </>
+                    ) : null}
 
                     <Box
                         sx={{
