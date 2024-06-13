@@ -12,7 +12,7 @@ import { useTheme } from '@emotion/react';
 const ProposalSubmissionDialog = ({
     proposal,
     openEditDialog,
-    handleCloseEditDialog,
+    handleCloseSubmissionDialog,
 }) => {
     const theme = useTheme();
     const navigate = useNavigate();
@@ -22,7 +22,7 @@ const ProposalSubmissionDialog = ({
             <Dialog
                 fullScreen
                 open={openEditDialog}
-                onClose={handleCloseEditDialog}
+                onClose={handleCloseSubmissionDialog}
             >
                 <Box
                     sx={{
@@ -71,7 +71,12 @@ const ProposalSubmissionDialog = ({
                     >
                         {step === 1 && <StoreDataStep setStep={setStep} />}
                         {step === 2 && (
-                            <InformationStorageStep proposal={proposal} />
+                            <InformationStorageStep
+                                proposal={proposal}
+                                handleCloseSubmissionDialog={
+                                    handleCloseSubmissionDialog
+                                }
+                            />
                         )}
                     </Box>
                 </Box>

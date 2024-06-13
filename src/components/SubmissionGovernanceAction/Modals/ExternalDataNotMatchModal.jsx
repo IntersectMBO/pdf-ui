@@ -6,7 +6,12 @@ import {
 import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
 import React from 'react';
 
-const ExternalDataNotMatchModal = ({ open, onClose, onSubmit }) => {
+const ExternalDataNotMatchModal = ({
+    open,
+    onClose,
+    buttonOneClick,
+    buttonTwoClick,
+}) => {
     const theme = useTheme();
     return (
         <Modal open={open} onClose={onClose} data-testid='data-not-match-modal'>
@@ -112,7 +117,7 @@ const ExternalDataNotMatchModal = ({ open, onClose, onSubmit }) => {
                         sx={{
                             borderRadius: '20px',
                         }}
-                        onClick={() => console.log('Go to Data Edit Screen')}
+                        onClick={buttonOneClick}
                         data-testid='data-not-match-modal-go-to-data-button'
                     >
                         Go to Data Edit Screen
@@ -123,7 +128,7 @@ const ExternalDataNotMatchModal = ({ open, onClose, onSubmit }) => {
                         sx={{
                             borderRadius: '20px',
                         }}
-                        onClick={() => console.log('Cancel registration')}
+                        onClick={buttonTwoClick}
                         data-testid='data-not-match-modal-cancel-button'
                     >
                         Cancel registration

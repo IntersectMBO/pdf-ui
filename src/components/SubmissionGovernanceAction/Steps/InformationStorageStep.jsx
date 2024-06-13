@@ -12,13 +12,31 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../../context/context';
+import {
+    CheckingDataModal,
+    ExternalDataNotMatchModal,
+    UrlErrorModal,
+    CancelRegistrationModal,
+    GovernanceActionSubmittedModal,
+} from '../../../components/SubmissionGovernanceAction';
 
-const InformationStorageStep = ({ proposal }) => {
+const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
     const navigate = useNavigate();
     const { walletAPI } = useAppContext();
     const [jsonLdData, setJsonLdData] = useState({});
     const [hashData, setHashData] = useState('');
     const [fileURL, setFileURL] = useState('');
+
+    const [showCheckingDataModal, setCheckingDataModal] = useState(false);
+    const [showExternalDataNotMatchModal, setShowExternalDataNotMatchModal] =
+        useState(false);
+    const [showUrlErrorModal, setShowUrlErrorModal] = useState(false);
+    const [showCancelRegistrationModal, setShowCancelRegistrationModal] =
+        useState(false);
+    const [
+        showGovernanceActionSubmittedModal,
+        setShowGovernanceActionSubmittedModal,
+    ] = useState(false);
 
     const handleCreateGAJsonLD = async () => {
         const referencesList = [];
@@ -68,6 +86,7 @@ const InformationStorageStep = ({ proposal }) => {
 
     const handleGASubmission = async () => {
         try {
+            setCheckingDataModal(true);
             const response = await METADATA_API.post(`/validate`, {
                 url: fileURL,
                 hash: hashData,
@@ -106,14 +125,22 @@ const InformationStorageStep = ({ proposal }) => {
                         type: 'createGovAction',
                     });
 
-                    //console.log(tx);
                     if (tx) {
-                        navigate('/proposal_discussion');
+                        setShowGovernanceActionSubmittedModal(true);
                     }
+                }
+            } else {
+                console.error(response);
+                if (response?.data?.status === 'URL_NOT_FOUND') {
+                    setShowUrlErrorModal(true);
+                } else {
+                    setShowExternalDataNotMatchModal(true);
                 }
             }
         } catch (error) {
             console.error(error);
+        } finally {
+            setCheckingDataModal(false);
         }
     };
 
@@ -256,6 +283,7 @@ const InformationStorageStep = ({ proposal }) => {
                             <Button
                                 variant='contained'
                                 onClick={handleGASubmission}
+                                disabled={!fileURL}
                             >
                                 Submit
                             </Button>
@@ -263,6 +291,36 @@ const InformationStorageStep = ({ proposal }) => {
                     </CardContent>
                 </Card>
             </Box>
+
+            <CheckingDataModal open={showCheckingDataModal} />
+            <ExternalDataNotMatchModal
+                open={showExternalDataNotMatchModal}
+                onClose={() => setShowExternalDataNotMatchModal(false)}
+                buttonOneClick={handleCloseSubmissionDialog}
+                buttonTwoClick={() => {
+                    setShowExternalDataNotMatchModal(false);
+                    setShowCancelRegistrationModal(true);
+                }}
+            />
+            <UrlErrorModal
+                open={showUrlErrorModal}
+                onClose={() => setShowUrlErrorModal(false)}
+                buttonOneClick={handleCloseSubmissionDialog}
+                buttonTwoClick={() => {
+                    setShowUrlErrorModal(false);
+                    setShowCancelRegistrationModal(true);
+                }}
+            />
+
+            <CancelRegistrationModal
+                open={showCancelRegistrationModal}
+                onClose={() => setShowCancelRegistrationModal(false)}
+            />
+
+            <GovernanceActionSubmittedModal
+                open={showGovernanceActionSubmittedModal}
+                onClose={() => setShowGovernanceActionSubmittedModal(false)}
+            />
         </Box>
     );
 };
