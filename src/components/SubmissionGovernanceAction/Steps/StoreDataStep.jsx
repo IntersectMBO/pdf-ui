@@ -109,7 +109,6 @@ const StoreDataStep = ({ setStep }) => {
                         </Box>
                     </CardContent>
                 </Card>
-                :
             </Box>
         </Box>
     );

@@ -1,6 +1,6 @@
 'use client';
-
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 
 import {
     Box,
@@ -11,9 +11,79 @@ import {
     TextField,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../../context/context';
 
-const InformationStorageStep = () => {
+const InformationStorageStep = ({ proposal }) => {
     const navigate = useNavigate();
+    const { walletAPI } = useAppContext();
+    const [jsonLdData, setJsonLdData] = useState({});
+    const [hashData, setHashData] = useState('');
+    const [fileURL, setFileURL] = useState('');
+
+    const handleCreateGAJsonLD = async () => {
+        const jsonLd = await walletAPI.createGovernanceActionJsonLD({
+            title: proposal?.attributes?.content?.attributes?.prop_name,
+            abstract: proposal?.attributes?.content?.attributes?.prop_abstract,
+            motivation:
+                proposal?.attributes?.content?.attributes?.prop_motivation,
+            rationale:
+                proposal?.attributes?.content?.attributes?.prop_rationale,
+        });
+
+        if (!jsonLd) return;
+        setJsonLdData(jsonLd);
+        const hash = await walletAPI.createHash(jsonLd);
+        setHashData(hash);
+    };
+
+    const METADATA_API = axios.create({
+        baseURL:
+            'https://dev-sanchonet.govtool.byron.network/metadata-validation',
+        timeout: 30000,
+    });
+
+    const handleValidation = async () => {
+        const response = await METADATA_API.post(`/validate`, {
+            url: fileURL,
+            hash: hashData,
+        });
+        if (response?.data?.valid) {
+            const govActionBuilder =
+                await walletAPI.buildNewInfoGovernanceAction({
+                    hash: hashData,
+                    url: fileURL,
+                });
+
+            if (govActionBuilder) {
+                const tx = await walletAPI.buildSignSubmitConwayCertTx({
+                    govActionBuilder: govActionBuilder,
+                    type: 'createGovAction',
+                });
+
+                //console.log(tx);
+            }
+        }
+    };
+
+    const handleDownloadJsonLD = () => {
+        const blob = new Blob([JSON.stringify(jsonLdData, null, 2)], {
+            type: 'application/ld+json',
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'data.jsonld';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
+    useEffect(() => {
+        if (proposal && walletAPI) {
+            handleCreateGAJsonLD();
+        }
+    }, [walletAPI, proposal]);
 
     return (
         <Box display='flex' flexDirection='column'>
@@ -73,7 +143,11 @@ const InformationStorageStep = () => {
                                     1. Download this file
                                 </Typography>
 
-                                <Button variant='outlined' sx={{ ml: 2 }}>
+                                <Button
+                                    variant='outlined'
+                                    sx={{ ml: 2 }}
+                                    onClick={() => handleDownloadJsonLD()}
+                                >
                                     [file_name].jsonld
                                 </Button>
                             </Box>
@@ -94,21 +168,23 @@ const InformationStorageStep = () => {
 
                             <Box
                                 display={'flex'}
-                                alignItems={'center'}
+                                flexDirection={'column'}
                                 sx={{
                                     width: '100%',
                                 }}
                             >
                                 <Typography variant='body1' gutterBottom>
                                     3. Paste the URL here
-                                    <TextField
-                                        fullWidth
-                                        margin='normal'
-                                        label='URL'
-                                        variant='outlined'
-                                        placeholder='URL'
-                                    />
                                 </Typography>
+                                <TextField
+                                    fullWidth
+                                    margin='normal'
+                                    label='URL'
+                                    variant='outlined'
+                                    placeholder='URL'
+                                    value={fileURL || ''}
+                                    onChange={(e) => setFileURL(e.target.value)}
+                                />
                             </Box>
                         </Box>
                         <Box
@@ -125,11 +201,15 @@ const InformationStorageStep = () => {
                             >
                                 Cancel
                             </Button>
-                            <Button variant='contained'>Submit</Button>
+                            <Button
+                                variant='contained'
+                                onClick={handleValidation}
+                            >
+                                Submit
+                            </Button>
                         </Box>
                     </CardContent>
                 </Card>
-                :
             </Box>
         </Box>
     );

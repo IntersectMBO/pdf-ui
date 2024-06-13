@@ -38,6 +38,7 @@ import {
     EditProposalDialog,
     Poll,
     ReviewVersions,
+    ProposalSubmissionDialog,
 } from '../../../components';
 import { useAppContext } from '../../../context/context';
 import {
@@ -68,6 +69,7 @@ const SingleGovernanceAction = ({ id }) => {
     const [commentsSortType, setCommentsSortType] = useState('desc');
     const [proposalLink, setProposalLink] = useState('');
     const [disableShare, setDisableShare] = useState(false);
+    const [openGASubmissionDialog, setOpenGASubmissionDialog] = useState(false);
 
     useEffect(() => {
         let domain = new URL(window.location.href);
@@ -367,8 +369,8 @@ const SingleGovernanceAction = ({ id }) => {
                                                     variant='outlined'
                                                     data-testid='submit-as-GA-button'
                                                     onClick={() =>
-                                                        navigate(
-                                                            '/submit-governance-action'
+                                                        setOpenGASubmissionDialog(
+                                                            true
                                                         )
                                                     }
                                                 >
@@ -1218,6 +1220,14 @@ const SingleGovernanceAction = ({ id }) => {
                             </Box>
                         </Box>
                     </Modal>
+
+                    <ProposalSubmissionDialog
+                        proposal={proposal}
+                        openEditDialog={openGASubmissionDialog}
+                        handleCloseEditDialog={() =>
+                            setOpenGASubmissionDialog(false)
+                        }
+                    />
                 </Box>
             )}
         </>
