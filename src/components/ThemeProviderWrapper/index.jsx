@@ -38,6 +38,9 @@ let theme = createTheme({
             errorLight: '#FF9999',
             secondary: '#39B6D5',
             lightPurple: '#D6D8FF',
+            success_text: '#A1D797',
+            success: '#E0F2DC',
+            grey: '#506288',
         },
         iconButton: {
             outlineLightColor: alpha('#BFC8D9', 0.38),
