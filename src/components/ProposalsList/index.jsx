@@ -27,6 +27,7 @@ const ProposalsList = ({
     searchText = '',
     sortType = 'desc',
     isDraft = false,
+    isSubmitted = false,
     startEdittinButtonClick = false,
 }) => {
     const sliderRef = useRef(null);
@@ -42,13 +43,13 @@ const ProposalsList = ({
         try {
             let query = '';
             if (isDraft) {
-                query = `filters[$and][2][is_draft]=true&pagination[page]=${page}&pagination[pageSize]=25&sort[createdAt]=${sortType}&populate[0]=proposal_links`;
+                query = `filters[$and][2][is_draft]=true&filters[$and][3][prop_submitted]=${isSubmitted}&pagination[page]=${page}&pagination[pageSize]=25&sort[createdAt]=${sortType}&populate[0]=proposal_links`;
             } else {
                 query = `filters[$and][0][gov_action_type_id]=${
                     governanceAction?.id
                 }&filters[$and][1][prop_name][$containsi]=${
                     debouncedSearchValue || ''
-                }&pagination[page]=${page}&pagination[pageSize]=25&sort[createdAt]=${sortType}&populate[0]=proposal_links`;
+                }&filters[$and][2][prop_submitted]=${isSubmitted}&pagination[page]=${page}&pagination[pageSize]=25&sort[createdAt]=${sortType}&populate[0]=proposal_links`;
             }
             const { proposals, pgCount } = await getProposals(query);
             if (!proposals) return;

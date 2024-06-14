@@ -32,13 +32,16 @@ export const getSingleProposal = async (id) => {
     }
 };
 
-export const updateProposal = async (id, proposalData) => {
+export const updateProposalContent = async (id, proposalData) => {
     try {
-        const { data } = await axiosInstance.put(`/api/proposals/${id}`, {
-            data: {
-                ...proposalData,
-            },
-        });
+        const { data } = await axiosInstance.put(
+            `/api/proposal-contents/${id}`,
+            {
+                data: {
+                    ...proposalData,
+                },
+            }
+        );
 
         return data?.data;
     } catch (error) {
