@@ -2,6 +2,7 @@ import { useTheme } from '@emotion/react';
 import {
     IconChatAlt,
     IconCheveronLeft,
+    IconDocumentSearch,
     IconDotsVertical,
     IconInformationCircle,
     IconLink,
@@ -28,6 +29,7 @@ import {
     Modal,
     Stack,
     TextField,
+    Tooltip,
     Typography,
     alpha,
 } from '@mui/material';
@@ -316,56 +318,118 @@ const SingleGovernanceAction = ({ id }) => {
                                             variant='caption'
                                             component='p'
                                         >
-                                            {proposal?.attributes?.prop_submited
-                                                ? 'This proposal has been submitted on-chain as a Governance Action to get voted on.'
+                                            {proposal?.attributes?.content
+                                                ?.attributes?.prop_submitted
+                                                ? `Submitted for vote on: ${formatIsoDate(proposal?.attributes?.content?.attributes?.prop_submission_date)}`
                                                 : `Proposed on: ${formatIsoDate(
                                                       proposal?.attributes
                                                           ?.createdAt
                                                   )}`}
                                         </Typography>
-                                        <IconInformationCircle
-                                            width={16}
-                                            height={16}
-                                            fill={
-                                                theme?.palette?.primary?.icons
-                                                    ?.grey
+                                        <Tooltip
+                                            title={
+                                                proposal?.attributes?.content
+                                                    ?.attributes
+                                                    ?.prop_submitted ? (
+                                                    <span
+                                                        style={{
+                                                            whiteSpace:
+                                                                'pre-line',
+                                                        }}
+                                                    >
+                                                        {`Proposal Date\n\nThe date
+                                                        when Proposal was
+                                                        submitted as Governance
+                                                        Action.`}
+                                                    </span>
+                                                ) : (
+                                                    'Proposal Date'
+                                                )
                                             }
-                                        />
+                                        >
+                                            <Box>
+                                                <IconInformationCircle
+                                                    width={16}
+                                                    height={16}
+                                                    fill={
+                                                        theme?.palette?.primary
+                                                            ?.icons?.grey
+                                                    }
+                                                />
+                                            </Box>
+                                        </Tooltip>
                                     </Box>
                                 }
                             ></CardHeader>
-                            {user &&
-                                user?.user?.id?.toString() ===
-                                    proposal?.attributes?.user_id?.toString() &&
-                                !proposal?.attributes?.prop_submited && (
-                                    <CardContent>
+                            {
+                                <CardContent>
+                                    <Box
+                                        display='flex'
+                                        alignItems='center'
+                                        justifyContent='space-between'
+                                        flexDirection={{
+                                            xs: 'column',
+                                            sm: 'row',
+                                        }}
+                                    >
                                         <Box
-                                            display='flex'
-                                            alignItems='center'
-                                            justifyContent='space-between'
-                                            flexDirection={{
-                                                xs: 'column',
-                                                sm: 'row',
+                                            textAlign={{
+                                                xs: 'center',
+                                                sm: 'left',
                                             }}
                                         >
-                                            <Box
-                                                textAlign={{
-                                                    xs: 'center',
-                                                    sm: 'left',
-                                                }}
-                                            >
-                                                <Typography variant='body2'>
-                                                    Your Action:
-                                                </Typography>
+                                            {proposal?.attributes?.content
+                                                ?.attributes?.prop_submitted ? (
                                                 <Typography variant='caption'>
-                                                    If your are ready, submit
-                                                    this proposalContent as a
-                                                    governance action to get
-                                                    voted on
+                                                    This proposal has been
+                                                    submitted on-chain as a
+                                                    Governance Action to get
+                                                    voted on.
                                                 </Typography>
-                                            </Box>
+                                            ) : (
+                                                <>
+                                                    <Typography variant='body2'>
+                                                        Your Action:
+                                                    </Typography>
+                                                    <Typography variant='caption'>
+                                                        If your are ready,
+                                                        submit this
+                                                        proposalContent as a
+                                                        governance action to get
+                                                        voted on
+                                                    </Typography>
+                                                </>
+                                            )}
+                                        </Box>
 
-                                            <Box>
+                                        <Box>
+                                            {proposal?.attributes?.content
+                                                ?.attributes?.prop_submitted ? (
+                                                <Button
+                                                    variant='outlined'
+                                                    data-testid='review-and-vote-button'
+                                                    onClick={() =>
+                                                        navigate(
+                                                            `/connected/governance_actions/${proposal?.attributes?.content?.attributes?.prop_submission_tx_hash}#0`
+                                                        )
+                                                    }
+                                                    endIcon={
+                                                        <IconDocumentSearch
+                                                            width={18}
+                                                            height={18}
+                                                            fill={
+                                                                theme.palette
+                                                                    .primary
+                                                                    .main
+                                                            }
+                                                        />
+                                                    }
+                                                >
+                                                    Review and Vote
+                                                </Button>
+                                            ) : user &&
+                                              user?.user?.id?.toString() ===
+                                                  proposal?.attributes?.user_id?.toString() ? (
                                                 <Button
                                                     variant='outlined'
                                                     data-testid='submit-as-GA-button'
@@ -377,10 +441,11 @@ const SingleGovernanceAction = ({ id }) => {
                                                 >
                                                     Submit as Governance Action
                                                 </Button>
-                                            </Box>
+                                            ) : null}
                                         </Box>
-                                    </CardContent>
-                                )}
+                                    </Box>
+                                </CardContent>
+                            }
                         </Card>
                     </Box>
 
@@ -555,8 +620,9 @@ const SingleGovernanceAction = ({ id }) => {
                                         {user &&
                                             user?.user?.id?.toString() ===
                                                 proposal?.attributes?.user_id?.toString() &&
-                                            !proposal?.attributes
-                                                ?.prop_submited && (
+                                            !proposal?.attributes?.content
+                                                ?.attributes
+                                                ?.prop_submitted && (
                                                 <Box
                                                     display='flex'
                                                     justifyContent='flex-end'
@@ -821,7 +887,10 @@ const SingleGovernanceAction = ({ id }) => {
                                     flexDirection={'row'}
                                     justifyContent={'space-between'}
                                 >
-                                    <IconButton data-testid='comment-count'>
+                                    <IconButton
+                                        data-testid='comment-count'
+                                        disabled
+                                    >
                                         <Badge
                                             badgeContent={
                                                 proposal?.attributes
@@ -852,19 +921,22 @@ const SingleGovernanceAction = ({ id }) => {
                                             }}
                                             data-testid='like-button'
                                             disabled={
-                                                user
-                                                    ? user?.user?.id?.toString() ===
-                                                      proposal?.attributes?.user_id?.toString()
-                                                        ? true
-                                                        : userProposalVote
-                                                          ? userProposalVote
-                                                                ?.attributes
-                                                                ?.vote_result ===
-                                                            true
-                                                              ? true
-                                                              : false
-                                                          : false
-                                                    : true
+                                                proposal?.attributes?.content
+                                                    ?.attributes?.prop_submitted
+                                                    ? true
+                                                    : user
+                                                      ? user?.user?.id?.toString() ===
+                                                        proposal?.attributes?.user_id?.toString()
+                                                          ? true
+                                                          : userProposalVote
+                                                            ? userProposalVote
+                                                                  ?.attributes
+                                                                  ?.vote_result ===
+                                                              true
+                                                                ? true
+                                                                : false
+                                                            : false
+                                                      : true
                                             }
                                             onClick={() =>
                                                 user &&
@@ -930,19 +1002,22 @@ const SingleGovernanceAction = ({ id }) => {
                                             }}
                                             data-testid='dislike-button'
                                             disabled={
-                                                user
-                                                    ? user?.user?.id?.toString() ===
-                                                      proposal?.attributes?.user_id?.toString()
-                                                        ? true
-                                                        : userProposalVote
-                                                          ? userProposalVote
-                                                                ?.attributes
-                                                                ?.vote_result ===
-                                                            false
-                                                              ? true
-                                                              : false
-                                                          : false
-                                                    : true
+                                                proposal?.attributes?.content
+                                                    ?.attributes?.prop_submitted
+                                                    ? true
+                                                    : user
+                                                      ? user?.user?.id?.toString() ===
+                                                        proposal?.attributes?.user_id?.toString()
+                                                          ? true
+                                                          : userProposalVote
+                                                            ? userProposalVote
+                                                                  ?.attributes
+                                                                  ?.vote_result ===
+                                                              false
+                                                                ? true
+                                                                : false
+                                                            : false
+                                                      : true
                                             }
                                             onClick={() =>
                                                 userProposalVote?.attributes
@@ -1021,9 +1096,11 @@ const SingleGovernanceAction = ({ id }) => {
                                 height: 40,
                             }}
                             onClick={() =>
-                                setCommentsSortType((prev) =>
-                                    prev === 'desc' ? 'asc' : 'desc'
-                                )
+                                proposal?.attributes?.prop_comments_number === 0
+                                    ? null
+                                    : setCommentsSortType((prev) =>
+                                          prev === 'desc' ? 'asc' : 'desc'
+                                      )
                             }
                             data-testid='sort-comments'
                         >
@@ -1042,75 +1119,119 @@ const SingleGovernanceAction = ({ id }) => {
                             proposalAuthorUsername={
                                 proposal?.attributes?.user_govtool_username
                             }
+                            proposalSubmitted={
+                                proposal?.attributes?.content?.attributes
+                                    ?.prop_submitted
+                            }
                         />
                     </Box>
 
-                    <Box mt={4}>
-                        <Card>
-                            <CardContent>
-                                <Typography variant='subtitle1'>
-                                    Submit a comment
-                                </Typography>
+                    {proposal?.attributes?.content?.attributes
+                        ?.prop_submitted ? null : (
+                        <Box mt={4}>
+                            <Card>
+                                <CardContent>
+                                    <Typography variant='subtitle1'>
+                                        Submit a comment
+                                    </Typography>
 
-                                <TextField
-                                    fullWidth
-                                    margin='normal'
-                                    variant='outlined'
-                                    multiline={true}
-                                    helperText='Supporting text'
-                                    value={newCommentText || ''}
-                                    onChange={(e) =>
-                                        setNewCommentText(e.target.value)
-                                    }
-                                    data-testid='comment-input'
-                                />
-
-                                <Box
-                                    mt={2}
-                                    display='flex'
-                                    justifyContent={
-                                        user ? 'flex-end' : 'space-between'
-                                    }
-                                    flexDirection={{
-                                        xs: 'column',
-                                        sm: 'row',
-                                    }}
-                                    gap={2}
-                                >
-                                    {!user && (
-                                        <Typography variant='body2'>
-                                            Connect wallet to submit a comment
-                                            or create proposal
-                                        </Typography>
-                                    )}
-
-                                    <Button
-                                        variant='contained'
-                                        onClick={handleCreateComment}
-                                        disabled={!newCommentText || !user}
-                                        endIcon={
-                                            <IconReply
-                                                height={18}
-                                                width={18}
-                                                fill={
-                                                    !newCommentText || !user
-                                                        ? 'rgba(0,0,0, 0.26)'
-                                                        : 'white'
-                                                }
-                                            />
+                                    <TextField
+                                        fullWidth
+                                        margin='normal'
+                                        variant='outlined'
+                                        multiline={true}
+                                        helperText='Supporting text'
+                                        value={newCommentText || ''}
+                                        onChange={(e) =>
+                                            setNewCommentText(e.target.value)
                                         }
-                                        data-testid='comment-button'
+                                        data-testid='comment-input'
+                                    />
+
+                                    <Box
+                                        mt={2}
+                                        display='flex'
+                                        justifyContent={
+                                            user ? 'flex-end' : 'space-between'
+                                        }
+                                        flexDirection={{
+                                            xs: 'column',
+                                            sm: 'row',
+                                        }}
+                                        gap={2}
                                     >
-                                        Comment
-                                    </Button>
-                                </Box>
+                                        {!user && (
+                                            <Typography variant='body2'>
+                                                Connect wallet to submit a
+                                                comment or create proposal
+                                            </Typography>
+                                        )}
+
+                                        <Button
+                                            variant='contained'
+                                            onClick={handleCreateComment}
+                                            disabled={!newCommentText || !user}
+                                            endIcon={
+                                                <IconReply
+                                                    height={18}
+                                                    width={18}
+                                                    fill={
+                                                        !newCommentText || !user
+                                                            ? 'rgba(0,0,0, 0.26)'
+                                                            : 'white'
+                                                    }
+                                                />
+                                            }
+                                            data-testid='comment-button'
+                                        >
+                                            Comment
+                                        </Button>
+                                    </Box>
+                                </CardContent>
+                            </Card>
+                        </Box>
+                    )}
+                    {proposal?.attributes?.prop_comments_number === 0 ? (
+                        <Card
+                            variant='outlined'
+                            sx={{
+                                backgroundColor: alpha('#FFFFFF', 0.3),
+                                my: 3,
+                            }}
+                        >
+                            <CardContent>
+                                <Stack
+                                    display={'flex'}
+                                    direction={'column'}
+                                    alignItems={'center'}
+                                    justifyContent={'center'}
+                                    gap={1}
+                                >
+                                    <Typography
+                                        variant='h6'
+                                        color='text.black'
+                                        fontWeight={600}
+                                    >
+                                        No Comments yet
+                                    </Typography>
+                                    <Typography
+                                        variant='body1'
+                                        color='text.black'
+                                    >
+                                        Be the first to share your thoughts on
+                                        this proposal.
+                                    </Typography>
+                                </Stack>
                             </CardContent>
                         </Card>
-                    </Box>
+                    ) : null}
 
                     {commentsList?.map((comment, index) => (
                         <Box mt={4} key={index}>
-                            <CommentCard comment={comment} />
+                            <CommentCard
+                                comment={comment}
+                                proposal={proposal}
+                            />
                         </Box>
                     ))}
                     {commentsCurrentPage < commentsPageCount && (

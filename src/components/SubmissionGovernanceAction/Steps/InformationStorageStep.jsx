@@ -131,6 +131,8 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                             proposal?.attributes?.content?.id,
                             {
                                 prop_submitted: true,
+                                prop_submission_date: new Date(),
+                                prop_submission_tx_hash: tx,
                             }
                         );
                         setShowGovernanceActionSubmittedModal(true);
