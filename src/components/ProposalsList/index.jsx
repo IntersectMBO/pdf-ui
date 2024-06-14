@@ -40,11 +40,6 @@ const ProposalsList = ({
     const debouncedSearchValue = useDebounce(searchText);
 
     const fetchProposals = async (reset = true, page) => {
-        statusList;
-
-        const haveActiveFilter = statusList?.some(
-            (filter) => filter === 'active'
-        );
         const haveSubmittedFilter = statusList?.some(
             (filter) => filter === 'submitted'
         );
