@@ -19,7 +19,7 @@ import {
     CancelRegistrationModal,
     GovernanceActionSubmittedModal,
 } from '../../../components/SubmissionGovernanceAction';
-import { updateProposal } from '../../../lib/api';
+import { updateProposalContent } from '../../../lib/api';
 
 const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
     const navigate = useNavigate();
@@ -127,9 +127,12 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                     });
 
                     if (tx) {
-                        await updateProposal(proposal?.id, {
-                            prop_submited: true,
-                        });
+                        await updateProposalContent(
+                            proposal?.attributes?.content?.id,
+                            {
+                                prop_submitted: true,
+                            }
+                        );
                         setShowGovernanceActionSubmittedModal(true);
                     }
                 }
