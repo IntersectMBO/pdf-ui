@@ -27,7 +27,7 @@ const ProposalsList = ({
     searchText = '',
     sortType = 'desc',
     isDraft = false,
-    isSubmitted = false,
+    statusList = [],
     startEdittinButtonClick = false,
 }) => {
     const sliderRef = useRef(null);
@@ -40,16 +40,34 @@ const ProposalsList = ({
     const debouncedSearchValue = useDebounce(searchText);
 
     const fetchProposals = async (reset = true, page) => {
+        const haveSubmittedFilter = statusList?.some(
+            (filter) => filter === 'submitted'
+        );
+
         try {
             let query = '';
             if (isDraft) {
-                query = `filters[$and][2][is_draft]=true&filters[$and][3][prop_submitted]=${isSubmitted}&pagination[page]=${page}&pagination[pageSize]=25&sort[createdAt]=${sortType}&populate[0]=proposal_links`;
+                if (statusList?.length === 0 || statusList?.length === 2) {
+                    query = `filters[$and][2][is_draft]=true&pagination[page]=${page}&pagination[pageSize]=25&sort[createdAt]=${sortType}&populate[0]=proposal_links`;
+                } else {
+                    const isSubmitted = haveSubmittedFilter ? 'true' : 'false';
+                    query = `filters[$and][2][is_draft]=true&filters[$and][3][prop_submitted]=${isSubmitted}&pagination[page]=${page}&pagination[pageSize]=25&sort[createdAt]=${sortType}&populate[0]=proposal_links`;
+                }
             } else {
-                query = `filters[$and][0][gov_action_type_id]=${
-                    governanceAction?.id
-                }&filters[$and][1][prop_name][$containsi]=${
-                    debouncedSearchValue || ''
-                }&filters[$and][2][prop_submitted]=${isSubmitted}&pagination[page]=${page}&pagination[pageSize]=25&sort[createdAt]=${sortType}&populate[0]=proposal_links`;
+                if (statusList?.length === 0 || statusList?.length === 2) {
+                    query = `filters[$and][0][gov_action_type_id]=${
+                        governanceAction?.id
+                    }&filters[$and][1][prop_name][$containsi]=${
+                        debouncedSearchValue || ''
+                    }&pagination[page]=${page}&pagination[pageSize]=25&sort[createdAt]=${sortType}&populate[0]=proposal_links`;
+                } else {
+                    const isSubmitted = haveSubmittedFilter ? 'true' : 'false';
+                    query = `filters[$and][0][gov_action_type_id]=${
+                        governanceAction?.id
+                    }&filters[$and][1][prop_name][$containsi]=${
+                        debouncedSearchValue || ''
+                    }&filters[$and][2][prop_submitted]=${isSubmitted}&pagination[page]=${page}&pagination[pageSize]=25&sort[createdAt]=${sortType}&populate[0]=proposal_links`;
+                }
             }
             const { proposals, pgCount } = await getProposals(query);
             if (!proposals) return;
@@ -73,7 +91,7 @@ const ProposalsList = ({
             fetchProposals(true, 1);
             setCurrentPage(1);
         }
-    }, [mounted, debouncedSearchValue, sortType]);
+    }, [mounted, debouncedSearchValue, sortType, statusList]);
 
     return isDraft && proposalsList?.length === 0 ? null : (
         <Box overflow={'hidden'}>

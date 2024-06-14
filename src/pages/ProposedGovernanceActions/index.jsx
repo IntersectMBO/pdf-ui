@@ -5,7 +5,7 @@ import {
     IconFilter,
     IconSearch,
     IconSort,
-    IconPlusCircle
+    IconPlusCircle,
 } from '@intersect.mbo/intersectmbo.org-icons-set';
 import {
     Box,
@@ -20,6 +20,7 @@ import {
     Typography,
     Button,
     Tooltip,
+    Divider,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { ProposalsList } from '../../components';
@@ -40,6 +41,11 @@ const ProposedGovernanceActions = () => {
         filteredGovernanceActionTypeList,
         setFilteredGovernanceActionTypeList,
     ] = useState([]);
+
+    const [
+        filteredGovernanceActionStatusList,
+        setFilteredGovernanceActionStatusList,
+    ] = useState(['active']);
 
     const [filtersAnchorEl, setFiltersAnchorEl] = useState(null);
     const openFilters = Boolean(filtersAnchorEl);
@@ -82,8 +88,26 @@ const ProposedGovernanceActions = () => {
         setFilteredGovernanceActionTypeList(updatedList);
     };
 
+    const toggleStatusFilter = (status) => {
+        let filterExist = filteredGovernanceActionStatusList?.some(
+            (filter) => filter === status
+        );
+
+        let updatedList;
+        if (filterExist) {
+            updatedList = filteredGovernanceActionStatusList.filter(
+                (filter) => filter !== status
+            );
+        } else {
+            updatedList = [...filteredGovernanceActionStatusList, status];
+        }
+
+        setFilteredGovernanceActionStatusList(updatedList);
+    };
+
     const resetFilters = () => {
         setFilteredGovernanceActionTypeList([]);
+        setFilteredGovernanceActionStatusList(['active']);
         handleCloseFilters();
     };
 
@@ -212,50 +236,141 @@ const ProposedGovernanceActions = () => {
                                         vertical: 'bottom',
                                     }}
                                 >
-                                    {governanceActionTypeList?.map(
-                                        (ga, index) => (
-                                            <MenuItem
-                                                key={`${ga?.attributes?.gov_action_type_name}-${index}`}
-                                                selected={filteredGovernanceActionTypeList?.some(
-                                                    (filter) =>
-                                                        filter?.id === ga?.id
-                                                )}
-                                                id={`${ga?.attributes?.gov_action_type_name}-radio-wrapper`}
-                                                data-testid={`${ga?.attributes?.gov_action_type_name}-radio-wrapper`}
-                                            >
-                                                <FormControlLabel
-                                                    control={
-                                                        <Checkbox
-                                                            onChange={() =>
-                                                                toggleActionFilter(
-                                                                    ga
-                                                                )
-                                                            }
-                                                            checked={filteredGovernanceActionTypeList?.some(
-                                                                (filter) =>
-                                                                    filter?.id ===
-                                                                    ga?.id
-                                                            )}
-                                                            id={`${ga?.attributes?.gov_action_type_name}-radio`}
-                                                            data-testid={`${ga?.attributes?.gov_action_type_name}-radio`}
-                                                        />
-                                                    }
-                                                    label={
-                                                        ga?.attributes
-                                                            ?.gov_action_type_name
-                                                    }
-                                                />
-                                            </MenuItem>
-                                        )
-                                    )}
-                                    <MenuItem
-                                        onClick={() => resetFilters()}
-                                        data-testid='reset-filters'
-                                    >
-                                        <Typography color={'primary'}>
-                                            Reset filters
+                                    <Box px={2}>
+                                        <Typography
+                                            variant='body1'
+                                            sx={{
+                                                mb: 1,
+                                            }}
+                                        >
+                                            Proposals types
                                         </Typography>
-                                    </MenuItem>
+                                        <Divider
+                                            sx={{
+                                                color: (theme) => ({
+                                                    borderColor:
+                                                        theme.palette.border
+                                                            .lightGray,
+                                                }),
+                                            }}
+                                        />
+                                        {governanceActionTypeList?.map(
+                                            (ga, index) => (
+                                                <MenuItem
+                                                    key={`${ga?.attributes?.gov_action_type_name}-${index}`}
+                                                    selected={filteredGovernanceActionTypeList?.some(
+                                                        (filter) =>
+                                                            filter?.id ===
+                                                            ga?.id
+                                                    )}
+                                                    id={`${ga?.attributes?.gov_action_type_name}-radio-wrapper`}
+                                                    data-testid={`${ga?.attributes?.gov_action_type_name}-radio-wrapper`}
+                                                >
+                                                    <FormControlLabel
+                                                        control={
+                                                            <Checkbox
+                                                                onChange={() =>
+                                                                    toggleActionFilter(
+                                                                        ga
+                                                                    )
+                                                                }
+                                                                checked={filteredGovernanceActionTypeList?.some(
+                                                                    (filter) =>
+                                                                        filter?.id ===
+                                                                        ga?.id
+                                                                )}
+                                                                id={`${ga?.attributes?.gov_action_type_name}-radio`}
+                                                                data-testid={`${ga?.attributes?.gov_action_type_name}-radio`}
+                                                            />
+                                                        }
+                                                        label={
+                                                            ga?.attributes
+                                                                ?.gov_action_type_name
+                                                        }
+                                                    />
+                                                </MenuItem>
+                                            )
+                                        )}
+
+                                        <Typography
+                                            variant='body1'
+                                            sx={{ mb: 1, mt: 2 }}
+                                        >
+                                            Proposals status
+                                        </Typography>
+                                        <Divider
+                                            sx={{
+                                                color: (theme) => ({
+                                                    borderColor:
+                                                        theme.palette.border
+                                                            .lightGray,
+                                                }),
+                                            }}
+                                        />
+                                        <MenuItem
+                                            selected={filteredGovernanceActionStatusList?.some(
+                                                (filter) =>
+                                                    filter === 'submitted'
+                                            )}
+                                            id={`submitted-for-vote-radio-wrapper`}
+                                            data-testid={`submitted-for-vote-radio-wrapper`}
+                                        >
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        onChange={() =>
+                                                            toggleStatusFilter(
+                                                                'submitted'
+                                                            )
+                                                        }
+                                                        checked={filteredGovernanceActionStatusList?.some(
+                                                            (filter) =>
+                                                                filter ===
+                                                                'submitted'
+                                                        )}
+                                                        id={`submitted-for-vote-radio`}
+                                                        data-testid={`submitted-for-vote-radio`}
+                                                    />
+                                                }
+                                                label={'Submitted for vote'}
+                                            />
+                                        </MenuItem>
+                                        <MenuItem
+                                            selected={filteredGovernanceActionStatusList?.some(
+                                                (filter) => filter === 'active'
+                                            )}
+                                            id={`active-proposal-radio-wrapper`}
+                                            data-testid={`active-proposal-radio-wrapper`}
+                                        >
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        onChange={() =>
+                                                            toggleStatusFilter(
+                                                                'active'
+                                                            )
+                                                        }
+                                                        checked={filteredGovernanceActionStatusList?.some(
+                                                            (filter) =>
+                                                                filter ===
+                                                                'active'
+                                                        )}
+                                                        id={`active-proposal-radio`}
+                                                        data-testid={`active-proposal-radio`}
+                                                    />
+                                                }
+                                                label={'Active proposal'}
+                                            />
+                                        </MenuItem>
+                                        <MenuItem
+                                            onClick={() => resetFilters()}
+                                            data-testid='reset-filters'
+                                        >
+                                            <Typography color={'primary'}>
+                                                Reset filters
+                                            </Typography>
+                                        </MenuItem>
+                                    </Box>
                                 </Menu>
                                 <Tooltip title='Sort'>
                                     <IconButton
@@ -294,6 +409,7 @@ const ProposedGovernanceActions = () => {
                             governanceAction={item}
                             searchText={proposalSearchText}
                             sortType={sortType}
+                            statusList={filteredGovernanceActionStatusList}
                         />
                     </Box>
                 ))}
