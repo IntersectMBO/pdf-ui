@@ -53,13 +53,25 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
         setOpenEditDialog(false);
     };
 
-    const CardStatusBadge = styled(Badge)(({ theme }) => ({
+    const filterProps = ({ draft, submitted, ...rest }) => rest;
+
+    const CardStatusBadge = styled(({ draft, submitted, ...rest }) => (
+        <Badge {...filterProps(rest)} />
+    ))(({ theme, draft = false, submitted = false }) => ({
         width: '100%',
         height: '100%',
         '& .MuiBadge-badge': {
             transform: 'translate(-25px, -15px)',
-            color: theme.palette.text.black,
-            backgroundColor: theme.palette.badgeColors.lightPurple,
+            color: submitted
+                ? 'white'
+                : draft
+                  ? theme.palette.text.black
+                  : theme.palette.badgeColors.success_text,
+            backgroundColor: submitted
+                ? theme.palette.badgeColors.grey
+                : draft
+                  ? theme.palette.badgeColors.lightPurple
+                  : theme.palette.badgeColors.success,
             padding: '14px 12px',
             borderRadius: 100,
         },
@@ -397,8 +409,8 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                                     {user &&
                                         user?.user?.id?.toString() ===
                                             proposal?.attributes?.user_id?.toString() &&
-                                        !proposal?.attributes
-                                            ?.prop_submited && (
+                                        !proposal?.attributes?.content
+                                            ?.attributes?.prop_submitted && (
                                             <Tooltip title='Edit'>
                                                 <IconButton
                                                     aria-label='edit'
@@ -452,12 +464,28 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
             badgeContent={'Draft'}
             aria-label='draft-badge'
             showZero
+            draft={true}
         >
             <CardContentComponent proposal={proposal} />
         </CardStatusBadge>
     ) : (
         <Box>
-            <CardContentComponent proposal={proposal} />
+            <CardStatusBadge
+                badgeContent={
+                    proposal?.attributes?.content?.attributes?.prop_submitted
+                        ? 'Submitted for Vote'
+                        : 'Active'
+                }
+                aria-label='draft-badge'
+                submitted={
+                    proposal?.attributes?.content?.attributes?.prop_submitted
+                        ? true
+                        : false
+                }
+                showZero
+            >
+                <CardContentComponent proposal={proposal} />
+            </CardStatusBadge>
 
             {openEditDialog && (
                 <EditProposalDialog

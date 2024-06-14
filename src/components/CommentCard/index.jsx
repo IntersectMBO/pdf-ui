@@ -20,7 +20,7 @@ import {
     Typography,
     TextField,
 } from '@mui/material';
-const CommentCard = ({ comment }) => {
+const CommentCard = ({ comment, proposal }) => {
     const { setLoading, user } = useAppContext();
     const theme = useTheme();
     const maxLength = 128;
@@ -198,6 +198,11 @@ const CommentCard = ({ comment }) => {
                                 height: '24px',
                                 backgroundColor: 'rgba(0, 0, 0, 0.1)',
                                 borderRadius: '50%',
+                                visibility:
+                                    commentHasReplays ||
+                                    comment?.attributes?.subcommens_number
+                                        ? 'visible'
+                                        : 'hidden',
                             }}
                         ></Box>
                         <Box
@@ -206,6 +211,11 @@ const CommentCard = ({ comment }) => {
                                 height: '100%',
                                 backgroundColor: 'rgba(0, 0, 0, 0.1)',
                                 marginTop: '4px',
+                                visibility:
+                                    commentHasReplays ||
+                                    comment?.attributes?.subcommens_number
+                                        ? 'visible'
+                                        : 'hidden',
                             }}
                         ></Box>
 
@@ -314,7 +324,8 @@ const CommentCard = ({ comment }) => {
                                               ?.subcommens_number || 0}
                                 </Typography>
                             </Box>
-                            {user && (
+                            {proposal?.attributes?.content?.attributes
+                                ?.prop_submitted ? null : user ? (
                                 <Button
                                     variant='outlined'
                                     startIcon={
@@ -339,7 +350,7 @@ const CommentCard = ({ comment }) => {
                                 >
                                     {showReply ? 'Cancel' : 'Reply'}
                                 </Button>
-                            )}
+                            ) : null}
                         </Box>
 
                         {showReply && (

@@ -23,7 +23,12 @@ import {
 } from '../../lib/api';
 import { formatPollDateDisplay } from '../../lib/utils';
 
-const Poll = ({ proposalID, proposalUserId, proposalAuthorUsername }) => {
+const Poll = ({
+    proposalID,
+    proposalUserId,
+    proposalAuthorUsername,
+    proposalSubmitted,
+}) => {
     const { user, setLoading } = useAppContext();
     const [poll, setPoll] = useState(null);
     const [userPollVote, setUserPollVote] = useState(null);
@@ -172,7 +177,9 @@ const Poll = ({ proposalID, proposalUserId, proposalAuthorUsername }) => {
     if (poll) {
         return (
             <>
-                {user && !userPollVote && user?.user?.id !== +proposalUserId ? (
+                {proposalSubmitted ? null : user &&
+                  !userPollVote &&
+                  user?.user?.id !== +proposalUserId ? (
                     <Card
                         sx={{
                             mb: 3,
@@ -572,7 +579,8 @@ const Poll = ({ proposalID, proposalUserId, proposalAuthorUsername }) => {
         );
     }
 
-    return user && user?.user?.id === +proposalUserId ? (
+    return proposalSubmitted ? null : user &&
+      user?.user?.id === +proposalUserId ? (
         <Card data-testid='add-poll-card'>
             <CardContent>
                 <Typography variant='body1' fontWeight={600}>
