@@ -31,6 +31,20 @@ export const getSingleProposal = async (id) => {
         throw error;
     }
 };
+
+export const updateProposal = async (id, proposalData) => {
+    try {
+        const { data } = await axiosInstance.put(`/api/proposals/${id}`, {
+            data: {
+                ...proposalData,
+            },
+        });
+
+        return data?.data;
+    } catch (error) {
+        console.error(error);
+    }
+};
 export const getGovernanceActionTypes = async () => {
     try {
         const { data } = await axiosInstance.get(

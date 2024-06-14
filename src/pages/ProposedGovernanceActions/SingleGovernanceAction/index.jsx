@@ -306,37 +306,38 @@ const SingleGovernanceAction = ({ id }) => {
                                     backgroundColor: alpha('#F2F4F8', 0.7),
                                 }}
                                 title={
-                                    <>
-                                        <Box
-                                            display={'flex'}
-                                            justifyContent={'center'}
-                                            alignItems={'center'}
-                                            flexDirection={'row'}
+                                    <Box
+                                        display={'flex'}
+                                        justifyContent={'center'}
+                                        alignItems={'center'}
+                                        flexDirection={'row'}
+                                    >
+                                        <Typography
+                                            variant='caption'
+                                            component='p'
                                         >
-                                            <Typography
-                                                variant='caption'
-                                                component='p'
-                                            >
-                                                {`Proposed on: ${formatIsoDate(
-                                                    proposal?.attributes
-                                                        ?.createdAt
-                                                )}`}
-                                            </Typography>
-                                            <IconInformationCircle
-                                                width={16}
-                                                height={16}
-                                                fill={
-                                                    theme?.palette?.primary
-                                                        ?.icons?.grey
-                                                }
-                                            />
-                                        </Box>
-                                    </>
+                                            {proposal?.attributes?.prop_submited
+                                                ? 'This proposal has been submitted on-chain as a Governance Action to get voted on.'
+                                                : `Proposed on: ${formatIsoDate(
+                                                      proposal?.attributes
+                                                          ?.createdAt
+                                                  )}`}
+                                        </Typography>
+                                        <IconInformationCircle
+                                            width={16}
+                                            height={16}
+                                            fill={
+                                                theme?.palette?.primary?.icons
+                                                    ?.grey
+                                            }
+                                        />
+                                    </Box>
                                 }
                             ></CardHeader>
                             {user &&
                                 user?.user?.id?.toString() ===
-                                    proposal?.attributes?.user_id?.toString() && (
+                                    proposal?.attributes?.user_id?.toString() &&
+                                !proposal?.attributes?.prop_submited && (
                                     <CardContent>
                                         <Box
                                             display='flex'
@@ -387,16 +388,7 @@ const SingleGovernanceAction = ({ id }) => {
                         <Card>
                             <CardContent>
                                 <Grid container>
-                                    <Grid
-                                        item
-                                        xs={
-                                            user &&
-                                            user?.user?.id?.toString() ===
-                                                proposal?.attributes?.user_id?.toString()
-                                                ? 10
-                                                : 11
-                                        }
-                                    >
+                                    <Grid item xs={10}>
                                         <Typography variant='h4' component='h2'>
                                             {
                                                 proposal?.attributes?.content
@@ -423,7 +415,7 @@ const SingleGovernanceAction = ({ id }) => {
                                     {/* SHARE BUTTON */}
                                     <Grid
                                         item
-                                        xs={1}
+                                        xs={2}
                                         display='flex'
                                         justifyContent='flex-end'
                                     >
@@ -559,132 +551,138 @@ const SingleGovernanceAction = ({ id }) => {
                                                 </Stack>
                                             </Stack>
                                         </Menu>
-                                    </Grid>
 
-                                    {user &&
-                                        user?.user?.id?.toString() ===
-                                            proposal?.attributes?.user_id?.toString() && (
-                                            <Grid
-                                                item
-                                                xs={1}
-                                                display='flex'
-                                                justifyContent='flex-end'
-                                            >
-                                                <IconButton
-                                                    id='menu-button'
-                                                    sx={{
-                                                        width: 40,
-                                                        height: 40,
-                                                    }}
-                                                    aria-controls={
-                                                        open
-                                                            ? 'proposal-menu'
-                                                            : undefined
-                                                    }
-                                                    aria-haspopup='true'
-                                                    aria-expanded={
-                                                        open
-                                                            ? 'true'
-                                                            : undefined
-                                                    }
-                                                    onClick={handleClick}
-                                                    data-testid='menu-button'
+                                        {user &&
+                                            user?.user?.id?.toString() ===
+                                                proposal?.attributes?.user_id?.toString() &&
+                                            !proposal?.attributes
+                                                ?.prop_submited && (
+                                                <Box
+                                                    display='flex'
+                                                    justifyContent='flex-end'
                                                 >
-                                                    <IconDotsVertical
-                                                        width='24'
-                                                        height='24'
-                                                    />
-                                                </IconButton>
-                                                <Menu
-                                                    id='proposal-menu'
-                                                    anchorEl={anchorEl}
-                                                    open={open}
-                                                    onClose={handleClose}
-                                                    MenuListProps={{
-                                                        'aria-labelledby':
-                                                            'menu-button',
-                                                    }}
-                                                    slotProps={{
-                                                        paper: {
-                                                            elevation: 4,
-                                                            sx: {
-                                                                overflow:
-                                                                    'visible',
-                                                                mt: 1,
+                                                    <IconButton
+                                                        id='menu-button'
+                                                        sx={{
+                                                            width: 40,
+                                                            height: 40,
+                                                        }}
+                                                        aria-controls={
+                                                            open
+                                                                ? 'proposal-menu'
+                                                                : undefined
+                                                        }
+                                                        aria-haspopup='true'
+                                                        aria-expanded={
+                                                            open
+                                                                ? 'true'
+                                                                : undefined
+                                                        }
+                                                        onClick={handleClick}
+                                                        data-testid='menu-button'
+                                                    >
+                                                        <IconDotsVertical
+                                                            width='24'
+                                                            height='24'
+                                                        />
+                                                    </IconButton>
+                                                    <Menu
+                                                        id='proposal-menu'
+                                                        anchorEl={anchorEl}
+                                                        open={open}
+                                                        onClose={handleClose}
+                                                        MenuListProps={{
+                                                            'aria-labelledby':
+                                                                'menu-button',
+                                                        }}
+                                                        slotProps={{
+                                                            paper: {
+                                                                elevation: 4,
+                                                                sx: {
+                                                                    overflow:
+                                                                        'visible',
+                                                                    mt: 1,
+                                                                },
                                                             },
-                                                        },
-                                                    }}
-                                                    transformOrigin={{
-                                                        horizontal: 'right',
-                                                        vertical: 'top',
-                                                    }}
-                                                    anchorOrigin={{
-                                                        horizontal: 'right',
-                                                        vertical: 'bottom',
-                                                    }}
-                                                    data-testid='proposal-menu'
-                                                >
-                                                    <MenuItem
-                                                        onClick={
-                                                            handleEditProposal
-                                                        }
-                                                        data-testid='edit-proposal'
+                                                        }}
+                                                        transformOrigin={{
+                                                            horizontal: 'right',
+                                                            vertical: 'top',
+                                                        }}
+                                                        anchorOrigin={{
+                                                            horizontal: 'right',
+                                                            vertical: 'bottom',
+                                                        }}
+                                                        data-testid='proposal-menu'
                                                     >
-                                                        <Stack
-                                                            direction={'row'}
-                                                            spacing={2}
-                                                            alignItems={
-                                                                'center'
+                                                        <MenuItem
+                                                            onClick={
+                                                                handleEditProposal
                                                             }
+                                                            data-testid='edit-proposal'
                                                         >
-                                                            <IconPencilAlt
-                                                                color={
-                                                                    theme
-                                                                        .palette
-                                                                        .primary
-                                                                        .icons
-                                                                        .black
+                                                            <Stack
+                                                                direction={
+                                                                    'row'
                                                                 }
-                                                                height={24}
-                                                                width={24}
-                                                            />
-                                                            <Typography variant='body1'>
-                                                                Edit Proposal
-                                                            </Typography>
-                                                        </Stack>
-                                                    </MenuItem>
-                                                    <MenuItem
-                                                        onClick={
-                                                            handleOpenDeleteModal
-                                                        }
-                                                        data-testid='delete-proposal'
-                                                    >
-                                                        <Stack
-                                                            direction={'row'}
-                                                            spacing={2}
-                                                            alignItems={
-                                                                'center'
+                                                                spacing={2}
+                                                                alignItems={
+                                                                    'center'
+                                                                }
+                                                            >
+                                                                <IconPencilAlt
+                                                                    color={
+                                                                        theme
+                                                                            .palette
+                                                                            .primary
+                                                                            .icons
+                                                                            .black
+                                                                    }
+                                                                    height={24}
+                                                                    width={24}
+                                                                />
+                                                                <Typography variant='body1'>
+                                                                    Edit
+                                                                    Proposal
+                                                                </Typography>
+                                                            </Stack>
+                                                        </MenuItem>
+                                                        <MenuItem
+                                                            onClick={
+                                                                handleOpenDeleteModal
                                                             }
+                                                            data-testid='delete-proposal'
                                                         >
-                                                            <IconTrash
-                                                                color={
-                                                                    theme
-                                                                        .palette
-                                                                        .primary
-                                                                        .icons
-                                                                        .black
+                                                            <Stack
+                                                                direction={
+                                                                    'row'
                                                                 }
-                                                                height={24}
-                                                                width={24}
-                                                            />
-                                                            <Typography variant='body1'>
-                                                                Delete Proposal
-                                                            </Typography>
-                                                        </Stack>
-                                                    </MenuItem>
-                                                </Menu>
-                                            </Grid>
-                                        )}
+                                                                spacing={2}
+                                                                alignItems={
+                                                                    'center'
+                                                                }
+                                                            >
+                                                                <IconTrash
+                                                                    color={
+                                                                        theme
+                                                                            .palette
+                                                                            .primary
+                                                                            .icons
+                                                                            .black
+                                                                    }
+                                                                    height={24}
+                                                                    width={24}
+                                                                />
+                                                                <Typography variant='body1'>
+                                                                    Delete
+                                                                    Proposal
+                                                                </Typography>
+                                                            </Stack>
+                                                        </MenuItem>
+                                                    </Menu>
+                                                </Box>
+                                            )}
+                                    </Grid>
                                 </Grid>
 
                                 <Box mt={2}>
@@ -781,38 +779,42 @@ const SingleGovernanceAction = ({ id }) => {
                                     </Typography>
                                 </Box>
 
-                                <Box mt={4}>
-                                    <Typography variant='caption'>
-                                        Supporting links
-                                    </Typography>
+                                {proposal?.attributes?.content?.attributes
+                                    ?.proposal_links?.length > 0 && (
+                                    <Box mt={4}>
+                                        <Typography variant='caption'>
+                                            Supporting links
+                                        </Typography>
 
-                                    <Box>
-                                        {proposal?.attributes?.content?.attributes?.proposal_links?.map(
-                                            (item, index) => (
-                                                <Button
-                                                    key={index}
-                                                    sx={{
-                                                        marginRight: 2,
-                                                        marginBottom: 2,
-                                                    }}
-                                                    startIcon={
-                                                        <IconLink
-                                                            width='18'
-                                                            height='18'
-                                                            fill={
-                                                                theme.palette
-                                                                    .primary
-                                                                    .main
-                                                            }
-                                                        />
-                                                    }
-                                                >
-                                                    {item?.prop_link_text}
-                                                </Button>
-                                            )
-                                        )}
+                                        <Box>
+                                            {proposal?.attributes?.content?.attributes?.proposal_links?.map(
+                                                (item, index) => (
+                                                    <Button
+                                                        key={index}
+                                                        sx={{
+                                                            marginRight: 2,
+                                                            marginBottom: 2,
+                                                        }}
+                                                        startIcon={
+                                                            <IconLink
+                                                                width='18'
+                                                                height='18'
+                                                                fill={
+                                                                    theme
+                                                                        .palette
+                                                                        .primary
+                                                                        .main
+                                                                }
+                                                            />
+                                                        }
+                                                    >
+                                                        {item?.prop_link_text}
+                                                    </Button>
+                                                )
+                                            )}
+                                        </Box>
                                     </Box>
-                                </Box>
+                                )}
                                 <Box
                                     mt={4}
                                     display={'flex'}
