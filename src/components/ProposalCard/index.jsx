@@ -396,7 +396,9 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                                     </IconButton>
                                     {user &&
                                         user?.user?.id?.toString() ===
-                                            proposal?.attributes?.user_id?.toString() && (
+                                            proposal?.attributes?.user_id?.toString() &&
+                                        !proposal?.attributes
+                                            ?.prop_submited && (
                                             <Tooltip title='Edit'>
                                                 <IconButton
                                                     aria-label='edit'
