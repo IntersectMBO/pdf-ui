@@ -33,6 +33,8 @@ import {
 import { formatIsoDate } from '../../lib/utils';
 import { LinkManager } from '../CreationGoveranceAction';
 
+import CreateGA2 from '../../assets/svg/CreateGA2.js';
+
 const style = {
     position: 'absolute',
     top: '50%',
@@ -229,12 +231,12 @@ const EditProposalDialog = ({
     }, [draft]);
 
     return (
-        <Box>
-            <Dialog
-                fullScreen
-                open={openEditDialog}
-                onClose={handleCloseEditDialog}
-            >
+        <Dialog
+            fullScreen
+            open={openEditDialog}
+            onClose={handleCloseEditDialog}
+        >
+            <Box height={'100%'} position={'relative'}>
                 <Grid
                     sx={{
                         display: 'flex',
@@ -256,7 +258,7 @@ const EditProposalDialog = ({
                             Edit Proposal
                         </Typography>
                     </Grid>
-                    <Grid item m={2}>
+                    <Grid item m={2} zIndex={10}>
                         <Button
                             size='small'
                             startIcon={
@@ -280,6 +282,7 @@ const EditProposalDialog = ({
                         justifyContent='center'
                         alignContent='center'
                         m={2}
+                        zIndex={10}
                     >
                         <Grid
                             xs={11}
@@ -289,7 +292,7 @@ const EditProposalDialog = ({
                             maxWidth='910px'
                             width='100%'
                         >
-                            <Card variant='outlined'>
+                            <Card>
                                 <CardContent
                                     sx={{
                                         ml: {
@@ -513,7 +516,9 @@ const EditProposalDialog = ({
                                                     </Typography>
                                                     <Typography
                                                         variant='caption'
-                                                        sx={{ float: 'right' }}
+                                                        sx={{
+                                                            float: 'right',
+                                                        }}
                                                     >
                                                         {`${
                                                             draft?.prop_abstract
@@ -553,7 +558,9 @@ const EditProposalDialog = ({
                                                     </Typography>
                                                     <Typography
                                                         variant='caption'
-                                                        sx={{ float: 'right' }}
+                                                        sx={{
+                                                            float: 'right',
+                                                        }}
                                                     >
                                                         {`${
                                                             draft
@@ -594,7 +601,9 @@ const EditProposalDialog = ({
                                                     </Typography>
                                                     <Typography
                                                         variant='caption'
-                                                        sx={{ float: 'right' }}
+                                                        sx={{
+                                                            float: 'right',
+                                                        }}
                                                     >
                                                         {`${
                                                             draft
@@ -915,65 +924,78 @@ const EditProposalDialog = ({
                         </Box>
                     </Box>
                 </Modal>
-            </Dialog>
-            <Modal
-                open={openDeleteConfirmationModal}
-                onClose={() => {
-                    handleCloseEditDialog();
-                    navigate('/proposal_discussion');
-                }}
-            >
-                <Box sx={style}>
-                    <Box
-                        pt={2}
-                        pl={2}
-                        pr={2}
-                        pb={1}
-                        borderBottom={1}
-                        borderColor={(theme) => theme.palette.border.lightGray}
-                    >
+                <Modal
+                    open={openDeleteConfirmationModal}
+                    onClose={() => {
+                        handleCloseEditDialog();
+                        navigate('/proposal_discussion');
+                    }}
+                >
+                    <Box sx={style}>
                         <Box
-                            display='flex'
-                            flexDirection='row'
-                            justifyContent='space-between'
-                            alignItems={'center'}
+                            pt={2}
+                            pl={2}
+                            pr={2}
+                            pb={1}
+                            borderBottom={1}
+                            borderColor={(theme) =>
+                                theme.palette.border.lightGray
+                            }
                         >
-                            <Typography variant='h6' component='h2'>
-                                Proposal Deleted
+                            <Box
+                                display='flex'
+                                flexDirection='row'
+                                justifyContent='space-between'
+                                alignItems={'center'}
+                            >
+                                <Typography variant='h6' component='h2'>
+                                    Proposal Deleted
+                                </Typography>
+                                <IconButton
+                                    onClick={() => {
+                                        setOpenDeleteConfirmationModal(false);
+                                        handleCloseEditDialog();
+                                        navigate('/proposal_discussion');
+                                    }}
+                                >
+                                    <IconX width='24px' height='24px' />
+                                </IconButton>
+                            </Box>
+                            <Typography
+                                mt={2}
+                                color={(theme) => theme.palette.text.grey}
+                            >
+                                The proposal has been deleted successfully.
                             </Typography>
-                            <IconButton
+                        </Box>
+                        <Box display='flex' flexDirection='column' m={2}>
+                            <Button
+                                variant='contained'
+                                fullWidth
                                 onClick={() => {
                                     setOpenDeleteConfirmationModal(false);
                                     handleCloseEditDialog();
                                     navigate('/proposal_discussion');
                                 }}
                             >
-                                <IconX width='24px' height='24px' />
-                            </IconButton>
+                                Go to Proposal Discussion
+                            </Button>
                         </Box>
-                        <Typography
-                            mt={2}
-                            color={(theme) => theme.palette.text.grey}
-                        >
-                            The proposal has been deleted successfully.
-                        </Typography>
                     </Box>
-                    <Box display='flex' flexDirection='column' m={2}>
-                        <Button
-                            variant='contained'
-                            fullWidth
-                            onClick={() => {
-                                setOpenDeleteConfirmationModal(false);
-                                handleCloseEditDialog();
-                                navigate('/proposal_discussion');
-                            }}
-                        >
-                            Go to Proposal Discussion
-                        </Button>
-                    </Box>
+                </Modal>
+
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        zIndex: 1,
+                    }}
+                >
+                    <CreateGA2 />
                 </Box>
-            </Modal>
-        </Box>
+            </Box>
+        </Dialog>
     );
 };
 

@@ -92,8 +92,11 @@ const UsernameModal = ({ open, handleClose: close }) => {
                             }}
                             color={(theme) => theme.palette.text.grey}
                         >
-                            Username cannot be changed in the Future. Some
-                            subtext why it is important goes here.
+                            By setting up a unique username, you can submit a
+                            proposal, participate in discussions, connect with
+                            other members and maintains a respectful
+                            environment. In the provided text field, please type
+                            your desired username.
                         </Typography>
 
                         <TextField

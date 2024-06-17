@@ -23,15 +23,13 @@ import {
     Divider,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { ProposalsList } from '../../components';
+import { ProposalsList, CreateGovernanceActionDialog } from '../../components';
 import { getGovernanceActionTypes } from '../../lib/api';
 import { useAppContext } from '../../context/context';
-import { useNavigate } from 'react-router-dom';
 
 const ProposedGovernanceActions = () => {
     const theme = useTheme();
     const { user } = useAppContext();
-    const navigate = useNavigate();
     const [proposalSearchText, setProposalSearchText] = useState('');
     const [sortType, setSortType] = useState('desc');
     const [governanceActionTypeList, setGovernanceActionTypeList] = useState(
@@ -41,13 +39,14 @@ const ProposedGovernanceActions = () => {
         filteredGovernanceActionTypeList,
         setFilteredGovernanceActionTypeList,
     ] = useState([]);
-
+    const [showCreateGADialog, setShowCreateGADialog] = useState(false);
     const [
         filteredGovernanceActionStatusList,
         setFilteredGovernanceActionStatusList,
     ] = useState(['active']);
 
     const [filtersAnchorEl, setFiltersAnchorEl] = useState(null);
+
     const openFilters = Boolean(filtersAnchorEl);
     const handleFiltersClick = (event) => {
         setFiltersAnchorEl(event.currentTarget);
@@ -129,11 +128,7 @@ const ProposedGovernanceActions = () => {
                             <Grid item xs={12} paddingBottom={2}>
                                 <Button
                                     variant='contained'
-                                    onClick={() =>
-                                        navigate(
-                                            '/proposal_discussion/create-governance-action'
-                                        )
-                                    }
+                                    onClick={() => setShowCreateGADialog(true)}
                                     startIcon={<IconPlusCircle fill='white' />}
                                     data-testid='propose-a-governance-action-button'
                                 >
@@ -420,6 +415,13 @@ const ProposedGovernanceActions = () => {
                     </Box>
                 ))}
             </Box>
+
+            {showCreateGADialog && (
+                <CreateGovernanceActionDialog
+                    open={showCreateGADialog}
+                    onClose={() => setShowCreateGADialog(false)}
+                />
+            )}
         </Box>
     );
 };
