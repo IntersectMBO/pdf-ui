@@ -48,6 +48,10 @@ const GlobalWrapper = ({ ...props }) => {
                         ...loggedInUser,
                     },
                 });
+
+                if (!loggedInUser?.govtool_username) {
+                    setOpenUsernameModal(true);
+                }
             } else {
                 const changeAddrHex = await wallet?.address;
                 const messageUtf = `Please sign this message to verify your identity at ${format(new Date(), 'd MMMM yyyy HH:mm:ss')}`;
