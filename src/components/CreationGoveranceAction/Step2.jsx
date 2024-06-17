@@ -64,7 +64,7 @@ const Step2 = ({
     }, []);
 
     return (
-        <Card variant='outlined'>
+        <Card>
             <CardContent
                 sx={{
                     ml: {

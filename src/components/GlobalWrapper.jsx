@@ -10,11 +10,7 @@ import {
     saveDataInSession,
     getDataFromSession,
 } from '../lib/utils';
-import {
-    CreateGovernanceAction,
-    ProposedGovernanceActions,
-    SingleGovernanceAction,
-} from '../pages';
+import { ProposedGovernanceActions, SingleGovernanceAction } from '../pages';
 import { format } from 'date-fns';
 
 const GlobalWrapper = ({ ...props }) => {
@@ -113,15 +109,7 @@ const GlobalWrapper = ({ ...props }) => {
     }, [GovToolAssemblyLocale]);
 
     const renderComponentBasedOnPath = (path) => {
-        if (
-            path.includes('create-governance-action') &&
-            GovToolAssemblyWalletAPI?.getChangeAddress
-        ) {
-            return <CreateGovernanceAction />;
-        } else if (
-            path.includes('proposal_discussion/') &&
-            getProposalID(path)
-        ) {
+        if (path.includes('proposal_discussion/') && getProposalID(path)) {
             return <SingleGovernanceAction id={getProposalID(path)} />;
         } else if (path.includes('proposal_discussion')) {
             return <ProposedGovernanceActions />;

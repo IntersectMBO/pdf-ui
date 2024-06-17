@@ -10,12 +10,10 @@ import {
     ListItem,
 } from '@mui/material';
 import { ProposalsList } from '..';
-import { useNavigate } from 'react-router-dom';
 import { getProposals } from '../../lib/api';
 import { useEffect, useState } from 'react';
 
-const Step1 = ({ setStep, setProposalData }) => {
-    const navigate = useNavigate();
+const Step1 = ({ setStep, setProposalData, onClose }) => {
     const [draftsEnabled, setDraftsEnabled] = useState(false);
 
     const fetchProposals = async () => {
@@ -38,7 +36,7 @@ const Step1 = ({ setStep, setProposalData }) => {
         <Box display='flex' flexDirection='column'>
             <Box>
                 {draftsEnabled ? (
-                    <Card variant='outlined'>
+                    <Card>
                         <CardContent>
                             <Box
                                 sx={{
@@ -72,7 +70,7 @@ const Step1 = ({ setStep, setProposalData }) => {
                         </CardContent>
                     </Card>
                 ) : (
-                    <Card variant='outlined'>
+                    <Card>
                         <CardContent
                             sx={{
                                 ml: {
@@ -185,9 +183,7 @@ const Step1 = ({ setStep, setProposalData }) => {
                                 <Button
                                     variant='outlined'
                                     sx={{ float: 'left' }}
-                                    onClick={() =>
-                                        navigate('/proposal_discussion')
-                                    }
+                                    onClick={onClose}
                                 >
                                     Cancel
                                 </Button>

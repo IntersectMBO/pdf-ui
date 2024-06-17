@@ -9,3 +9,4 @@ export { default as ThemeProviderWrapper } from './ThemeProviderWrapper';
 export { default as ReviewVersions } from './ReviewVersions';
 export { default as UsernameModal } from './UsernameModal';
 export { default as ProposalSubmissionDialog } from './ProposalSubmissionDialog';
+export { default as CreateGovernanceActionDialog } from './CreateGovernanceActionDialog';
