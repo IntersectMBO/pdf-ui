@@ -10,10 +10,14 @@ import {
 } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Step1, Step2, Step3 } from '../CreationGoveranceAction';
+import {
+    Step1,
+    Step2,
+    Step3,
+    DraftSuccessfulModal,
+} from '../CreationGoveranceAction';
 import { useAppContext } from '../../context/context';
 import { createProposal } from '../../lib/api';
-import CreateGA1 from '../../assets/svg/CreateGA1.js';
 import CreateGA2 from '../../assets/svg/CreateGA2.js';
 
 const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
@@ -27,6 +31,8 @@ const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
 
     const [governanceActionTypes, setGovernanceActionTypes] = useState([]);
     const [isContinueDisabled, setIsContinueDisabled] = useState(true);
+    const [showDraftSuccessfulModal, setShowDraftSuccessfulModal] =
+        useState(false);
 
     const isSmallScreen = useMediaQuery((theme) =>
         theme.breakpoints.down('sm')
@@ -77,7 +83,7 @@ const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
                 });
                 if (data && data?.attributes && data?.attributes?.proposal_id) {
                     if (isDraft) {
-                        navigate(`/proposal_discussion`);
+                        setShowDraftSuccessfulModal(true);
                     } else {
                         navigate(
                             `/proposal_discussion/${data?.attributes?.proposal_id}`
@@ -202,6 +208,11 @@ const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
                     <CreateGA2 />
                 </Box>
             </Box>
+
+            <DraftSuccessfulModal
+                open={showDraftSuccessfulModal}
+                onClose={() => setShowDraftSuccessfulModal(false)}
+            />
         </Dialog>
     );
 };
