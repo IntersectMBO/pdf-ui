@@ -1169,13 +1169,18 @@ const SingleGovernanceAction = ({ id }) => {
                                         <Button
                                             variant='contained'
                                             onClick={handleCreateComment}
-                                            disabled={!newCommentText || !user}
+                                            disabled={
+                                                !newCommentText ||
+                                                !user?.user?.govtool_username
+                                            }
                                             endIcon={
                                                 <IconReply
                                                     height={18}
                                                     width={18}
                                                     fill={
-                                                        !newCommentText || !user
+                                                        !newCommentText ||
+                                                        !user?.user
+                                                            ?.govtool_username
                                                             ? 'rgba(0,0,0, 0.26)'
                                                             : 'white'
                                                     }

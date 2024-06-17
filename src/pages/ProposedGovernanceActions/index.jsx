@@ -125,7 +125,7 @@ const ProposedGovernanceActions = () => {
                         justifyContent={'space-between'}
                         spacing={1}
                     >
-                        {user ? (
+                        {user?.user?.govtool_username ? (
                             <Grid item xs={12} paddingBottom={2}>
                                 <Button
                                     variant='contained'

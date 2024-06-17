@@ -402,13 +402,18 @@ const CommentCard = ({ comment, proposal }) => {
                                     <Button
                                         variant='contained'
                                         onClick={handleCreateComment}
-                                        disabled={!subcommentText}
+                                        disabled={
+                                            !subcommentText ||
+                                            !user?.user?.govtool_username
+                                        }
                                         endIcon={
                                             <IconReply
                                                 height={18}
                                                 width={18}
                                                 fill={
-                                                    !subcommentText
+                                                    !subcommentText ||
+                                                    !user?.user
+                                                        ?.govtool_username
                                                         ? 'rgba(0,0,0, 0.26)'
                                                         : 'white'
                                                 }
