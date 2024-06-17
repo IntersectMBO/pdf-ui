@@ -4,8 +4,12 @@ import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { UsernameModal } from '../components';
 import { useAppContext } from '../context/context';
-import { loginUser } from '../lib/api';
-import { clearSession, saveDataInSession } from '../lib/utils';
+import { loginUser, getLoggedInUserInfo } from '../lib/api';
+import {
+    clearSession,
+    saveDataInSession,
+    getDataFromSession,
+} from '../lib/utils';
 import {
     CreateGovernanceAction,
     ProposedGovernanceActions,
@@ -25,7 +29,6 @@ const GlobalWrapper = ({ ...props }) => {
     } = props;
 
     const clearStates = () => {
-        clearSession();
         setWalletAPI(null);
         setUser(null);
     };
@@ -38,22 +41,35 @@ const GlobalWrapper = ({ ...props }) => {
 
     const loginUserToApp = async (wallet) => {
         try {
-            const changeAddrHex = await wallet?.address;
-            const messageUtf = `Please sign this message to verify your identity at ${format(new Date(), 'd MMMM yyyy HH:mm:ss')}`;
-            const messageHex = utf8ToHex(messageUtf);
-            const signedData = await wallet.signData(changeAddrHex, messageHex);
+            if (getDataFromSession('pdfUserJwt')) {
+                const loggedInUser = await getLoggedInUserInfo();
+                setUser({
+                    user: {
+                        ...loggedInUser,
+                    },
+                });
+            } else {
+                const changeAddrHex = await wallet?.address;
+                const messageUtf = `Please sign this message to verify your identity at ${format(new Date(), 'd MMMM yyyy HH:mm:ss')}`;
+                const messageHex = utf8ToHex(messageUtf);
 
-            const userResponse = await loginUser({
-                identifier: changeAddrHex,
-                signedData: signedData,
-            });
+                const signedData = await wallet.signData(
+                    changeAddrHex,
+                    messageHex
+                );
 
-            if (!userResponse) return;
-            saveDataInSession('pdfUserJwt', userResponse?.jwt);
-            setUser(userResponse);
+                const userResponse = await loginUser({
+                    identifier: changeAddrHex,
+                    signedData: signedData,
+                });
 
-            if (!userResponse?.user?.govtool_username) {
-                setOpenUsernameModal(true);
+                if (!userResponse) return;
+                saveDataInSession('pdfUserJwt', userResponse?.jwt);
+                setUser(userResponse);
+
+                if (!userResponse?.user?.govtool_username) {
+                    setOpenUsernameModal(true);
+                }
             }
         } catch (error) {
             console.error(error);
@@ -81,6 +97,7 @@ const GlobalWrapper = ({ ...props }) => {
                 loginUserToApp(GovToolAssemblyWalletAPI);
             } else {
                 clearStates();
+                clearSession();
             }
         }
     }, [GovToolAssemblyWalletAPI?.address, mounted]);

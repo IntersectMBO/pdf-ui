@@ -57,11 +57,6 @@ const CreateGovernanceAction = () => {
         }
     }, [proposalData]); // proposalData is a dependency
 
-    // Use handleIsContinueDisabled in useEffect
-    useEffect(() => {
-        handleIsContinueDisabled();
-    }, [handleIsContinueDisabled]); // Now handleIsContinueDisabled can be safely added to the dependency array
-
     const handleCreateProposal = async (isDraft = false) => {
         setLoading(true);
         try {
@@ -93,6 +88,11 @@ const CreateGovernanceAction = () => {
             setLoading(false);
         }
     };
+
+    // Use handleIsContinueDisabled in useEffect
+    useEffect(() => {
+        handleIsContinueDisabled();
+    }, [handleIsContinueDisabled]); // Now handleIsContinueDisabled can be safely added to the dependency array
 
     useEffect(() => {
         setProposalData((prev) => ({
