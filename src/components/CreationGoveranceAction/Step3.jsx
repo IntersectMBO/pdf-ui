@@ -130,55 +130,90 @@ const Step3 = ({
                         </Typography>
                     </Box>
 
-                    <Box>
-                        <Typography
-                            variant='body1'
-                            color={theme.palette.text.grey}
-                            gutterBottom
-                        >
-                            Supporting links
-                        </Typography>
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                flexDirection: isSmallScreen ? 'column' : 'row',
-                                flexWrap: 'wrap',
-                                gap: 2,
-                            }}
-                        >
-                            {proposalData?.proposal_links?.map(
-                                (link, index) => (
-                                    <Box
-                                        key={index}
-                                        sx={{
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            textDecoration: 'none',
-                                        }}
-                                        component={Link}
-                                        href={link?.prop_link}
-                                        target='_blank'
-                                        rel='noopener noreferrer'
-                                    >
-                                        <Box mr={0.5}>
-                                            <IconLink
-                                                fill={
-                                                    theme.palette.primary.main
-                                                }
-                                            />
-                                        </Box>
-                                        <Typography
-                                            variant='body1'
-                                            component='span'
-                                        >
-                                            {link?.prop_link_text}
-                                        </Typography>
-                                    </Box>
-                                )
-                            )}
+                    {proposalData?.prop_receiving_address && (
+                        <Box>
+                            <Typography
+                                variant='body1'
+                                color={theme.palette.text.grey}
+                                gutterBottom
+                            >
+                                Receiving address
+                            </Typography>
+                            <Typography variant='body1' gutterBottom>
+                                {proposalData?.prop_receiving_address}
+                            </Typography>
                         </Box>
-                    </Box>
+                    )}
+
+                    {proposalData?.prop_amount && (
+                        <Box>
+                            <Typography
+                                variant='body1'
+                                color={theme.palette.text.grey}
+                                gutterBottom
+                            >
+                                Amount
+                            </Typography>
+                            <Typography variant='body1' gutterBottom>
+                                {proposalData?.prop_amount}
+                            </Typography>
+                        </Box>
+                    )}
+
+                    {proposalData?.proposal_links?.length > 0 && (
+                        <Box>
+                            <Typography
+                                variant='body1'
+                                color={theme.palette.text.grey}
+                                gutterBottom
+                            >
+                                Supporting links
+                            </Typography>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: isSmallScreen
+                                        ? 'column'
+                                        : 'row',
+                                    flexWrap: 'wrap',
+                                    gap: 2,
+                                }}
+                            >
+                                {proposalData?.proposal_links?.map(
+                                    (link, index) => (
+                                        <Box
+                                            key={index}
+                                            sx={{
+                                                display: 'flex',
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                                textDecoration: 'none',
+                                            }}
+                                            component={Link}
+                                            href={link?.prop_link}
+                                            target='_blank'
+                                            rel='noopener noreferrer'
+                                        >
+                                            <Box mr={0.5}>
+                                                <IconLink
+                                                    fill={
+                                                        theme.palette.primary
+                                                            .main
+                                                    }
+                                                />
+                                            </Box>
+                                            <Typography
+                                                variant='body1'
+                                                component='span'
+                                            >
+                                                {link?.prop_link_text}
+                                            </Typography>
+                                        </Box>
+                                    )
+                                )}
+                            </Box>
+                        </Box>
+                    )}
                 </Box>
 
                 <Box

@@ -18,27 +18,27 @@ const Step1 = ({ setStep, setProposalData }) => {
     const navigate = useNavigate();
     const [draftsEnabled, setDraftsEnabled] = useState(false);
 
-        const fetchProposals = async () => {
+    const fetchProposals = async () => {
         try {
             const query = `filters[$and][0][is_draft]=true&pagination[page]=1&pagination[pageSize]=1`;
-           
+
             const { total } = await getProposals(query);
             if (total === 0) return;
-           setDraftsEnabled(true)
+            setDraftsEnabled(true);
         } catch (error) {
             console.error(error);
         }
-        };
-    
+    };
+
     useEffect(() => {
-        fetchProposals()
-    }, [])
+        fetchProposals();
+    }, []);
 
     return (
         <Box display='flex' flexDirection='column'>
             <Box>
-                {draftsEnabled ? 
-                  <Card variant='outlined'>
+                {draftsEnabled ? (
+                    <Card variant='outlined'>
                         <CardContent>
                             <Box
                                 sx={{
@@ -46,21 +46,22 @@ const Step1 = ({ setStep, setProposalData }) => {
                                 }}
                             >
                                 <Typography variant='h4' gutterBottom>
-                                   Decide if you want to use Existing Draft or Create new proposal
+                                    Decide if you want to use Existing Draft or
+                                    Create new proposal
                                 </Typography>
                             </Box>
 
                             <Box color={(theme) => theme.palette.text.grey}>
-                                    <Typography variant='body1' gutterBottom>
-                                           Existing Drafts can save you some time and effort or simply start from stratch.
-                                    </Typography>
+                                <Typography variant='body1' gutterBottom>
+                                    Existing Drafts can save you some time and
+                                    effort or simply start from stratch.
+                                </Typography>
                             </Box>
                             <Box
                                 sx={{
                                     mt: 2,
                                 }}
                             >
-            
                                 <Button
                                     variant='contained'
                                     onClick={() => setStep(2)}
@@ -69,9 +70,11 @@ const Step1 = ({ setStep, setProposalData }) => {
                                 </Button>
                             </Box>
                         </CardContent>
-                    </Card>:
+                    </Card>
+                ) : (
                     <Card variant='outlined'>
-                        <CardContent  sx={{
+                        <CardContent
+                            sx={{
                                 ml: {
                                     xs: 0,
                                     sm: 5,
@@ -84,7 +87,8 @@ const Step1 = ({ setStep, setProposalData }) => {
                                     md: 5,
                                     lg: 15,
                                 },
-                            }}>
+                            }}
+                        >
                             <Box
                                 sx={{
                                     align: 'center',
@@ -112,9 +116,13 @@ const Step1 = ({ setStep, setProposalData }) => {
                                             paddingX: 0,
                                         }}
                                     >
-                                        <Typography variant='body1' gutterBottom>
-                                            Before submitting a Governance Action on
-                                            chain you need to submit a Proposal.
+                                        <Typography
+                                            variant='body1'
+                                            gutterBottom
+                                        >
+                                            Before submitting a Governance
+                                            Action on chain you need to submit a
+                                            Proposal.
                                         </Typography>
 
                                         <Typography
@@ -122,12 +130,13 @@ const Step1 = ({ setStep, setProposalData }) => {
                                             gutterBottom
                                             sx={{ fontWeight: 'bold' }}
                                         >
-                                            This allows you to get feedback from the
-                                            community to refine and improve your
-                                            proposal, increasing the chances of your
-                                            Governance Action getting approved, and
-                                            also building up supporting context in
-                                            the form of metadata.
+                                            This allows you to get feedback from
+                                            the community to refine and improve
+                                            your proposal, increasing the
+                                            chances of your Governance Action
+                                            getting approved, and also building
+                                            up supporting context in the form of
+                                            metadata.
                                         </Typography>
                                     </ListItem>
                                     <ListItem
@@ -137,11 +146,14 @@ const Step1 = ({ setStep, setProposalData }) => {
                                             paddingX: 0,
                                         }}
                                     >
-                                        <Typography variant='body1' gutterBottom>
-                                            Once you are happy with your proposal
-                                            you can open a poll to check ‘Is this
-                                            proposal ready to be submitted on
-                                            chain?’
+                                        <Typography
+                                            variant='body1'
+                                            gutterBottom
+                                        >
+                                            Once you are happy with your
+                                            proposal you can open a poll to
+                                            check ‘Is this proposal ready to be
+                                            submitted on chain?’
                                         </Typography>
                                     </ListItem>
                                     <ListItem
@@ -151,10 +163,14 @@ const Step1 = ({ setStep, setProposalData }) => {
                                             paddingX: 0,
                                         }}
                                     >
-                                        <Typography variant='body1' gutterBottom>
-                                            If you get support on the poll you are
-                                            ready to submit your proposal on chain
-                                            as a Governance Action to get voted on.
+                                        <Typography
+                                            variant='body1'
+                                            gutterBottom
+                                        >
+                                            If you get support on the poll you
+                                            are ready to submit your proposal on
+                                            chain as a Governance Action to get
+                                            voted on.
                                         </Typography>
                                     </ListItem>
                                 </List>
@@ -169,7 +185,9 @@ const Step1 = ({ setStep, setProposalData }) => {
                                 <Button
                                     variant='outlined'
                                     sx={{ float: 'left' }}
-                                    onClick={() => navigate('/proposal_discussion')}
+                                    onClick={() =>
+                                        navigate('/proposal_discussion')
+                                    }
                                 >
                                     Cancel
                                 </Button>
@@ -182,7 +200,7 @@ const Step1 = ({ setStep, setProposalData }) => {
                             </Box>
                         </CardContent>
                     </Card>
-                }
+                )}
             </Box>
 
             <Box mt={4}>

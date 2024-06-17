@@ -393,10 +393,9 @@ const SingleGovernanceAction = ({ id }) => {
                                                     </Typography>
                                                     <Typography variant='caption'>
                                                         If your are ready,
-                                                        submit this
-                                                        proposalContent as a
-                                                        governance action to get
-                                                        voted on
+                                                        submit this proposal as
+                                                        a governance action to
+                                                        get voted on.
                                                     </Typography>
                                                 </>
                                             )}

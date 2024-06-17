@@ -125,7 +125,7 @@ const ProposedGovernanceActions = () => {
                         justifyContent={'space-between'}
                         spacing={1}
                     >
-                        {user && (
+                        {user ? (
                             <Grid item xs={12} paddingBottom={2}>
                                 <Button
                                     variant='contained'
@@ -139,6 +139,12 @@ const ProposedGovernanceActions = () => {
                                 >
                                     Propose a Governance Action
                                 </Button>
+                            </Grid>
+                        ) : (
+                            <Grid item xs={12} paddingBottom={2}>
+                                <Typography variant='h4' component='h1'>
+                                    Proposed Governance Actions
+                                </Typography>
                             </Grid>
                         )}
                         <Grid item md={6} sx={{ flexGrow: { xs: 1 } }}>
