@@ -45,7 +45,7 @@ const GlobalWrapper = ({ ...props }) => {
                     },
                 });
 
-                if (!loggedInUser?.govtool_username) {
+                if (loggedInUser && !loggedInUser?.govtool_username) {
                     setOpenUsernameModal(true);
                 }
             } else {
@@ -67,7 +67,7 @@ const GlobalWrapper = ({ ...props }) => {
                 saveDataInSession('pdfUserJwt', userResponse?.jwt);
                 setUser(userResponse);
 
-                if (!userResponse?.user?.govtool_username) {
+                if (userResponse && !userResponse?.user?.govtool_username) {
                     setOpenUsernameModal(true);
                 }
             }
