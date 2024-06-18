@@ -100,6 +100,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
                         </Typography>
 
                         <TextField
+                            data-testid='username-input'
                             label='Username'
                             variant='outlined'
                             sx={{
@@ -111,6 +112,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
                             required
                         />
                         <Button
+                            data-testid='proceed-button'
                             variant='contained'
                             fullWidth
                             disabled={!username}
@@ -174,6 +176,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
                                 Proceed with this username
                             </Button>
                             <Button
+                                data-testid='no-change-button'
                                 variant='outlined'
                                 fullWidth
                                 onClick={handleBack}
@@ -209,6 +212,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
                         </Box>
                         <Box m={2}>
                             <Button
+                                data-testid='close-button'
                                 variant='contained'
                                 fullWidth
                                 onClick={handleClose}
@@ -224,7 +228,11 @@ const UsernameModal = ({ open, handleClose: close }) => {
     };
 
     return (
-        <Modal open={open} onClose={handleClose}>
+        <Modal
+            open={open}
+            onClose={handleClose}
+            data-testid='setup-username-modal'
+        >
             <Box sx={style}>{renderStep()}</Box>
         </Modal>
     );
