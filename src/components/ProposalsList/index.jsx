@@ -141,7 +141,7 @@ const ProposalsList = ({
             {proposalsList?.length > 0 ? (
                 showAll ? (
                     <Box px={1.5}>
-                        <Grid container spacing={2} paddingY={4}>
+                        <Grid container spacing={4} paddingY={4}>
                             {proposalsList?.map((proposal, index) => (
                                 <Grid item key={index} xs={12} sm={6} md={4}>
                                     <ProposalCard
