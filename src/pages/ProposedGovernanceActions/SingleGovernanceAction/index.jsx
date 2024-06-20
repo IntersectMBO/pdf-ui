@@ -55,6 +55,7 @@ import {
 import { formatIsoDate } from '../../../lib/utils';
 
 const SingleGovernanceAction = ({ id }) => {
+    const MAX_COMMENT_LENGTH = 256;
     const navigate = useNavigate();
     const { user, setLoading } = useAppContext();
     const theme = useTheme();
@@ -244,6 +245,26 @@ const SingleGovernanceAction = ({ id }) => {
             console.error(error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    };
+
+    const handleChange = (event) => {
+        let value = event.target.value;
+
+        if (value.startsWith(' ')) {
+            value = value.trimStart();
+        }
+
+        value = value.replace(/  +/g, ' ');
+
+        if (value.length <= MAX_COMMENT_LENGTH) {
+            setNewCommentText(value);
         }
     };
 
@@ -1139,11 +1160,41 @@ const SingleGovernanceAction = ({ id }) => {
                                         margin='normal'
                                         variant='outlined'
                                         multiline={true}
-                                        helperText='Supporting text'
-                                        value={newCommentText || ''}
-                                        onChange={(e) =>
-                                            setNewCommentText(e.target.value)
+                                        maxRows={5}
+                                        helperText={
+                                            <>
+                                                <Typography variant='caption'>
+                                                    * Symbols
+                                                </Typography>
+                                                <Typography
+                                                    variant='caption'
+                                                    sx={{
+                                                        float: 'right',
+                                                        mr: 2,
+                                                        color: (theme) =>
+                                                            newCommentText?.length ===
+                                                                MAX_COMMENT_LENGTH &&
+                                                            theme?.palette
+                                                                ?.error?.main,
+                                                    }}
+                                                >
+                                                    {`${
+                                                        newCommentText?.length ||
+                                                        0
+                                                    }/${MAX_COMMENT_LENGTH}`}
+                                                </Typography>
+                                            </>
                                         }
+                                        value={newCommentText || ''}
+                                        onChange={(e) => handleChange(e)}
+                                        inputProps={{
+                                            maxLength: MAX_COMMENT_LENGTH,
+                                            onKeyDown: handleKeyDown,
+                                            spellCheck: 'false',
+                                            autoCorrect: 'off',
+                                            autoCapitalize: 'none',
+                                            autoComplete: 'off',
+                                        }}
                                         data-testid='comment-input'
                                     />
 
