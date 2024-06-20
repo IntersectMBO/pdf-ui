@@ -38,8 +38,8 @@ let theme = createTheme({
             errorLight: '#FF9999',
             secondary: '#39B6D5',
             lightPurple: '#D6D8FF',
-            success_text: '#A1D797',
-            success: '#E0F2DC',
+            success_text: '#315E29',
+            success: '#C0E4BA',
             grey: '#506288',
         },
         iconButton: {
