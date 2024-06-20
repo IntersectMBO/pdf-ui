@@ -91,6 +91,24 @@ const CommentCard = ({ comment, proposal }) => {
         }
     };
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    };
+
+    const handleChange = (event) => {
+        let value = event.target.value;
+        if (value.startsWith(' ')) {
+            value = value.trimStart();
+        }
+        value = value.replace(/  +/g, ' ');
+
+        if (value.length <= subcommentMaxLength) {
+            setSubcommentText(value);
+        }
+    };
+
     useEffect(() => {
         if (showSubcomments) {
             loadSubComments(1);
@@ -364,13 +382,19 @@ const CommentCard = ({ comment, proposal }) => {
                                     name='subcomment'
                                     label=''
                                     placeholder='Add comment'
+                                    maxRows={5}
                                     multiline
-                                    rows={4}
                                     value={subcommentText || ''}
                                     variant='outlined'
-                                    onChange={(e) =>
-                                        setSubcommentText(e.target.value)
-                                    }
+                                    onChange={(e) => handleChange(e)}
+                                    inputProps={{
+                                        maxLength: subcommentMaxLength,
+                                        onKeyDown: handleKeyDown,
+                                        spellCheck: 'false',
+                                        autoCorrect: 'off',
+                                        autoCapitalize: 'none',
+                                        autoComplete: 'off',
+                                    }}
                                     helperText={
                                         <>
                                             <Typography variant='caption'>
@@ -378,7 +402,15 @@ const CommentCard = ({ comment, proposal }) => {
                                             </Typography>
                                             <Typography
                                                 variant='caption'
-                                                sx={{ float: 'right' }}
+                                                sx={{
+                                                    float: 'right',
+                                                    mr: 2,
+                                                    color: (theme) =>
+                                                        subcommentText?.length ===
+                                                            subcommentMaxLength &&
+                                                        theme?.palette?.error
+                                                            ?.main,
+                                                }}
                                             >
                                                 {`${
                                                     subcommentText?.length || 0
