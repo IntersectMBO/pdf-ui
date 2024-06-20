@@ -367,9 +367,15 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                                 borderRadius: '14px',
                             }}
                         >
-                            <IconInformationCircle
-                                color={theme.palette.primary.icons.black}
-                            />
+                            <Tooltip title={'Proposal Date'}>
+                                <Box display={'flex'} alignItems={'center'}>
+                                    <IconInformationCircle
+                                        color={
+                                            theme.palette.primary.icons.black
+                                        }
+                                    />
+                                </Box>
+                            </Tooltip>
                             <Typography
                                 variant='body2'
                                 component='p'
@@ -392,20 +398,25 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                             {proposal?.attributes?.content?.attributes
                                 ?.is_draft ? null : (
                                 <Box display={'flex'} gap={1}>
-                                    <IconButton
-                                        data-testid={`proposal-${proposal?.id}-comment-count`}
-                                        disabled={true}
-                                    >
-                                        <StyledBadge
-                                            badgeContent={
-                                                proposal?.attributes
-                                                    ?.prop_comments_number || 0
-                                            }
-                                            aria-label='comments'
-                                            showZero
-                                        ></StyledBadge>
-                                        <IconChatAlt />
-                                    </IconButton>
+                                    <Tooltip title={'Comments Number'}>
+                                        <Box>
+                                            <IconButton
+                                                data-testid={`proposal-${proposal?.id}-comment-count`}
+                                                disabled={true}
+                                            >
+                                                <StyledBadge
+                                                    badgeContent={
+                                                        proposal?.attributes
+                                                            ?.prop_comments_number ||
+                                                        0
+                                                    }
+                                                    aria-label='comments'
+                                                    showZero
+                                                ></StyledBadge>
+                                                <IconChatAlt />
+                                            </IconButton>
+                                        </Box>
+                                    </Tooltip>
                                     {user &&
                                         user?.user?.id?.toString() ===
                                             proposal?.attributes?.user_id?.toString() &&

@@ -33,7 +33,7 @@ import {
     Typography,
     alpha,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     CommentCard,
@@ -73,6 +73,19 @@ const SingleGovernanceAction = ({ id }) => {
     const [proposalLink, setProposalLink] = useState('');
     const [disableShare, setDisableShare] = useState(false);
     const [openGASubmissionDialog, setOpenGASubmissionDialog] = useState(false);
+
+    const targetRef = useRef();
+
+    const scrollToComponent = () => {
+        if (targetRef.current) {
+            const top =
+                targetRef.current.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({
+                top,
+                behavior: 'smooth',
+            });
+        }
+    };
 
     useEffect(() => {
         let domain = new URL(window.location.href);
@@ -413,10 +426,11 @@ const SingleGovernanceAction = ({ id }) => {
                                                         Your Action:
                                                     </Typography>
                                                     <Typography variant='caption'>
-                                                        If your are ready,
-                                                        submit this proposal as
-                                                        a governance action to
-                                                        get voted on.
+                                                        {user &&
+                                                        user?.user?.id?.toString() ===
+                                                            proposal?.attributes?.user_id?.toString()
+                                                            ? `If your are ready, submit this proposal as a governance action to get voted on.`
+                                                            : `Help make the proposal better by commenting`}
                                                     </Typography>
                                                 </>
                                             )}
@@ -461,7 +475,17 @@ const SingleGovernanceAction = ({ id }) => {
                                                 >
                                                     Submit as Governance Action
                                                 </Button>
-                                            ) : null}
+                                            ) : (
+                                                <Button
+                                                    variant='outlined'
+                                                    data-testid='proposal-details-header-comment-button'
+                                                    onClick={() =>
+                                                        scrollToComponent()
+                                                    }
+                                                >
+                                                    Comment
+                                                </Button>
+                                            )}
                                         </Box>
                                     </Box>
                                 </CardContent>
@@ -1209,6 +1233,7 @@ const SingleGovernanceAction = ({ id }) => {
                                             sm: 'row',
                                         }}
                                         gap={2}
+                                        ref={targetRef}
                                     >
                                         {!user && (
                                             <Typography variant='body2'>
