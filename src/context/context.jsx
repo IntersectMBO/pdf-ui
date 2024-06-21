@@ -7,6 +7,10 @@ export function AppContextProvider({ children }) {
     const [loading, setLoading] = useState(false);
     const [walletAPI, setWalletAPI] = useState(null);
     const [locale, setLocale] = useState('en');
+    const [openUsernameModal, setOpenUsernameModal] = useState({
+        open: false,
+        callBackFn: () => {},
+    });
 
     return (
         <AppContext.Provider
@@ -19,6 +23,8 @@ export function AppContextProvider({ children }) {
                 setWalletAPI,
                 locale,
                 setLocale,
+                openUsernameModal,
+                setOpenUsernameModal,
             }}
         >
             {children}

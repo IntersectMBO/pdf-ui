@@ -53,11 +53,14 @@ import {
     updateProposalLikesOrDislikes,
 } from '../../../lib/api';
 import { formatIsoDate } from '../../../lib/utils';
+import { loginUserToApp } from '../../../lib/helpers';
+import ProposalOwnModal from '../../../components/ProposalOwnModal';
 
 const SingleGovernanceAction = ({ id }) => {
     const MAX_COMMENT_LENGTH = 256;
     const navigate = useNavigate();
-    const { user, setLoading } = useAppContext();
+    const { user, setLoading, walletAPI, setOpenUsernameModal, setUser } =
+        useAppContext();
     const theme = useTheme();
     const [proposal, setProposal] = useState(null);
     const [mounted, setMounted] = useState(false);
@@ -73,8 +76,10 @@ const SingleGovernanceAction = ({ id }) => {
     const [proposalLink, setProposalLink] = useState('');
     const [disableShare, setDisableShare] = useState(false);
     const [openGASubmissionDialog, setOpenGASubmissionDialog] = useState(false);
+    const [ownProposalModal, setOwnProposalModal] = useState(false);
 
     const targetRef = useRef();
+    const menuRef = useRef();
 
     const scrollToComponent = () => {
         if (targetRef.current) {
@@ -106,8 +111,8 @@ const SingleGovernanceAction = ({ id }) => {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
+    const handleClick = () => {
+        setAnchorEl(menuRef?.current);
     };
 
     const handleClose = () => {
@@ -135,6 +140,7 @@ const SingleGovernanceAction = ({ id }) => {
 
     const handleOpenDeleteModal = () => {
         setOpenDeleteModal(true);
+        handleClose();
     };
 
     const handleCloseDeleteModal = () => {
@@ -231,8 +237,15 @@ const SingleGovernanceAction = ({ id }) => {
         }
     };
 
-    const updateLikesOrDislikes = async ({ like = true }) => {
+    const updateLikesOrDislikes = async ({ like = true, loggedInUser }) => {
         setLoading(true);
+        if (
+            loggedInUser?.id?.toString() ===
+            proposal?.attributes?.user_id?.toString()
+        ) {
+            return setOwnProposalModal(true);
+        }
+
         try {
             let data = userProposalVote
                 ? {
@@ -403,18 +416,22 @@ const SingleGovernanceAction = ({ id }) => {
                                         justifyContent='space-between'
                                         flexDirection={{
                                             xs: 'column',
-                                            sm: 'row',
+                                            md: 'row',
                                         }}
+                                        gap={1}
                                     >
                                         <Box
                                             textAlign={{
                                                 xs: 'center',
-                                                sm: 'left',
+                                                md: 'left',
                                             }}
                                         >
                                             {proposal?.attributes?.content
                                                 ?.attributes?.prop_submitted ? (
-                                                <Typography variant='caption'>
+                                                <Typography
+                                                    variant='caption'
+                                                    sx={{ textWrap: 'balance' }}
+                                                >
                                                     This proposal has been
                                                     submitted on-chain as a
                                                     Governance Action to get
@@ -425,7 +442,12 @@ const SingleGovernanceAction = ({ id }) => {
                                                     <Typography variant='body2'>
                                                         Your Action:
                                                     </Typography>
-                                                    <Typography variant='caption'>
+                                                    <Typography
+                                                        variant='caption'
+                                                        sx={{
+                                                            textWrap: 'balance',
+                                                        }}
+                                                    >
                                                         {user &&
                                                         user?.user?.id?.toString() ===
                                                             proposal?.attributes?.user_id?.toString()
@@ -458,6 +480,9 @@ const SingleGovernanceAction = ({ id }) => {
                                                             }
                                                         />
                                                     }
+                                                    sx={{
+                                                        width: 'max-content',
+                                                    }}
                                                 >
                                                     Review and Vote
                                                 </Button>
@@ -467,10 +492,20 @@ const SingleGovernanceAction = ({ id }) => {
                                                 <Button
                                                     variant='outlined'
                                                     data-testid='submit-as-GA-button'
-                                                    onClick={() =>
-                                                        setOpenGASubmissionDialog(
-                                                            true
-                                                        )
+                                                    sx={{
+                                                        width: 'max-content',
+                                                    }}
+                                                    onClick={async () =>
+                                                        await loginUserToApp({
+                                                            wallet: walletAPI,
+                                                            setUser: setUser,
+                                                            setOpenUsernameModal:
+                                                                setOpenUsernameModal,
+                                                            callBackFn: () =>
+                                                                setOpenGASubmissionDialog(
+                                                                    true
+                                                                ),
+                                                        })
                                                     }
                                                 >
                                                     Submit as Governance Action
@@ -482,6 +517,9 @@ const SingleGovernanceAction = ({ id }) => {
                                                     onClick={() =>
                                                         scrollToComponent()
                                                     }
+                                                    sx={{
+                                                        width: 'max-content',
+                                                    }}
                                                 >
                                                     Comment
                                                 </Button>
@@ -528,36 +566,51 @@ const SingleGovernanceAction = ({ id }) => {
                                         display='flex'
                                         justifyContent='flex-end'
                                     >
-                                        <IconButton
-                                            id='share-button'
-                                            sx={{
-                                                width: 40,
-                                                height: 40,
-                                            }}
-                                            aria-controls={
-                                                openShare
-                                                    ? 'share-menu'
-                                                    : undefined
+                                        <Tooltip
+                                            title={
+                                                <span
+                                                    style={{
+                                                        whiteSpace: 'pre-line',
+                                                    }}
+                                                >
+                                                    {`Share proposal\n\nClick to share this proposal on social media.`}
+                                                </span>
                                             }
-                                            aria-haspopup='true'
-                                            aria-expanded={
-                                                openShare ? 'true' : undefined
-                                            }
-                                            onClick={handleShareClick}
                                         >
-                                            <IconShare
-                                                width='24'
-                                                height='24'
-                                                fill={
+                                            <IconButton
+                                                id='share-button'
+                                                sx={{
+                                                    width: 40,
+                                                    height: 40,
+                                                }}
+                                                aria-controls={
                                                     openShare
-                                                        ? theme?.palette
-                                                              ?.primary?.main
-                                                        : theme?.palette
-                                                              ?.primary?.icons
-                                                              ?.black
+                                                        ? 'share-menu'
+                                                        : undefined
                                                 }
-                                            />
-                                        </IconButton>
+                                                aria-haspopup='true'
+                                                aria-expanded={
+                                                    openShare
+                                                        ? 'true'
+                                                        : undefined
+                                                }
+                                                onClick={handleShareClick}
+                                            >
+                                                <IconShare
+                                                    width='24'
+                                                    height='24'
+                                                    fill={
+                                                        openShare
+                                                            ? theme?.palette
+                                                                  ?.primary
+                                                                  ?.main
+                                                            : theme?.palette
+                                                                  ?.primary
+                                                                  ?.icons?.black
+                                                    }
+                                                />
+                                            </IconButton>
+                                        </Tooltip>
                                         <Menu
                                             id='share-menu'
                                             anchorEl={shareAnchorEl}
@@ -688,12 +741,38 @@ const SingleGovernanceAction = ({ id }) => {
                                                                 ? 'true'
                                                                 : undefined
                                                         }
-                                                        onClick={handleClick}
+                                                        ref={menuRef}
+                                                        onClick={async () => {
+                                                            await loginUserToApp(
+                                                                {
+                                                                    wallet: walletAPI,
+                                                                    setUser:
+                                                                        setUser,
+                                                                    setOpenUsernameModal:
+                                                                        setOpenUsernameModal,
+                                                                    callBackFn:
+                                                                        () =>
+                                                                            handleClick(),
+                                                                }
+                                                            );
+                                                        }}
                                                         data-testid='menu-button'
                                                     >
                                                         <IconDotsVertical
                                                             width='24'
                                                             height='24'
+                                                            fill={
+                                                                open
+                                                                    ? theme
+                                                                          ?.palette
+                                                                          ?.primary
+                                                                          ?.main
+                                                                    : theme
+                                                                          ?.palette
+                                                                          ?.primary
+                                                                          ?.icons
+                                                                          ?.black
+                                                            }
                                                         />
                                                     </IconButton>
                                                     <Menu
@@ -726,8 +805,19 @@ const SingleGovernanceAction = ({ id }) => {
                                                         data-testid='proposal-menu'
                                                     >
                                                         <MenuItem
-                                                            onClick={
-                                                                handleEditProposal
+                                                            onClick={async () =>
+                                                                await loginUserToApp(
+                                                                    {
+                                                                        wallet: walletAPI,
+                                                                        setUser:
+                                                                            setUser,
+                                                                        setOpenUsernameModal:
+                                                                            setOpenUsernameModal,
+                                                                        callBackFn:
+                                                                            () =>
+                                                                                handleEditProposal(),
+                                                                    }
+                                                                )
                                                             }
                                                             data-testid='edit-proposal'
                                                         >
@@ -758,8 +848,19 @@ const SingleGovernanceAction = ({ id }) => {
                                                             </Stack>
                                                         </MenuItem>
                                                         <MenuItem
-                                                            onClick={
-                                                                handleOpenDeleteModal
+                                                            onClick={async () =>
+                                                                await loginUserToApp(
+                                                                    {
+                                                                        wallet: walletAPI,
+                                                                        setUser:
+                                                                            setUser,
+                                                                        setOpenUsernameModal:
+                                                                            setOpenUsernameModal,
+                                                                        callBackFn:
+                                                                            () =>
+                                                                                handleOpenDeleteModal(),
+                                                                    }
+                                                                )
                                                             }
                                                             data-testid='delete-proposal'
                                                         >
@@ -836,8 +937,15 @@ const SingleGovernanceAction = ({ id }) => {
                                                         height='18'
                                                     />
                                                 }
-                                                onClick={
-                                                    handleOpenReviewVersions
+                                                onClick={async () =>
+                                                    await loginUserToApp({
+                                                        wallet: walletAPI,
+                                                        setUser: setUser,
+                                                        setOpenUsernameModal:
+                                                            setOpenUsernameModal,
+                                                        callBackFn: () =>
+                                                            handleOpenReviewVersions(),
+                                                    })
                                                 }
                                                 data-testid='review-version'
                                             >
@@ -931,193 +1039,433 @@ const SingleGovernanceAction = ({ id }) => {
                                     flexDirection={'row'}
                                     justifyContent={'space-between'}
                                 >
-                                    <IconButton
-                                        data-testid='comment-count'
-                                        disabled
-                                    >
-                                        <Badge
-                                            badgeContent={
-                                                proposal?.attributes
-                                                    ?.prop_comments_number || 0
-                                            }
-                                            aria-label='proposal comments'
-                                            showZero
-                                            sx={{
-                                                transform:
-                                                    'translate(30px, -20px)',
-                                                '& .MuiBadge-badge': {
-                                                    color: 'white',
-                                                    backgroundColor: (theme) =>
-                                                        theme.palette
-                                                            .badgeColors
-                                                            .primary,
-                                                },
-                                            }}
-                                        ></Badge>
-                                        <IconChatAlt />
-                                    </IconButton>
+                                    <Tooltip title='Total comments number'>
+                                        <span>
+                                            <Box
+                                                display={'flex'}
+                                                alignItems={'center'}
+                                            >
+                                                <IconButton
+                                                    data-testid='comment-count'
+                                                    disabled
+                                                >
+                                                    <Badge
+                                                        badgeContent={
+                                                            proposal?.attributes
+                                                                ?.prop_comments_number ||
+                                                            0
+                                                        }
+                                                        aria-label='proposal comments'
+                                                        showZero
+                                                        sx={{
+                                                            transform:
+                                                                'translate(30px, -20px)',
+                                                            '& .MuiBadge-badge':
+                                                                {
+                                                                    color: 'white',
+                                                                    backgroundColor:
+                                                                        (
+                                                                            theme
+                                                                        ) =>
+                                                                            theme
+                                                                                .palette
+                                                                                .badgeColors
+                                                                                .primary,
+                                                                },
+                                                        }}
+                                                    ></Badge>
+                                                    <IconChatAlt />
+                                                </IconButton>
+                                            </Box>
+                                        </span>
+                                    </Tooltip>
                                     <Box display={'flex'} gap={1}>
                                         {/* LIKE BUTTON */}
-                                        <IconButton
-                                            sx={{
-                                                border: (theme) =>
-                                                    `1px solid ${theme.palette.iconButton.outlineLightColor}`,
-                                            }}
-                                            data-testid='like-button'
-                                            disabled={
-                                                proposal?.attributes?.content
-                                                    ?.attributes?.prop_submitted
-                                                    ? true
-                                                    : user
-                                                      ? user?.user?.id?.toString() ===
-                                                        proposal?.attributes?.user_id?.toString()
-                                                          ? true
-                                                          : userProposalVote
-                                                            ? userProposalVote
-                                                                  ?.attributes
-                                                                  ?.vote_result ===
-                                                              true
-                                                                ? true
-                                                                : false
-                                                            : false
-                                                      : true
-                                            }
-                                            onClick={() =>
-                                                user &&
-                                                userProposalVote?.attributes
-                                                    ?.vote_result === true
-                                                    ? null
-                                                    : updateLikesOrDislikes({
-                                                          like: true,
-                                                      })
+                                        <Tooltip
+                                            title={
+                                                <span
+                                                    style={{
+                                                        whiteSpace: 'pre-line',
+                                                    }}
+                                                >
+                                                    {proposal?.attributes
+                                                        ?.content?.attributes
+                                                        ?.prop_submitted
+                                                        ? `Proposal Submitted\n\nYou can't like this proposal`
+                                                        : user
+                                                          ? user?.user?.id?.toString() ===
+                                                            proposal?.attributes?.user_id?.toString()
+                                                              ? `You can't like your proposal`
+                                                              : userProposalVote
+                                                                ? userProposalVote
+                                                                      ?.attributes
+                                                                      ?.vote_result ===
+                                                                  true
+                                                                    ? `You already liked this proposal`
+                                                                    : 'Like this proposal\n\nClick to like this proposal'
+                                                                : 'Like this proposal\n\nClick to like this proposal'
+                                                          : 'Like this proposal\n\nClick to like this proposal'}
+                                                </span>
                                             }
                                         >
-                                            <Badge
-                                                badgeContent={
-                                                    proposal?.attributes
-                                                        ?.prop_likes || 0
-                                                }
-                                                data-testid='like-count'
-                                                showZero
-                                                aria-label='proposal likes'
-                                                sx={{
-                                                    transform:
-                                                        'translate(30px, -20px)',
-                                                    '& .MuiBadge-badge': {
-                                                        color: 'white',
-                                                        backgroundColor: (
-                                                            theme
-                                                        ) =>
-                                                            theme.palette
-                                                                .badgeColors
-                                                                .secondary,
-                                                    },
-                                                }}
-                                            ></Badge>
-                                            <IconThumbUp
-                                                fill={
-                                                    user
-                                                        ? userProposalVote
-                                                            ? userProposalVote
-                                                                  ?.attributes
-                                                                  ?.vote_result ===
-                                                              true
-                                                                ? theme?.palette
-                                                                      ?.primary
-                                                                      ?.main
+                                            <span>
+                                                <IconButton
+                                                    sx={{
+                                                        border: (theme) =>
+                                                            `1px solid ${theme.palette.iconButton.outlineLightColor}`,
+                                                    }}
+                                                    data-testid='like-button'
+                                                    disabled={
+                                                        proposal?.attributes
+                                                            ?.content
+                                                            ?.attributes
+                                                            ?.prop_submitted
+                                                            ? true
+                                                            : user
+                                                              ? user?.user?.id?.toString() ===
+                                                                proposal?.attributes?.user_id?.toString()
+                                                                  ? true
+                                                                  : userProposalVote
+                                                                    ? userProposalVote
+                                                                          ?.attributes
+                                                                          ?.vote_result ===
+                                                                      true
+                                                                        ? true
+                                                                        : false
+                                                                    : false
+                                                              : false
+                                                    }
+                                                    onClick={
+                                                        proposal?.attributes
+                                                            ?.content
+                                                            ?.attributes
+                                                            ?.prop_submitted
+                                                            ? null
+                                                            : user
+                                                              ? user?.user?.id?.toString() ===
+                                                                proposal?.attributes?.user_id?.toString()
+                                                                  ? null
+                                                                  : userProposalVote
+                                                                    ? userProposalVote
+                                                                          ?.attributes
+                                                                          ?.vote_result ===
+                                                                      null
+                                                                        ? null
+                                                                        : async () =>
+                                                                              await loginUserToApp(
+                                                                                  {
+                                                                                      wallet: walletAPI,
+                                                                                      setUser:
+                                                                                          setUser,
+                                                                                      setOpenUsernameModal:
+                                                                                          setOpenUsernameModal,
+                                                                                      callBackFn:
+                                                                                          (
+                                                                                              loggedInUser
+                                                                                          ) =>
+                                                                                              updateLikesOrDislikes(
+                                                                                                  {
+                                                                                                      like: true,
+                                                                                                      loggedInUser:
+                                                                                                          loggedInUser,
+                                                                                                  }
+                                                                                              ),
+                                                                                  }
+                                                                              )
+                                                                    : async () =>
+                                                                          await loginUserToApp(
+                                                                              {
+                                                                                  wallet: walletAPI,
+                                                                                  setUser:
+                                                                                      setUser,
+                                                                                  setOpenUsernameModal:
+                                                                                      setOpenUsernameModal,
+                                                                                  callBackFn:
+                                                                                      (
+                                                                                          loggedInUser
+                                                                                      ) =>
+                                                                                          updateLikesOrDislikes(
+                                                                                              {
+                                                                                                  like: true,
+                                                                                                  loggedInUser:
+                                                                                                      loggedInUser,
+                                                                                              }
+                                                                                          ),
+                                                                              }
+                                                                          )
+                                                              : async () =>
+                                                                    await loginUserToApp(
+                                                                        {
+                                                                            wallet: walletAPI,
+                                                                            setUser:
+                                                                                setUser,
+                                                                            setOpenUsernameModal:
+                                                                                setOpenUsernameModal,
+                                                                            callBackFn:
+                                                                                (
+                                                                                    loggedInUser
+                                                                                ) =>
+                                                                                    updateLikesOrDislikes(
+                                                                                        {
+                                                                                            like: true,
+                                                                                            loggedInUser:
+                                                                                                loggedInUser,
+                                                                                        }
+                                                                                    ),
+                                                                        }
+                                                                    )
+                                                    }
+                                                >
+                                                    <Badge
+                                                        badgeContent={
+                                                            proposal?.attributes
+                                                                ?.prop_likes ||
+                                                            0
+                                                        }
+                                                        data-testid='like-count'
+                                                        showZero
+                                                        aria-label='proposal likes'
+                                                        sx={{
+                                                            transform:
+                                                                'translate(30px, -20px)',
+                                                            '& .MuiBadge-badge':
+                                                                {
+                                                                    color: 'white',
+                                                                    backgroundColor:
+                                                                        (
+                                                                            theme
+                                                                        ) =>
+                                                                            theme
+                                                                                .palette
+                                                                                .badgeColors
+                                                                                .secondary,
+                                                                },
+                                                        }}
+                                                    ></Badge>
+                                                    <IconThumbUp
+                                                        fill={
+                                                            user
+                                                                ? userProposalVote
+                                                                    ? userProposalVote
+                                                                          ?.attributes
+                                                                          ?.vote_result ===
+                                                                      true
+                                                                        ? theme
+                                                                              ?.palette
+                                                                              ?.primary
+                                                                              ?.main
+                                                                        : theme
+                                                                              ?.palette
+                                                                              ?.primary
+                                                                              ?.icons
+                                                                              ?.black
+                                                                    : theme
+                                                                          ?.palette
+                                                                          ?.primary
+                                                                          ?.icons
+                                                                          ?.black
                                                                 : theme?.palette
                                                                       ?.primary
                                                                       ?.icons
                                                                       ?.black
-                                                            : theme?.palette
-                                                                  ?.primary
-                                                                  ?.icons?.black
-                                                        : theme?.palette
-                                                              ?.primary?.icons
-                                                              ?.black
-                                                }
-                                            />
-                                        </IconButton>
+                                                        }
+                                                    />
+                                                </IconButton>
+                                            </span>
+                                        </Tooltip>
                                         {/* DISLIKE BUTTON */}
-                                        <IconButton
-                                            sx={{
-                                                border: (theme) =>
-                                                    `1px solid ${theme.palette.iconButton.outlineLightColor}`,
-                                            }}
-                                            data-testid='dislike-button'
-                                            disabled={
-                                                proposal?.attributes?.content
-                                                    ?.attributes?.prop_submitted
-                                                    ? true
-                                                    : user
-                                                      ? user?.user?.id?.toString() ===
-                                                        proposal?.attributes?.user_id?.toString()
-                                                          ? true
-                                                          : userProposalVote
-                                                            ? userProposalVote
-                                                                  ?.attributes
-                                                                  ?.vote_result ===
-                                                              false
-                                                                ? true
-                                                                : false
-                                                            : false
-                                                      : true
-                                            }
-                                            onClick={() =>
-                                                userProposalVote?.attributes
-                                                    ?.vote_result === false
-                                                    ? null
-                                                    : updateLikesOrDislikes({
-                                                          like: false,
-                                                      })
+                                        <Tooltip
+                                            title={
+                                                <span
+                                                    style={{
+                                                        whiteSpace: 'pre-line',
+                                                    }}
+                                                >
+                                                    {proposal?.attributes
+                                                        ?.content?.attributes
+                                                        ?.prop_submitted
+                                                        ? `Proposal Submitted\n\nYou can't dislike this proposal`
+                                                        : user
+                                                          ? user?.user?.id?.toString() ===
+                                                            proposal?.attributes?.user_id?.toString()
+                                                              ? `You can't dislike your proposal`
+                                                              : userProposalVote
+                                                                ? userProposalVote
+                                                                      ?.attributes
+                                                                      ?.vote_result ===
+                                                                  false
+                                                                    ? `You already disliked this proposal`
+                                                                    : 'Dislike this proposal\n\nClick to dislike this proposal'
+                                                                : 'Dislike this proposal\n\nClick to dislike this proposal'
+                                                          : 'Dislike this proposal\n\nClick to dislike this proposal'}
+                                                </span>
                                             }
                                         >
-                                            <Badge
-                                                badgeContent={
-                                                    proposal?.attributes
-                                                        ?.prop_dislikes || 0
-                                                }
-                                                data-testid='dislike-count'
-                                                showZero
-                                                aria-label='proposal dislikes'
-                                                sx={{
-                                                    transform:
-                                                        'translate(30px, -20px)',
-                                                    '& .MuiBadge-badge': {
-                                                        color: 'white',
-                                                        backgroundColor: (
-                                                            theme
-                                                        ) =>
-                                                            theme.palette
-                                                                .badgeColors
-                                                                .errorLight,
-                                                    },
-                                                }}
-                                            ></Badge>
-                                            <IconThumbDown
-                                                fill={
-                                                    user
-                                                        ? userProposalVote
-                                                            ? userProposalVote
-                                                                  ?.attributes
-                                                                  ?.vote_result ===
-                                                              false
-                                                                ? theme?.palette
-                                                                      ?.primary
-                                                                      ?.main
+                                            <span>
+                                                <IconButton
+                                                    sx={{
+                                                        border: (theme) =>
+                                                            `1px solid ${theme.palette.iconButton.outlineLightColor}`,
+                                                    }}
+                                                    data-testid='dislike-button'
+                                                    disabled={
+                                                        proposal?.attributes
+                                                            ?.content
+                                                            ?.attributes
+                                                            ?.prop_submitted
+                                                            ? true
+                                                            : user
+                                                              ? user?.user?.id?.toString() ===
+                                                                proposal?.attributes?.user_id?.toString()
+                                                                  ? true
+                                                                  : userProposalVote
+                                                                    ? userProposalVote
+                                                                          ?.attributes
+                                                                          ?.vote_result ===
+                                                                      false
+                                                                        ? true
+                                                                        : false
+                                                                    : false
+                                                              : false
+                                                    }
+                                                    onClick={
+                                                        proposal?.attributes
+                                                            ?.content
+                                                            ?.attributes
+                                                            ?.prop_submitted
+                                                            ? null
+                                                            : user
+                                                              ? user?.user?.id?.toString() ===
+                                                                proposal?.attributes?.user_id?.toString()
+                                                                  ? null
+                                                                  : userProposalVote
+                                                                    ? userProposalVote
+                                                                          ?.attributes
+                                                                          ?.vote_result ===
+                                                                      null
+                                                                        ? null
+                                                                        : async () =>
+                                                                              await loginUserToApp(
+                                                                                  {
+                                                                                      wallet: walletAPI,
+                                                                                      setUser:
+                                                                                          setUser,
+                                                                                      setOpenUsernameModal:
+                                                                                          setOpenUsernameModal,
+                                                                                      callBackFn:
+                                                                                          (
+                                                                                              loggedInUser
+                                                                                          ) =>
+                                                                                              updateLikesOrDislikes(
+                                                                                                  {
+                                                                                                      like: false,
+                                                                                                      loggedInUser:
+                                                                                                          loggedInUser,
+                                                                                                  }
+                                                                                              ),
+                                                                                  }
+                                                                              )
+                                                                    : async () =>
+                                                                          await loginUserToApp(
+                                                                              {
+                                                                                  wallet: walletAPI,
+                                                                                  setUser:
+                                                                                      setUser,
+                                                                                  setOpenUsernameModal:
+                                                                                      setOpenUsernameModal,
+                                                                                  callBackFn:
+                                                                                      (
+                                                                                          loggedInUser
+                                                                                      ) =>
+                                                                                          updateLikesOrDislikes(
+                                                                                              {
+                                                                                                  like: false,
+                                                                                                  loggedInUser:
+                                                                                                      loggedInUser,
+                                                                                              }
+                                                                                          ),
+                                                                              }
+                                                                          )
+                                                              : async () =>
+                                                                    await loginUserToApp(
+                                                                        {
+                                                                            wallet: walletAPI,
+                                                                            setUser:
+                                                                                setUser,
+                                                                            setOpenUsernameModal:
+                                                                                setOpenUsernameModal,
+                                                                            callBackFn:
+                                                                                (
+                                                                                    loggedInUser
+                                                                                ) =>
+                                                                                    updateLikesOrDislikes(
+                                                                                        {
+                                                                                            like: false,
+                                                                                            loggedInUser:
+                                                                                                loggedInUser,
+                                                                                        }
+                                                                                    ),
+                                                                        }
+                                                                    )
+                                                    }
+                                                >
+                                                    <Badge
+                                                        badgeContent={
+                                                            proposal?.attributes
+                                                                ?.prop_dislikes ||
+                                                            0
+                                                        }
+                                                        data-testid='dislike-count'
+                                                        showZero
+                                                        aria-label='proposal dislikes'
+                                                        sx={{
+                                                            transform:
+                                                                'translate(30px, -20px)',
+                                                            '& .MuiBadge-badge':
+                                                                {
+                                                                    color: 'white',
+                                                                    backgroundColor:
+                                                                        (
+                                                                            theme
+                                                                        ) =>
+                                                                            theme
+                                                                                .palette
+                                                                                .badgeColors
+                                                                                .errorLight,
+                                                                },
+                                                        }}
+                                                    ></Badge>
+                                                    <IconThumbDown
+                                                        fill={
+                                                            user
+                                                                ? userProposalVote
+                                                                    ? userProposalVote
+                                                                          ?.attributes
+                                                                          ?.vote_result ===
+                                                                      false
+                                                                        ? theme
+                                                                              ?.palette
+                                                                              ?.primary
+                                                                              ?.main
+                                                                        : theme
+                                                                              ?.palette
+                                                                              ?.primary
+                                                                              ?.icons
+                                                                              ?.black
+                                                                    : theme
+                                                                          ?.palette
+                                                                          ?.primary
+                                                                          ?.icons
+                                                                          ?.black
                                                                 : theme?.palette
                                                                       ?.primary
                                                                       ?.icons
                                                                       ?.black
-                                                            : theme?.palette
-                                                                  ?.primary
-                                                                  ?.icons?.black
-                                                        : theme?.palette
-                                                              ?.primary?.icons
-                                                              ?.black
-                                                }
-                                            />
-                                        </IconButton>
+                                                        }
+                                                    />
+                                                </IconButton>
+                                            </span>
+                                        </Tooltip>
                                     </Box>
                                 </Box>
                             </CardContent>
@@ -1225,9 +1573,7 @@ const SingleGovernanceAction = ({ id }) => {
                                     <Box
                                         mt={2}
                                         display='flex'
-                                        justifyContent={
-                                            user ? 'flex-end' : 'space-between'
-                                        }
+                                        justifyContent={'flex-end'}
                                         flexDirection={{
                                             xs: 'column',
                                             sm: 'row',
@@ -1235,28 +1581,25 @@ const SingleGovernanceAction = ({ id }) => {
                                         gap={2}
                                         ref={targetRef}
                                     >
-                                        {!user && (
-                                            <Typography variant='body2'>
-                                                Connect wallet to submit a
-                                                comment or create proposal
-                                            </Typography>
-                                        )}
-
                                         <Button
                                             variant='contained'
-                                            onClick={handleCreateComment}
-                                            disabled={
-                                                !newCommentText ||
-                                                !user?.user?.govtool_username
+                                            onClick={async () =>
+                                                await loginUserToApp({
+                                                    wallet: walletAPI,
+                                                    setUser: setUser,
+                                                    setOpenUsernameModal:
+                                                        setOpenUsernameModal,
+                                                    callBackFn: () =>
+                                                        handleCreateComment(),
+                                                })
                                             }
+                                            disabled={!newCommentText}
                                             endIcon={
                                                 <IconReply
                                                     height={18}
                                                     width={18}
                                                     fill={
-                                                        !newCommentText ||
-                                                        !user?.user
-                                                            ?.govtool_username
+                                                        !newCommentText
                                                             ? 'rgba(0,0,0, 0.26)'
                                                             : 'white'
                                                     }
@@ -1415,7 +1758,16 @@ const SingleGovernanceAction = ({ id }) => {
                                     sx={{
                                         borderRadius: '20px',
                                     }}
-                                    onClick={handleDeleteProposal}
+                                    onClick={async () =>
+                                        await loginUserToApp({
+                                            wallet: walletAPI,
+                                            setUser: setUser,
+                                            setOpenUsernameModal:
+                                                setOpenUsernameModal,
+                                            callBackFn: () =>
+                                                handleDeleteProposal(),
+                                        })
+                                    }
                                     data-testid='delete-proposal-yes-button'
                                 >
                                     Yes, delete my proposal completely
@@ -1430,6 +1782,11 @@ const SingleGovernanceAction = ({ id }) => {
                         handleCloseSubmissionDialog={() =>
                             setOpenGASubmissionDialog(false)
                         }
+                    />
+
+                    <ProposalOwnModal
+                        open={ownProposalModal}
+                        onClose={() => setOwnProposalModal(false)}
                     />
                 </Box>
             )}
