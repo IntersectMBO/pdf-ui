@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 
 const Step1 = ({ setStep, setProposalData, onClose }) => {
     const [draftsEnabled, setDraftsEnabled] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
     const fetchProposals = async () => {
         try {
@@ -29,8 +30,12 @@ const Step1 = ({ setStep, setProposalData, onClose }) => {
     };
 
     useEffect(() => {
-        fetchProposals();
-    }, []);
+        if (!mounted) {
+            setMounted(true);
+        } else {
+            fetchProposals();
+        }
+    }, [mounted]);
 
     return (
         <Box display='flex' flexDirection='column'>
@@ -208,6 +213,7 @@ const Step1 = ({ setStep, setProposalData, onClose }) => {
                             proposal?.attributes?.content?.attributes
                         );
                     }}
+                    statusList={[]}
                 />
             </Box>
         </Box>

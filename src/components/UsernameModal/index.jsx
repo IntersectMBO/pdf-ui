@@ -27,13 +27,20 @@ const style = {
 };
 
 const UsernameModal = ({ open, handleClose: close }) => {
-    const { setUser } = useAppContext();
+    const { setUser, setOpenUsernameModal } = useAppContext();
     const [username, setUsername] = useState('');
     const [step, setStep] = useState(1);
 
-    const handleClose = () => {
+    const handleClose = (setFnToNUll = true) => {
         close();
         setStep(1);
+        setUsername('');
+        setFnToNUll
+            ? setOpenUsernameModal((prev) => ({
+                  ...prev,
+                  callBackFn: () => {},
+              }))
+            : open?.callBackFn();
     };
 
     const handleNext = async () => {
@@ -205,7 +212,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
                                 <Typography variant='h6' component='h3'>
                                     Username submitted!
                                 </Typography>
-                                <IconButton onClick={handleClose}>
+                                <IconButton onClick={() => handleClose(false)}>
                                     <IconX width='24px' height='24px' />
                                 </IconButton>
                             </Box>
@@ -215,7 +222,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
                                 data-testid='close-button'
                                 variant='contained'
                                 fullWidth
-                                onClick={handleClose}
+                                onClick={() => handleClose(false)}
                             >
                                 Close
                             </Button>
@@ -229,8 +236,10 @@ const UsernameModal = ({ open, handleClose: close }) => {
 
     return (
         <Modal
-            open={open}
-            onClose={handleClose}
+            open={open?.open}
+            onClose={
+                step === 3 ? () => handleClose() : () => handleClose(false)
+            }
             data-testid='setup-username-modal'
         >
             <Box sx={style}>{renderStep()}</Box>

@@ -20,8 +20,10 @@ import {
     Typography,
     TextField,
 } from '@mui/material';
+import { loginUserToApp } from '../../lib/helpers';
 const CommentCard = ({ comment, proposal }) => {
-    const { setLoading, user } = useAppContext();
+    const { setLoading, walletAPI, setUser, setOpenUsernameModal } =
+        useAppContext();
     const theme = useTheme();
     const maxLength = 128;
     const subcommentMaxLength = 256;
@@ -343,7 +345,7 @@ const CommentCard = ({ comment, proposal }) => {
                                 </Typography>
                             </Box>
                             {proposal?.attributes?.content?.attributes
-                                ?.prop_submitted ? null : user ? (
+                                ?.prop_submitted ? null : (
                                 <Button
                                     variant='outlined'
                                     startIcon={
@@ -368,7 +370,7 @@ const CommentCard = ({ comment, proposal }) => {
                                 >
                                     {showReply ? 'Cancel' : 'Reply'}
                                 </Button>
-                            ) : null}
+                            )}
                         </Box>
 
                         {showReply && (
@@ -433,19 +435,23 @@ const CommentCard = ({ comment, proposal }) => {
                                 >
                                     <Button
                                         variant='contained'
-                                        onClick={handleCreateComment}
-                                        disabled={
-                                            !subcommentText ||
-                                            !user?.user?.govtool_username
+                                        onClick={async () =>
+                                            await loginUserToApp({
+                                                wallet: walletAPI,
+                                                setUser: setUser,
+                                                setOpenUsernameModal:
+                                                    setOpenUsernameModal,
+                                                callBackFn: () =>
+                                                    handleCreateComment(),
+                                            })
                                         }
+                                        disabled={!subcommentText}
                                         endIcon={
                                             <IconReply
                                                 height={18}
                                                 width={18}
                                                 fill={
-                                                    !subcommentText ||
-                                                    !user?.user
-                                                        ?.govtool_username
+                                                    !subcommentText
                                                         ? 'rgba(0,0,0, 0.26)'
                                                         : 'white'
                                                 }

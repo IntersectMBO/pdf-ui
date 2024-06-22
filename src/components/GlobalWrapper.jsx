@@ -4,20 +4,20 @@ import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { UsernameModal } from '../components';
 import { useAppContext } from '../context/context';
-import { loginUser, getLoggedInUserInfo } from '../lib/api';
-import {
-    clearSession,
-    saveDataInSession,
-    getDataFromSession,
-} from '../lib/utils';
+import { clearSession } from '../lib/utils';
 import { ProposedGovernanceActions, SingleGovernanceAction } from '../pages';
-import { format } from 'date-fns';
+import { loginUserToApp } from '../lib/helpers';
 
 const GlobalWrapper = ({ ...props }) => {
     const pathname = props?.pathname;
-    const { setWalletAPI, setLocale, setUser } = useAppContext();
+    const {
+        setWalletAPI,
+        setLocale,
+        setUser,
+        openUsernameModal,
+        setOpenUsernameModal,
+    } = useAppContext();
     const [mounted, setMounted] = useState(false);
-    const [openUsernameModal, setOpenUsernameModal] = useState(false);
 
     const {
         walletAPI: GovToolAssemblyWalletAPI,
@@ -27,53 +27,6 @@ const GlobalWrapper = ({ ...props }) => {
     const clearStates = () => {
         setWalletAPI(null);
         setUser(null);
-    };
-
-    function utf8ToHex(str) {
-        return Array.from(str)
-            .map((char) => char.charCodeAt(0).toString(16).padStart(2, '0'))
-            .join('');
-    }
-
-    const loginUserToApp = async (wallet) => {
-        try {
-            if (getDataFromSession('pdfUserJwt')) {
-                const loggedInUser = await getLoggedInUserInfo();
-                setUser({
-                    user: {
-                        ...loggedInUser,
-                    },
-                });
-
-                if (loggedInUser && !loggedInUser?.govtool_username) {
-                    setOpenUsernameModal(true);
-                }
-            } else {
-                const changeAddrHex = await wallet?.address;
-                const messageUtf = `Please sign this message to verify your identity at ${format(new Date(), 'd MMMM yyyy HH:mm:ss')}`;
-                const messageHex = utf8ToHex(messageUtf);
-
-                const signedData = await wallet.signData(
-                    changeAddrHex,
-                    messageHex
-                );
-
-                const userResponse = await loginUser({
-                    identifier: changeAddrHex,
-                    signedData: signedData,
-                });
-
-                if (!userResponse) return;
-                saveDataInSession('pdfUserJwt', userResponse?.jwt);
-                setUser(userResponse);
-
-                if (userResponse && !userResponse?.user?.govtool_username) {
-                    setOpenUsernameModal(true);
-                }
-            }
-        } catch (error) {
-            console.error(error);
-        }
     };
 
     function getProposalID(url) {
@@ -87,14 +40,22 @@ const GlobalWrapper = ({ ...props }) => {
         return lastSegment;
     }
 
+    const handleLogin = async (wallet) => {
+        await loginUserToApp({
+            wallet: wallet,
+            setUser: setUser,
+            setOpenUsernameModal: setOpenUsernameModal,
+            globalWrapper: true,
+        });
+    };
+
     useEffect(() => {
         if (!mounted) {
-            clearStates();
             setMounted(true);
         } else {
             if (GovToolAssemblyWalletAPI?.address) {
                 setWalletAPI(GovToolAssemblyWalletAPI);
-                loginUserToApp(GovToolAssemblyWalletAPI);
+                handleLogin(GovToolAssemblyWalletAPI);
             } else {
                 clearStates();
                 clearSession();
@@ -128,7 +89,13 @@ const GlobalWrapper = ({ ...props }) => {
             {renderComponentBasedOnPath(pathname)}
             <UsernameModal
                 open={openUsernameModal}
-                handleClose={() => setOpenUsernameModal(false)}
+                handleClose={
+                    () =>
+                        setOpenUsernameModal({
+                            open: false,
+                            callBackFn: () => {},
+                        }) // Reset open and callbackFn state
+                }
             />
         </Box>
     );

@@ -399,7 +399,10 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                                 ?.is_draft ? null : (
                                 <Box display={'flex'} gap={1}>
                                     <Tooltip title={'Comments Number'}>
-                                        <Box>
+                                        <Box
+                                            display={'flex'}
+                                            alignItems={'center'}
+                                        >
                                             <IconButton
                                                 data-testid={`proposal-${proposal?.id}-comment-count`}
                                                 disabled={true}

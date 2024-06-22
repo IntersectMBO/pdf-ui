@@ -26,10 +26,11 @@ import { useEffect, useState } from 'react';
 import { ProposalsList, CreateGovernanceActionDialog } from '../../components';
 import { getGovernanceActionTypes } from '../../lib/api';
 import { useAppContext } from '../../context/context';
+import { loginUserToApp } from '../../lib/helpers';
 
 const ProposedGovernanceActions = () => {
     const theme = useTheme();
-    const { user } = useAppContext();
+    const { walletAPI, setOpenUsernameModal, setUser } = useAppContext();
     const [proposalSearchText, setProposalSearchText] = useState('');
     const [sortType, setSortType] = useState('desc');
     const [governanceActionTypeList, setGovernanceActionTypeList] = useState(
@@ -124,24 +125,32 @@ const ProposedGovernanceActions = () => {
                         justifyContent={'space-between'}
                         spacing={1}
                     >
-                        {user?.user?.govtool_username ? (
-                            <Grid item xs={12} paddingBottom={2}>
-                                <Button
-                                    variant='contained'
-                                    onClick={() => setShowCreateGADialog(true)}
-                                    startIcon={<IconPlusCircle fill='white' />}
-                                    data-testid='propose-a-governance-action-button'
-                                >
-                                    Propose a Governance Action
-                                </Button>
-                            </Grid>
-                        ) : (
+                        {walletAPI ? (
                             <Grid item xs={12} paddingBottom={2}>
                                 <Typography variant='h4' component='h1'>
                                     Proposed Governance Actions
                                 </Typography>
                             </Grid>
-                        )}
+                        ) : null}
+                        <Grid item xs={12} paddingBottom={2}>
+                            <Button
+                                variant='contained'
+                                onClick={async () =>
+                                    await loginUserToApp({
+                                        wallet: walletAPI,
+                                        setUser: setUser,
+                                        setOpenUsernameModal:
+                                            setOpenUsernameModal,
+                                        callBackFn: () =>
+                                            setShowCreateGADialog(true),
+                                    })
+                                }
+                                startIcon={<IconPlusCircle fill='white' />}
+                                data-testid='propose-a-governance-action-button'
+                            >
+                                Propose a Governance Action
+                            </Button>
+                        </Grid>
                         <Grid item md={6} sx={{ flexGrow: { xs: 1 } }}>
                             <TextField
                                 fullWidth
