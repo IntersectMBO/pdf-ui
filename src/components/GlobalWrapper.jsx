@@ -16,17 +16,20 @@ const GlobalWrapper = ({ ...props }) => {
         setUser,
         openUsernameModal,
         setOpenUsernameModal,
+        setValidateMetadata,
     } = useAppContext();
     const [mounted, setMounted] = useState(false);
 
     const {
         walletAPI: GovToolAssemblyWalletAPI,
         locale: GovToolAssemblyLocale,
+        validateMetadata: GovToolAssemblyValidateMetadata,
     } = props;
 
     const clearStates = () => {
         setWalletAPI(null);
         setUser(null);
+        setValidateMetadata(null);
     };
 
     function getProposalID(url) {
@@ -48,6 +51,11 @@ const GlobalWrapper = ({ ...props }) => {
             globalWrapper: true,
         });
     };
+    useEffect(() => {
+        if (GovToolAssemblyValidateMetadata) {
+            setValidateMetadata(() => GovToolAssemblyValidateMetadata);
+        }
+    }, [GovToolAssemblyValidateMetadata, setValidateMetadata]);
 
     useEffect(() => {
         if (!mounted) {

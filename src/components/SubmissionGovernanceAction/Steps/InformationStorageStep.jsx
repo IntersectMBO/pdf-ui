@@ -1,5 +1,5 @@
 'use client';
-import axios from 'axios';
+
 import React, { useState, useEffect } from 'react';
 
 import {
@@ -23,7 +23,7 @@ import { updateProposalContent } from '../../../lib/api';
 
 const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
     const navigate = useNavigate();
-    const { walletAPI } = useAppContext();
+    const { walletAPI, validateMetadata } = useAppContext();
     const [jsonLdData, setJsonLdData] = useState({});
     const [hashData, setHashData] = useState('');
     const [fileURL, setFileURL] = useState('');
@@ -72,28 +72,16 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
         setHashData(hash);
     };
 
-    const replaceApiWithMetadataValidation = (url) => {
-        return url.replace('api', 'metadata-validation');
-    };
-
-    const METADATA_API = axios.create({
-        baseURL: process.env.NEXT_PUBLIC_BASE_URL
-            ? replaceApiWithMetadataValidation(process.env.NEXT_PUBLIC_BASE_URL)
-            : replaceApiWithMetadataValidation(
-                  'https://dev-sanchonet.govtool.byron.network/api'
-              ),
-        timeout: 30000,
-    });
-
     const handleGASubmission = async () => {
         try {
             setCheckingDataModal(true);
-            const response = await METADATA_API.post(`/validate`, {
+            const response = await validateMetadata({
                 url: fileURL,
                 hash: hashData,
+                standard: 'CIP108',
             });
 
-            if (response?.data?.valid) {
+            if (response?.valid) {
                 let govActionBuilder = null;
                 if (
                     proposal?.attributes?.content?.attributes?.gov_action_type
@@ -140,7 +128,7 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                 }
             } else {
                 console.error(response);
-                if (response?.data?.status === 'URL_NOT_FOUND') {
+                if (response?.status === 'URL_NOT_FOUND') {
                     setShowUrlErrorModal(true);
                 } else {
                     setShowExternalDataNotMatchModal(true);

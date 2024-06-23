@@ -6,6 +6,7 @@ export function AppContextProvider({ children }) {
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(false);
     const [walletAPI, setWalletAPI] = useState(null);
+    const [validateMetadata, setValidateMetadata] = useState(null);
     const [locale, setLocale] = useState('en');
     const [openUsernameModal, setOpenUsernameModal] = useState({
         open: false,
@@ -25,6 +26,8 @@ export function AppContextProvider({ children }) {
                 setLocale,
                 openUsernameModal,
                 setOpenUsernameModal,
+                validateMetadata,
+                setValidateMetadata,
             }}
         >
             {children}
