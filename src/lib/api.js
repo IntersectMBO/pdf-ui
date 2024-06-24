@@ -103,17 +103,14 @@ export const deleteProposal = async (proposalId) => {
     }
 };
 
-export const getPoll = async ({ proposalID }) => {
+export const getPolls = async ({ query = '' }) => {
     try {
-        const { data } = await axiosInstance.get(
-            `/api/polls?filters[proposal_id][$eq]=${proposalID}&pagination[page]=1&pagination[pageSize]=1&sort[createdAt]=desc`
-        );
+        const { data } = await axiosInstance.get(`/api/polls?${query}`);
 
-        if (data?.data && data?.data?.length > 0) {
-            return data.data[0];
-        } else {
-            return null;
-        }
+        const polls = data?.data;
+        const pgCount = data?.meta?.pagination?.pageCount;
+        const total = data?.meta?.pagination?.total;
+        return { polls, pgCount, total };
     } catch (error) {
         throw error;
     }
