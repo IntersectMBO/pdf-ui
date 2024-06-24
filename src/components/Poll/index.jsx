@@ -543,7 +543,8 @@ const Poll = ({
                                 mt={2}
                                 color={(theme) => theme.palette.text.grey}
                             >
-                                Please confirm you want to close the Poll.
+                                Closing the poll will prevent users from
+                                submitting additional votes.
                             </Typography>
                         </Box>
                         <Box
@@ -558,9 +559,9 @@ const Poll = ({
                                 sx={{
                                     borderRadius: '20px',
                                 }}
-                                onClick={toggleClosePollModal}
+                                onClick={() => closeProposalPoll()}
                             >
-                                I don't want to close
+                                Close the Poll
                             </Button>
                             <Button
                                 variant='outlined'
@@ -568,9 +569,9 @@ const Poll = ({
                                 sx={{
                                     borderRadius: '20px',
                                 }}
-                                onClick={() => closeProposalPoll()}
+                                onClick={toggleClosePollModal}
                             >
-                                Yes, close Poll
+                                Cancel
                             </Button>
                         </Box>
                     </Box>

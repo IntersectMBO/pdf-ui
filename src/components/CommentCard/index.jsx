@@ -398,27 +398,21 @@ const CommentCard = ({ comment, proposal }) => {
                                         autoComplete: 'off',
                                     }}
                                     helperText={
-                                        <>
-                                            <Typography variant='caption'>
-                                                * Symbols
-                                            </Typography>
-                                            <Typography
-                                                variant='caption'
-                                                sx={{
-                                                    float: 'right',
-                                                    mr: 2,
-                                                    color: (theme) =>
-                                                        subcommentText?.length ===
-                                                            subcommentMaxLength &&
-                                                        theme?.palette?.error
-                                                            ?.main,
-                                                }}
-                                            >
-                                                {`${
-                                                    subcommentText?.length || 0
-                                                }/${subcommentMaxLength}`}
-                                            </Typography>
-                                        </>
+                                        <Typography
+                                            variant='caption'
+                                            sx={{
+                                                float: 'right',
+                                                mr: 2,
+                                                color: (theme) =>
+                                                    subcommentText?.length ===
+                                                        subcommentMaxLength &&
+                                                    theme?.palette?.error?.main,
+                                            }}
+                                        >
+                                            {`${
+                                                subcommentText?.length || 0
+                                            }/${subcommentMaxLength}`}
+                                        </Typography>
                                     }
                                     InputProps={{
                                         inputProps: {

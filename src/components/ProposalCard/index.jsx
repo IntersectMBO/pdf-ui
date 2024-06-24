@@ -29,6 +29,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/context';
 import { formatIsoDate } from '../../lib/utils';
 import EditProposalDialog from '../EditProposalDialog';
+import ReactMarkdown from 'react-markdown';
 
 const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
     const { user } = useAppContext();
@@ -307,24 +308,33 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                             >
                                 Abstract
                             </Typography>
-                            <Typography
-                                variant='body2'
-                                component='p'
-                                color='text.darkPurple'
-                                sx={{
-                                    display: '-webkit-box',
-                                    WebkitBoxOrient: 'vertical',
-                                    WebkitLineClamp: 3,
-                                    lineClamp: 3,
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
+                            <ReactMarkdown
+                                components={{
+                                    p(props) {
+                                        const { children } = props;
+                                        return (
+                                            <Typography
+                                                variant='body2'
+                                                component='p'
+                                                color='text.darkPurple'
+                                                sx={{
+                                                    display: '-webkit-box',
+                                                    WebkitBoxOrient: 'vertical',
+                                                    WebkitLineClamp: 3,
+                                                    lineClamp: 3,
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                }}
+                                            >
+                                                {children}
+                                            </Typography>
+                                        );
+                                    },
                                 }}
                             >
-                                {
-                                    proposal?.attributes?.content?.attributes
-                                        ?.prop_abstract
-                                }
-                            </Typography>
+                                {proposal?.attributes?.content?.attributes
+                                    ?.prop_abstract || ''}
+                            </ReactMarkdown>
                         </Box>
                         <Box>
                             <Typography

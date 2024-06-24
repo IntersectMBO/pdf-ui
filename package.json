@@ -30,6 +30,7 @@
         "@intersect.mbo/intersectmbo.org-icons-set": "^1.0.8",
         "axios": "^1.7.2",
         "date-fns": "^3.6.0",
+        "react-markdown": "^8.0.6",
         "react-slick": "^0.30.2",
         "slick-carousel": "^1.8.1",
         "web-vitals": "^2.1.4"

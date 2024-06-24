@@ -55,6 +55,7 @@ import {
 import { formatIsoDate } from '../../../lib/utils';
 import { loginUserToApp } from '../../../lib/helpers';
 import ProposalOwnModal from '../../../components/ProposalOwnModal';
+import ReactMarkdown from 'react-markdown';
 
 const SingleGovernanceAction = ({ id }) => {
     const MAX_COMMENT_LENGTH = 256;
@@ -967,34 +968,61 @@ const SingleGovernanceAction = ({ id }) => {
                                     <Typography variant='caption'>
                                         Abstract
                                     </Typography>
-                                    <Typography variant='body2'>
-                                        {
-                                            proposal?.attributes?.content
-                                                ?.attributes?.prop_abstract
-                                        }
-                                    </Typography>
+                                    <ReactMarkdown
+                                        components={{
+                                            p(props) {
+                                                const { children } = props;
+                                                return (
+                                                    <Typography variant='body2'>
+                                                        {children}
+                                                    </Typography>
+                                                );
+                                            },
+                                        }}
+                                    >
+                                        {proposal?.attributes?.content
+                                            ?.attributes?.prop_abstract || ''}
+                                    </ReactMarkdown>
                                 </Box>
                                 <Box mt={4}>
                                     <Typography variant='caption'>
                                         Motivation
                                     </Typography>
-                                    <Typography variant='body2'>
-                                        {
-                                            proposal?.attributes?.content
-                                                ?.attributes?.prop_motivation
-                                        }
-                                    </Typography>
+                                    <ReactMarkdown
+                                        components={{
+                                            p(props) {
+                                                const { children } = props;
+                                                return (
+                                                    <Typography variant='body2'>
+                                                        {children}
+                                                    </Typography>
+                                                );
+                                            },
+                                        }}
+                                    >
+                                        {proposal?.attributes?.content
+                                            ?.attributes?.prop_motivation || ''}
+                                    </ReactMarkdown>
                                 </Box>
                                 <Box mt={4}>
                                     <Typography variant='caption'>
                                         Rationale
                                     </Typography>
-                                    <Typography variant='body2'>
-                                        {
-                                            proposal?.attributes?.content
-                                                ?.attributes?.prop_rationale
-                                        }
-                                    </Typography>
+                                    <ReactMarkdown
+                                        components={{
+                                            p(props) {
+                                                const { children } = props;
+                                                return (
+                                                    <Typography variant='body2'>
+                                                        {children}
+                                                    </Typography>
+                                                );
+                                            },
+                                        }}
+                                    >
+                                        {proposal?.attributes?.content
+                                            ?.attributes?.prop_rationale || ''}
+                                    </ReactMarkdown>
                                 </Box>
 
                                 {proposal?.attributes?.content?.attributes
@@ -1534,28 +1562,22 @@ const SingleGovernanceAction = ({ id }) => {
                                         multiline={true}
                                         maxRows={5}
                                         helperText={
-                                            <>
-                                                <Typography variant='caption'>
-                                                    * Symbols
-                                                </Typography>
-                                                <Typography
-                                                    variant='caption'
-                                                    sx={{
-                                                        float: 'right',
-                                                        mr: 2,
-                                                        color: (theme) =>
-                                                            newCommentText?.length ===
-                                                                MAX_COMMENT_LENGTH &&
-                                                            theme?.palette
-                                                                ?.error?.main,
-                                                    }}
-                                                >
-                                                    {`${
-                                                        newCommentText?.length ||
-                                                        0
-                                                    }/${MAX_COMMENT_LENGTH}`}
-                                                </Typography>
-                                            </>
+                                            <Typography
+                                                variant='caption'
+                                                sx={{
+                                                    float: 'right',
+                                                    mr: 2,
+                                                    color: (theme) =>
+                                                        newCommentText?.length ===
+                                                            MAX_COMMENT_LENGTH &&
+                                                        theme?.palette?.error
+                                                            ?.main,
+                                                }}
+                                            >
+                                                {`${
+                                                    newCommentText?.length || 0
+                                                }/${MAX_COMMENT_LENGTH}`}
+                                            </Typography>
                                         }
                                         value={newCommentText || ''}
                                         onChange={(e) => handleChange(e)}

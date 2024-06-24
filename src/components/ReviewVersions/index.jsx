@@ -25,6 +25,7 @@ import {
 import { formatIsoDate, formatIsoTime } from '../../lib/utils';
 import { useEffect, useState } from 'react';
 import { getProposals } from '../../lib/api';
+import ReactMarkdown from 'react-markdown';
 
 const ReviewVersions = ({ open, onClose, id }) => {
     const theme = useTheme();
@@ -376,18 +377,29 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                                     >
                                                         Abstract
                                                     </Typography>
-                                                    <Typography
-                                                        variant='body1'
-                                                        gutterBottom
+                                                    <ReactMarkdown
+                                                        components={{
+                                                            p(props) {
+                                                                const {
+                                                                    children,
+                                                                } = props;
+                                                                return (
+                                                                    <Typography variant='body1'>
+                                                                        {
+                                                                            children
+                                                                        }
+                                                                    </Typography>
+                                                                );
+                                                            },
+                                                        }}
                                                     >
-                                                        {
-                                                            selectedVersion
-                                                                ?.attributes
-                                                                ?.content
-                                                                ?.attributes
-                                                                ?.prop_abstract
-                                                        }
-                                                    </Typography>
+                                                        {selectedVersion
+                                                            ?.attributes
+                                                            ?.content
+                                                            ?.attributes
+                                                            ?.prop_abstract ||
+                                                            ''}
+                                                    </ReactMarkdown>
                                                 </Box>
                                                 <Box>
                                                     <Typography
@@ -399,18 +411,29 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                                     >
                                                         Motivation
                                                     </Typography>
-                                                    <Typography
-                                                        variant='body1'
-                                                        gutterBottom
+                                                    <ReactMarkdown
+                                                        components={{
+                                                            p(props) {
+                                                                const {
+                                                                    children,
+                                                                } = props;
+                                                                return (
+                                                                    <Typography variant='body1'>
+                                                                        {
+                                                                            children
+                                                                        }
+                                                                    </Typography>
+                                                                );
+                                                            },
+                                                        }}
                                                     >
-                                                        {
-                                                            selectedVersion
-                                                                ?.attributes
-                                                                ?.content
-                                                                ?.attributes
-                                                                ?.prop_motivation
-                                                        }
-                                                    </Typography>
+                                                        {selectedVersion
+                                                            ?.attributes
+                                                            ?.content
+                                                            ?.attributes
+                                                            ?.prop_motivation ||
+                                                            ''}
+                                                    </ReactMarkdown>
                                                 </Box>
                                                 <Box>
                                                     <Typography
@@ -422,18 +445,30 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                                     >
                                                         Rationale
                                                     </Typography>
-                                                    <Typography
-                                                        variant='body1'
-                                                        gutterBottom
+
+                                                    <ReactMarkdown
+                                                        components={{
+                                                            p(props) {
+                                                                const {
+                                                                    children,
+                                                                } = props;
+                                                                return (
+                                                                    <Typography variant='body1'>
+                                                                        {
+                                                                            children
+                                                                        }
+                                                                    </Typography>
+                                                                );
+                                                            },
+                                                        }}
                                                     >
-                                                        {
-                                                            selectedVersion
-                                                                ?.attributes
-                                                                ?.content
-                                                                ?.attributes
-                                                                ?.prop_rationale
-                                                        }
-                                                    </Typography>
+                                                        {selectedVersion
+                                                            ?.attributes
+                                                            ?.content
+                                                            ?.attributes
+                                                            ?.prop_rationale ||
+                                                            ''}
+                                                    </ReactMarkdown>
                                                 </Box>
 
                                                 {selectedVersion?.attributes
