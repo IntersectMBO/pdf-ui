@@ -1889,20 +1889,7 @@ const SingleGovernanceAction = ({ id }) => {
                                 <Button
                                     variant='contained'
                                     fullWidth
-                                    sx={{
-                                        borderRadius: '20px',
-                                    }}
-                                    onClick={handleCloseDeleteModal}
-                                    data-testid='delete-proposal-no-button'
-                                >
-                                    I don't want to delete
-                                </Button>
-                                <Button
-                                    variant='outlined'
-                                    fullWidth
-                                    sx={{
-                                        borderRadius: '20px',
-                                    }}
+                                    data-testid='delete-proposal-yes-button'
                                     onClick={async () =>
                                         await loginUserToApp({
                                             wallet: walletAPI,
@@ -1913,9 +1900,16 @@ const SingleGovernanceAction = ({ id }) => {
                                                 handleDeleteProposal(),
                                         })
                                     }
-                                    data-testid='delete-proposal-yes-button'
                                 >
-                                    Yes, delete my proposal completely
+                                    Delete Proposal
+                                </Button>
+                                <Button
+                                    variant='outlined'
+                                    fullWidth
+                                    onClick={handleCloseDeleteModal}
+                                    data-testid='delete-proposal-no-button'
+                                >
+                                    Cancel
                                 </Button>
                             </Box>
                         </Box>
