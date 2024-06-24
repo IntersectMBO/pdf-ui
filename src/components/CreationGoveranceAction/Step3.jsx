@@ -11,6 +11,7 @@ import {
     Link,
     Typography,
 } from '@mui/material';
+import ReactMarkdown from 'react-markdown';
 
 const Step3 = ({
     setStep,
@@ -99,9 +100,20 @@ const Step3 = ({
                         >
                             Abstrtact
                         </Typography>
-                        <Typography variant='body1' gutterBottom>
-                            {proposalData?.prop_abstract}
-                        </Typography>
+                        <ReactMarkdown
+                            components={{
+                                p(props) {
+                                    const { children } = props;
+                                    return (
+                                        <Typography variant='body1'>
+                                            {children}
+                                        </Typography>
+                                    );
+                                },
+                            }}
+                        >
+                            {proposalData?.prop_abstract || ''}
+                        </ReactMarkdown>
                     </Box>
 
                     <Box>
@@ -112,9 +124,20 @@ const Step3 = ({
                         >
                             Motivation
                         </Typography>
-                        <Typography variant='body1' gutterBottom>
-                            {proposalData?.prop_motivation}
-                        </Typography>
+                        <ReactMarkdown
+                            components={{
+                                p(props) {
+                                    const { children } = props;
+                                    return (
+                                        <Typography variant='body1'>
+                                            {children}
+                                        </Typography>
+                                    );
+                                },
+                            }}
+                        >
+                            {proposalData?.prop_motivation || ''}
+                        </ReactMarkdown>
                     </Box>
 
                     <Box>
@@ -125,9 +148,20 @@ const Step3 = ({
                         >
                             Rationale
                         </Typography>
-                        <Typography variant='body1' gutterBottom>
-                            {proposalData?.prop_rationale}
-                        </Typography>
+                        <ReactMarkdown
+                            components={{
+                                p(props) {
+                                    const { children } = props;
+                                    return (
+                                        <Typography variant='body1'>
+                                            {children}
+                                        </Typography>
+                                    );
+                                },
+                            }}
+                        >
+                            {proposalData?.prop_rationale || ''}
+                        </ReactMarkdown>
                     </Box>
 
                     {proposalData?.prop_receiving_address && (
