@@ -15,59 +15,30 @@ import { useEffect, useState } from 'react';
 import { useAppContext } from '../../context/context';
 import {
     closePoll,
-    createPoll,
     createPollVote,
-    getPoll,
     getUserPollVote,
     updatePollVote,
 } from '../../lib/api';
 import { formatPollDateDisplay } from '../../lib/utils';
 
 const Poll = ({
-    proposalID,
+    fetchActivePoll = false,
+    fetchUnactivePolls = false,
     proposalUserId,
     proposalAuthorUsername,
     proposalSubmitted,
+    poll,
 }) => {
     const { user, setLoading } = useAppContext();
-    const [poll, setPoll] = useState(null);
     const [userPollVote, setUserPollVote] = useState(null);
-    const [mounted, setMounted] = useState(false);
     const [showChangeVoteModal, setShowChangeVoteModal] = useState(false);
     const [showClosePollModal, setShowClosePollModal] = useState(false);
 
-    const fetchPoll = async (id) => {
-        try {
-            const response = await getPoll({ proposalID: id });
-            if (!response) return;
-            setPoll(response);
-        } catch (error) {
-            console.error(error);
-        }
-    };
     const fetchUserPollVote = async (id) => {
         try {
             const response = await getUserPollVote({ pollID: id });
             if (!response) return;
             setUserPollVote(response);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const addPoll = async () => {
-        try {
-            const response = await createPoll({
-                pollData: {
-                    data: {
-                        proposal_id: proposalID,
-                        poll_start_dt: new Date(),
-                        is_poll_active: true,
-                    },
-                },
-            });
-            if (!response) return;
-            setPoll(response);
         } catch (error) {
             console.error(error);
         }
@@ -109,7 +80,9 @@ const Poll = ({
             if (!response) return;
 
             setUserPollVote(response);
-            fetchPoll(proposalID);
+            if (fetchActivePoll) {
+                fetchActivePoll();
+            }
         } catch (error) {
             console.error(error);
         }
@@ -134,7 +107,9 @@ const Poll = ({
 
             if (!response) return;
             setUserPollVote(response);
-            fetchPoll(proposalID);
+            if (fetchActivePoll) {
+                fetchActivePoll();
+            }
             toggleChangeVoteModal();
         } catch (error) {
             console.error(error);
@@ -149,7 +124,12 @@ const Poll = ({
 
             if (!response) return;
 
-            setPoll(response);
+            if (fetchActivePoll) {
+                fetchActivePoll();
+            }
+            if (fetchUnactivePolls) {
+                fetchUnactivePolls();
+            }
             toggleClosePollModal();
         } catch (error) {
             console.error(error);
@@ -166,20 +146,13 @@ const Poll = ({
         }
     }, [user, poll]);
 
-    useEffect(() => {
-        if (!mounted) {
-            setMounted(true);
-        } else {
-            fetchPoll(proposalID);
-        }
-    }, [proposalID, mounted]);
-
     if (poll) {
         return (
             <>
                 {proposalSubmitted ? null : user &&
                   !userPollVote &&
-                  user?.user?.id !== +proposalUserId ? (
+                  user?.user?.id !== +proposalUserId &&
+                  poll?.attributes?.is_poll_active ? (
                     <Card
                         sx={{
                             mb: 3,
@@ -579,35 +552,6 @@ const Poll = ({
             </>
         );
     }
-
-    return proposalSubmitted ? null : user &&
-      user?.user?.id === +proposalUserId ? (
-        <Card data-testid='add-poll-card'>
-            <CardContent>
-                <Typography variant='body1' fontWeight={600}>
-                    Do you want to check if your proposal is ready to be
-                    submitted as a Governance Action?
-                </Typography>
-
-                <Typography variant='body2' mt={2}>
-                    Poll will be pinned to top of your comments list. You can
-                    close poll any time you like. Every next poll will close
-                    previous one. Previous polls will be displayed as a comment
-                    in the comments feed.
-                </Typography>
-
-                <Box mt={2} display='flex' justifyContent='flex-end'>
-                    <Button
-                        variant='contained'
-                        onClick={addPoll}
-                        data-testid='add-poll-button'
-                    >
-                        Add Poll
-                    </Button>
-                </Box>
-            </CardContent>
-        </Card>
-    ) : null;
 };
 
 export default Poll;

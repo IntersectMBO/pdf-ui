@@ -51,6 +51,8 @@ import {
     getSingleProposal,
     getUserProposalVote,
     updateProposalLikesOrDislikes,
+    createPoll,
+    getPolls,
 } from '../../../lib/api';
 import { formatIsoDate } from '../../../lib/utils';
 import { loginUserToApp } from '../../../lib/helpers';
@@ -78,6 +80,8 @@ const SingleGovernanceAction = ({ id }) => {
     const [disableShare, setDisableShare] = useState(false);
     const [openGASubmissionDialog, setOpenGASubmissionDialog] = useState(false);
     const [ownProposalModal, setOwnProposalModal] = useState(false);
+    const [unactivePollList, setUnactivePollList] = useState([]);
+    const [activePoll, setActivePoll] = useState(null);
 
     const targetRef = useRef();
     const menuRef = useRef();
@@ -295,6 +299,48 @@ const SingleGovernanceAction = ({ id }) => {
         }
     };
 
+    const addPoll = async () => {
+        try {
+            const response = await createPoll({
+                pollData: {
+                    data: {
+                        proposal_id: proposal?.id?.toString(),
+                        poll_start_dt: new Date(),
+                        is_poll_active: true,
+                    },
+                },
+            });
+            if (!response) return;
+            fetchActivePoll();
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const fetchUnactivePolls = async () => {
+        try {
+            const query = `filters[$and][0][proposal_id][$eq]=${proposal?.id}&filters[$and][1][is_poll_active]=false&pagination[page]=1&pagination[pageSize]=25&sort[createdAt]=desc`;
+            const { polls, pgCount, total } = await getPolls({ query: query });
+            if (!polls) return;
+            setUnactivePollList(polls);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const fetchActivePoll = async () => {
+        try {
+            const query = `filters[$and][0][proposal_id][$eq]=${proposal?.id}&filters[$and][1][is_poll_active]=true&pagination[page]=1&pagination[pageSize]=1&sort[createdAt]=desc`;
+            const { polls, pgCount, total } = await getPolls({
+                query: query,
+            });
+            if (!polls?.length === 0) return;
+            setActivePoll(polls[0]);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     useEffect(() => {
         if (!mounted) {
             setMounted(true);
@@ -303,6 +349,13 @@ const SingleGovernanceAction = ({ id }) => {
             fetchComments(1);
         }
     }, [id, mounted]);
+
+    useEffect(() => {
+        if (proposal && mounted) {
+            fetchActivePoll();
+            fetchUnactivePolls();
+        }
+    }, [proposal]);
 
     useEffect(() => {
         if (mounted && user) {
@@ -1532,19 +1585,89 @@ const SingleGovernanceAction = ({ id }) => {
                         </IconButton>
                     </Box>
 
-                    <Box mt={4}>
-                        <Poll
-                            proposalID={id}
-                            proposalUserId={proposal?.attributes?.user_id}
-                            proposalAuthorUsername={
-                                proposal?.attributes?.user_govtool_username
-                            }
-                            proposalSubmitted={
-                                proposal?.attributes?.content?.attributes
-                                    ?.prop_submitted
-                            }
-                        />
-                    </Box>
+                    {proposal?.attributes?.content?.attributes
+                        ?.prop_submitted ? null : user &&
+                      +user?.user?.id === +proposal?.attributes?.user_id &&
+                      !activePoll ? (
+                        <Box mt={4}>
+                            <Card data-testid='add-poll-card'>
+                                <CardContent>
+                                    <Typography
+                                        variant='body1'
+                                        fontWeight={600}
+                                    >
+                                        Do you want to check if your proposal is
+                                        ready to be submitted as a Governance
+                                        Action?
+                                    </Typography>
+
+                                    <Typography variant='body2' mt={2}>
+                                        Poll will be pinned to top of your
+                                        comments list. You can close poll any
+                                        time you like. Every next poll will
+                                        close previous one. Previous polls will
+                                        be displayed as a comment in the
+                                        comments feed.
+                                    </Typography>
+
+                                    <Box
+                                        mt={2}
+                                        display='flex'
+                                        justifyContent='flex-end'
+                                    >
+                                        <Button
+                                            variant='contained'
+                                            onClick={addPoll}
+                                            data-testid='add-poll-button'
+                                        >
+                                            Add Poll
+                                        </Button>
+                                    </Box>
+                                </CardContent>
+                            </Card>
+                        </Box>
+                    ) : null}
+
+                    {activePoll && (
+                        <Box mt={4}>
+                            <Poll
+                                proposalUserId={proposal?.attributes?.user_id}
+                                proposalAuthorUsername={
+                                    proposal?.attributes?.user_govtool_username
+                                }
+                                proposalSubmitted={
+                                    proposal?.attributes?.content?.attributes
+                                        ?.prop_submitted
+                                }
+                                poll={activePoll}
+                                fetchActivePoll={fetchActivePoll}
+                                fetchUnactivePolls={fetchUnactivePolls}
+                            />
+                        </Box>
+                    )}
+
+                    {unactivePollList?.length > 0 && (
+                        <Box mt={4}>
+                            {unactivePollList?.map((poll, index) => (
+                                <Box key={index} mb={4}>
+                                    <Poll
+                                        proposalUserId={
+                                            proposal?.attributes?.user_id
+                                        }
+                                        proposalAuthorUsername={
+                                            proposal?.attributes
+                                                ?.user_govtool_username
+                                        }
+                                        proposalSubmitted={
+                                            proposal?.attributes?.content
+                                                ?.attributes?.prop_submitted
+                                        }
+                                        poll={poll}
+                                    />
+                                </Box>
+                            ))}
+                        </Box>
+                    )}
 
                     {proposal?.attributes?.content?.attributes
                         ?.prop_submitted ? null : (
