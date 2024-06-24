@@ -29,6 +29,8 @@ const ProposalsList = ({
     isDraft = false,
     statusList = [],
     startEdittinButtonClick = false,
+    setShowAllActivated = false,
+    showAllActivated = false,
 }) => {
     const sliderRef = useRef(null);
 
@@ -112,31 +114,45 @@ const ProposalsList = ({
                             : governanceAction?.attributes
                                   ?.gov_action_type_name}
                     </Typography>
-                    {proposalsList?.length > 0 && (
-                        <Button
-                            variant='outlined'
-                            onClick={() => setShowAll((prev) => !prev)}
-                            data-testid='show-all-button'
-                        >
-                            {showAll ? 'Show less' : 'Show all'}
-                        </Button>
-                    )}
+                    {proposalsList?.length > 0 &&
+                        (setShowAllActivated
+                            ? !showAllActivated?.is_activated
+                            : true) && (
+                            <Button
+                                variant='outlined'
+                                onClick={() => {
+                                    setShowAll((prev) => !prev);
+                                    if (setShowAllActivated) {
+                                        setShowAllActivated(() => ({
+                                            is_activated: true,
+                                            gov_action_type: governanceAction,
+                                        }));
+                                    }
+                                }}
+                                data-testid='show-all-button'
+                            >
+                                {showAll ? 'Show less' : 'Show all'}
+                            </Button>
+                        )}
                 </Box>
 
-                {!showAll && proposalsList?.length > 0 && (
-                    <Box display={'flex'} alignItems={'center'}>
-                        <IconButton
-                            onClick={() => sliderRef.current.slickPrev()}
-                        >
-                            <IconCheveronLeft width={20} height={20} />
-                        </IconButton>
-                        <IconButton
-                            onClick={() => sliderRef.current.slickNext()}
-                        >
-                            <IconCheveronRight width={20} height={20} />
-                        </IconButton>
-                    </Box>
-                )}
+                {(setShowAllActivated
+                    ? !showAllActivated?.is_activated
+                    : !showAll) &&
+                    proposalsList?.length > 0 && (
+                        <Box display={'flex'} alignItems={'center'}>
+                            <IconButton
+                                onClick={() => sliderRef.current.slickPrev()}
+                            >
+                                <IconCheveronLeft width={20} height={20} />
+                            </IconButton>
+                            <IconButton
+                                onClick={() => sliderRef.current.slickNext()}
+                            >
+                                <IconCheveronRight width={20} height={20} />
+                            </IconButton>
+                        </Box>
+                    )}
             </Box>
             {proposalsList?.length > 0 ? (
                 showAll ? (

@@ -6,6 +6,7 @@ import {
     IconSearch,
     IconSort,
     IconPlusCircle,
+    IconArrowLeft,
 } from '@intersect.mbo/intersectmbo.org-icons-set';
 import {
     Box,
@@ -27,9 +28,11 @@ import { ProposalsList, CreateGovernanceActionDialog } from '../../components';
 import { getGovernanceActionTypes } from '../../lib/api';
 import { useAppContext } from '../../context/context';
 import { loginUserToApp } from '../../lib/helpers';
+import { useNavigate } from 'react-router-dom';
 
 const ProposedGovernanceActions = () => {
     const theme = useTheme();
+    const navigate = useNavigate();
     const { walletAPI, setOpenUsernameModal, setUser } = useAppContext();
     const [proposalSearchText, setProposalSearchText] = useState('');
     const [sortType, setSortType] = useState('desc');
@@ -47,6 +50,10 @@ const ProposedGovernanceActions = () => {
     ] = useState(['active']);
 
     const [filtersAnchorEl, setFiltersAnchorEl] = useState(null);
+    const [showAllActivated, setShowAllActivated] = useState({
+        is_activated: false,
+        gov_action_type: null,
+    });
 
     const openFilters = Boolean(filtersAnchorEl);
     const handleFiltersClick = (event) => {
@@ -63,7 +70,6 @@ const ProposedGovernanceActions = () => {
             if (!response?.data) return;
 
             setGovernanceActionTypeList(response?.data);
-            // setFilteredGovernanceActionTypeList(response?.data);
         } catch (error) {
             console.error(error);
         }
@@ -115,6 +121,16 @@ const ProposedGovernanceActions = () => {
         fetchGovernanceActionTypes();
     }, []);
 
+    useEffect(() => {
+        if (showAllActivated?.is_activated) {
+            setFilteredGovernanceActionTypeList([
+                showAllActivated?.gov_action_type,
+            ]);
+        } else {
+            setFilteredGovernanceActionTypeList([]);
+        }
+    }, [showAllActivated]);
+
     return (
         <Box sx={{ mt: 3 }}>
             <Grid container spacing={3} flexDirection={'column'}>
@@ -125,13 +141,33 @@ const ProposedGovernanceActions = () => {
                         justifyContent={'space-between'}
                         spacing={1}
                     >
-                        {walletAPI ? (
+                        {!walletAPI && (
                             <Grid item xs={12} paddingBottom={2}>
                                 <Typography variant='h4' component='h1'>
                                     Proposed Governance Actions
                                 </Typography>
                             </Grid>
-                        ) : null}
+                        )}
+
+                        {showAllActivated?.is_activated && (
+                            <Grid item xs={12} paddingBottom={2}>
+                                <Button
+                                    variant='text'
+                                    startIcon={
+                                        <IconArrowLeft
+                                            fill={theme?.palette?.primary?.main}
+                                        />
+                                    }
+                                    onClick={() =>
+                                        navigate('/proposal_discussion')
+                                    }
+                                    data-testid='back-to-proposal-discussion-button'
+                                >
+                                    Back to Proposal Discussion
+                                </Button>
+                            </Grid>
+                        )}
+
                         <Grid item xs={12} paddingBottom={2}>
                             <Button
                                 variant='contained'
@@ -151,6 +187,7 @@ const ProposedGovernanceActions = () => {
                                 Propose a Governance Action
                             </Button>
                         </Grid>
+
                         <Grid item md={6} sx={{ flexGrow: { xs: 1 } }}>
                             <TextField
                                 fullWidth
@@ -247,59 +284,67 @@ const ProposedGovernanceActions = () => {
                                     }}
                                 >
                                     <Box px={2}>
-                                        <Typography
-                                            variant='body1'
-                                            sx={{
-                                                mb: 1,
-                                            }}
-                                        >
-                                            Proposals types
-                                        </Typography>
-                                        <Divider
-                                            sx={{
-                                                color: (theme) => ({
-                                                    borderColor:
-                                                        theme.palette.border
-                                                            .lightGray,
-                                                }),
-                                            }}
-                                        />
-                                        {governanceActionTypeList?.map(
-                                            (ga, index) => (
-                                                <MenuItem
-                                                    key={`${ga?.attributes?.gov_action_type_name}-${index}`}
-                                                    selected={filteredGovernanceActionTypeList?.some(
-                                                        (filter) =>
-                                                            filter?.id ===
-                                                            ga?.id
-                                                    )}
-                                                    id={`${ga?.attributes?.gov_action_type_name}-radio-wrapper`}
-                                                    data-testid={`${ga?.attributes?.gov_action_type_name}-radio-wrapper`}
+                                        {!showAllActivated?.is_activated && (
+                                            <Box>
+                                                <Typography
+                                                    variant='body1'
+                                                    sx={{
+                                                        mb: 1,
+                                                    }}
                                                 >
-                                                    <FormControlLabel
-                                                        control={
-                                                            <Checkbox
-                                                                onChange={() =>
-                                                                    toggleActionFilter(
-                                                                        ga
-                                                                    )
+                                                    Proposals types
+                                                </Typography>
+                                                <Divider
+                                                    sx={{
+                                                        color: (theme) => ({
+                                                            borderColor:
+                                                                theme.palette
+                                                                    .border
+                                                                    .lightGray,
+                                                        }),
+                                                    }}
+                                                />
+                                                {governanceActionTypeList?.map(
+                                                    (ga, index) => (
+                                                        <MenuItem
+                                                            key={`${ga?.attributes?.gov_action_type_name}-${index}`}
+                                                            selected={filteredGovernanceActionTypeList?.some(
+                                                                (filter) =>
+                                                                    filter?.id ===
+                                                                    ga?.id
+                                                            )}
+                                                            id={`${ga?.attributes?.gov_action_type_name}-radio-wrapper`}
+                                                            data-testid={`${ga?.attributes?.gov_action_type_name}-radio-wrapper`}
+                                                        >
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox
+                                                                        onChange={() =>
+                                                                            toggleActionFilter(
+                                                                                ga
+                                                                            )
+                                                                        }
+                                                                        checked={filteredGovernanceActionTypeList?.some(
+                                                                            (
+                                                                                filter
+                                                                            ) =>
+                                                                                filter?.id ===
+                                                                                ga?.id
+                                                                        )}
+                                                                        id={`${ga?.attributes?.gov_action_type_name}-radio`}
+                                                                        data-testid={`${ga?.attributes?.gov_action_type_name}-radio`}
+                                                                    />
                                                                 }
-                                                                checked={filteredGovernanceActionTypeList?.some(
-                                                                    (filter) =>
-                                                                        filter?.id ===
-                                                                        ga?.id
-                                                                )}
-                                                                id={`${ga?.attributes?.gov_action_type_name}-radio`}
-                                                                data-testid={`${ga?.attributes?.gov_action_type_name}-radio`}
+                                                                label={
+                                                                    ga
+                                                                        ?.attributes
+                                                                        ?.gov_action_type_name
+                                                                }
                                                             />
-                                                        }
-                                                        label={
-                                                            ga?.attributes
-                                                                ?.gov_action_type_name
-                                                        }
-                                                    />
-                                                </MenuItem>
-                                            )
+                                                        </MenuItem>
+                                                    )
+                                                )}
+                                            </Box>
                                         )}
 
                                         <Typography
@@ -420,6 +465,8 @@ const ProposedGovernanceActions = () => {
                             searchText={proposalSearchText}
                             sortType={sortType}
                             statusList={filteredGovernanceActionStatusList}
+                            setShowAllActivated={setShowAllActivated}
+                            showAllActivated={showAllActivated}
                         />
                     </Box>
                 ))}
