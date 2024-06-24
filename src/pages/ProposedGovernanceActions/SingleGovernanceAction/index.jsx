@@ -1778,7 +1778,7 @@ const SingleGovernanceAction = ({ id }) => {
                                         })
                                     }
                                 >
-                                    Delete proposal
+                                    Delete Proposal
                                 </Button>
                                 <Button
                                     variant='outlined'
