@@ -5,7 +5,11 @@ import { useEffect, useState } from 'react';
 import { UsernameModal } from '../components';
 import { useAppContext } from '../context/context';
 import { clearSession } from '../lib/utils';
-import { ProposedGovernanceActions, SingleGovernanceAction } from '../pages';
+import {
+    ProposedGovernanceActions,
+    SingleGovernanceAction,
+    IdentificationPage,
+} from '../pages';
 import { loginUserToApp } from '../lib/helpers';
 
 const GlobalWrapper = ({ ...props }) => {
@@ -17,6 +21,7 @@ const GlobalWrapper = ({ ...props }) => {
         openUsernameModal,
         setOpenUsernameModal,
         setValidateMetadata,
+        user,
     } = useAppContext();
     const [mounted, setMounted] = useState(false);
 
@@ -43,13 +48,19 @@ const GlobalWrapper = ({ ...props }) => {
         return lastSegment;
     }
 
-    const handleLogin = async (wallet) => {
-        await loginUserToApp({
-            wallet: wallet,
-            setUser: setUser,
-            setOpenUsernameModal: setOpenUsernameModal,
-            globalWrapper: true,
-        });
+    const handleLogin = async (trigerSignData) => {
+        if (GovToolAssemblyWalletAPI?.address) {
+            setWalletAPI(GovToolAssemblyWalletAPI);
+            await loginUserToApp({
+                wallet: GovToolAssemblyWalletAPI,
+                setUser: setUser,
+                setOpenUsernameModal: setOpenUsernameModal,
+                trigerSignData: trigerSignData ? true : false,
+            });
+        } else {
+            clearStates();
+            clearSession();
+        }
     };
     useEffect(() => {
         if (GovToolAssemblyValidateMetadata) {
@@ -61,13 +72,7 @@ const GlobalWrapper = ({ ...props }) => {
         if (!mounted) {
             setMounted(true);
         } else {
-            if (GovToolAssemblyWalletAPI?.address) {
-                setWalletAPI(GovToolAssemblyWalletAPI);
-                handleLogin(GovToolAssemblyWalletAPI);
-            } else {
-                clearStates();
-                clearSession();
-            }
+            handleLogin(false);
         }
     }, [GovToolAssemblyWalletAPI?.address, mounted]);
 
@@ -78,12 +83,16 @@ const GlobalWrapper = ({ ...props }) => {
     }, [GovToolAssemblyLocale]);
 
     const renderComponentBasedOnPath = (path) => {
-        if (path.includes('proposal_discussion/') && getProposalID(path)) {
-            return <SingleGovernanceAction id={getProposalID(path)} />;
-        } else if (path.includes('proposal_discussion')) {
-            return <ProposedGovernanceActions />;
+        if (!user && GovToolAssemblyWalletAPI?.address) {
+            return <IdentificationPage handleLogin={handleLogin} />;
         } else {
-            return <ProposedGovernanceActions />;
+            if (path.includes('proposal_discussion/') && getProposalID(path)) {
+                return <SingleGovernanceAction id={getProposalID(path)} />;
+            } else if (path.includes('proposal_discussion')) {
+                return <ProposedGovernanceActions />;
+            } else {
+                return <ProposedGovernanceActions />;
+            }
         }
     };
 

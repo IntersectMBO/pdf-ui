@@ -32,6 +32,7 @@ import {
 } from '../../lib/api';
 import { formatIsoDate } from '../../lib/utils';
 import { LinkManager } from '../CreationGoveranceAction';
+import DeleteProposalModal from '../DeleteProposalModal';
 
 import CreateGA2 from '../../assets/svg/CreateGA2.js';
 
@@ -68,7 +69,12 @@ const EditProposalDialog = ({
     const [governanceActionTypes, setGovernanceActionTypes] = useState([]);
     const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal] =
         useState(false);
-    const [selectedGovActionName, setSelectedGovActionName] = useState('');
+    const [selectedGovActionName, setSelectedGovActionName] = useState(
+        proposal?.attributes?.content?.attributes?.gov_action_type?.attributes
+            ?.gov_action_type_name
+    );
+    const [showProposalDeleteModal, setShowPoprosalDeleteModal] =
+        useState(false);
 
     const isSmallScreen = useMediaQuery((theme) =>
         theme.breakpoints.down('sm')
@@ -131,6 +137,7 @@ const EditProposalDialog = ({
             const response = await deleteProposal(proposal?.id);
             if (!response) return;
 
+            setShowPoprosalDeleteModal(false);
             setOpenDeleteConfirmationModal(true);
         } catch (error) {
             console.error('Failed to delete proposal:', error);
@@ -339,7 +346,7 @@ const EditProposalDialog = ({
                                             >
                                                 Proposal Details
                                             </Typography>
-                                            <Typography
+                                            {/* <Typography
                                                 variant='subtitle'
                                                 color={(theme) =>
                                                     theme.palette.text.grey
@@ -348,7 +355,7 @@ const EditProposalDialog = ({
                                             >
                                                 Subtext to describe something if
                                                 needed
-                                            </Typography>
+                                            </Typography> */}
 
                                             <Box>
                                                 <Button
@@ -375,8 +382,10 @@ const EditProposalDialog = ({
                                                             height='18'
                                                         />
                                                     }
-                                                    onClick={
-                                                        handleDeleteProposal
+                                                    onClick={() =>
+                                                        setShowPoprosalDeleteModal(
+                                                            true
+                                                        )
                                                     }
                                                 >
                                                     Delete Proposal
@@ -392,7 +401,7 @@ const EditProposalDialog = ({
                                                 mb: 2,
                                             }}
                                         >
-                                            <Box>
+                                            {/* <Box>
                                                 <Typography
                                                     variant='body2'
                                                     component='p'
@@ -419,7 +428,7 @@ const EditProposalDialog = ({
                                                             ?.createdAt
                                                     )}`}
                                                 </Typography>
-                                            </Box>
+                                            </Box> */}
                                             <Box>
                                                 <Typography
                                                     variant='body2'
@@ -429,12 +438,7 @@ const EditProposalDialog = ({
                                                         justifyContent:
                                                             'center',
                                                         alignItems: 'center',
-                                                        borderTopLeftRadius: 0,
-                                                        borderTopRightRadius: 0,
-                                                        borderBottomLeftRadius:
-                                                            '8px',
-                                                        borderBottomRightRadius:
-                                                            '8px',
+                                                        borderRadius: '8px',
                                                         gap: 1,
                                                         backgroundColor:
                                                             '#F3F4F8',
@@ -983,6 +987,12 @@ const EditProposalDialog = ({
                         </Box>
                     </Box>
                 </Modal>
+
+                <DeleteProposalModal
+                    open={showProposalDeleteModal}
+                    onClose={() => setShowPoprosalDeleteModal(false)}
+                    handleDeleteProposal={handleDeleteProposal}
+                />
 
                 <Box
                     sx={{

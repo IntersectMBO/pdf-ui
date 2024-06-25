@@ -7,7 +7,7 @@ export const loginUserToApp = async ({
     setUser,
     setOpenUsernameModal,
     callBackFn,
-    globalWrapper = false,
+    trigerSignData = true,
 }) => {
     try {
         if (getDataFromSession('pdfUserJwt')) {
@@ -31,7 +31,7 @@ export const loginUserToApp = async ({
                 }
             }
         } else {
-            if (!globalWrapper) {
+            if (trigerSignData) {
                 const changeAddrHex = await wallet?.address;
                 const messageUtf = `Please sign this message to verify your identity at ${format(
                     new Date(),
