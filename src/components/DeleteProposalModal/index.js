@@ -54,9 +54,8 @@ const DeleteProposalModal = ({ open, onClose, handleDeleteProposal }) => {
                         mt={2}
                         color={(theme) => theme.palette.text.grey}
                     >
-                        A dialog is a type of modal window that appears in front
-                        of app content to provide critical information, or
-                        prompt for a decision to be made.
+                        Clicking "Delete Proposal" will permanently remove your
+                        proposal from the system. This action cannot be undone.
                     </Typography>
                 </Box>
                 <Box display='flex' flexDirection='column' padding={2} gap={2}>
