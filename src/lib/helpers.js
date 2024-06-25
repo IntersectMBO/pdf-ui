@@ -1,5 +1,4 @@
 import { loginUser, getLoggedInUserInfo } from '../lib/api';
-import { format } from 'date-fns';
 import { saveDataInSession, getDataFromSession, utf8ToHex } from '../lib/utils';
 
 export const loginUserToApp = async ({
@@ -33,10 +32,7 @@ export const loginUserToApp = async ({
         } else {
             if (trigerSignData) {
                 const changeAddrHex = await wallet?.address;
-                const messageUtf = `Please sign this message to verify your identity at ${format(
-                    new Date(),
-                    'd MMMM yyyy HH:mm:ss'
-                )}`;
+                const messageUtf = `To proceed, please sign this data to verify your identity. This ensures that the action is secure and confirms your identity.`;
                 const messageHex = utf8ToHex(messageUtf);
 
                 const signedData = await wallet.signData(

@@ -165,7 +165,7 @@ const EditProposalDialog = ({
             });
             if (!response) return;
 
-            if (onUpdate) {
+            if (onUpdate && !isDraft) {
                 onUpdate();
             }
         } catch (error) {
