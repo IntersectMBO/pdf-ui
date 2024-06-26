@@ -18,6 +18,7 @@ import {
     UrlErrorModal,
     CancelRegistrationModal,
     GovernanceActionSubmittedModal,
+    InsufficientBallanceModal,
 } from '../../../components/SubmissionGovernanceAction';
 import { updateProposalContent } from '../../../lib/api';
 
@@ -38,6 +39,9 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
         showGovernanceActionSubmittedModal,
         setShowGovernanceActionSubmittedModal,
     ] = useState(false);
+
+    const [showInsufficientBallanceModal, setShowInsufficientBallanceModal] =
+        useState(false);
 
     const handleCreateGAJsonLD = async () => {
         const referencesList = [];
@@ -135,6 +139,9 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                 }
             }
         } catch (error) {
+            if (error.includes('Insufficient')) {
+                setShowInsufficientBallanceModal(true);
+            }
             console.error(error);
         } finally {
             setCheckingDataModal(false);
@@ -317,6 +324,12 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
             <GovernanceActionSubmittedModal
                 open={showGovernanceActionSubmittedModal}
                 onClose={() => setShowGovernanceActionSubmittedModal(false)}
+            />
+
+            <InsufficientBallanceModal
+                open={showInsufficientBallanceModal}
+                onClose={() => setShowInsufficientBallanceModal(false)}
+                buttonOneClick={handleCloseSubmissionDialog}
             />
         </Box>
     );
