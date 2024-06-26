@@ -164,7 +164,7 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
     return (
         <Box display='flex' flexDirection='column'>
             <Box>
-                <Card variant='outlined'>
+                <Card>
                     <CardContent
                         sx={{
                             ml: {
@@ -197,9 +197,9 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                                 Information Storage Steps
                             </Typography>
 
-                            <Button variant='text' size='small'>
+                            {/* <Button variant='text' size='small'>
                                 Read full guide
-                            </Button>
+                            </Button> */}
 
                             <Typography variant='body1' gutterBottom>
                                 Download your file, save it to your chosen

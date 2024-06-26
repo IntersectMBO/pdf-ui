@@ -55,15 +55,16 @@ import {
     getPolls,
 } from '../../../lib/api';
 import { formatIsoDate } from '../../../lib/utils';
-import { loginUserToApp } from '../../../lib/helpers';
 import ProposalOwnModal from '../../../components/ProposalOwnModal';
 import ReactMarkdown from 'react-markdown';
+import { loginUserToApp } from '../../../lib/helpers';
 
 const SingleGovernanceAction = ({ id }) => {
     const MAX_COMMENT_LENGTH = 256;
     const navigate = useNavigate();
-    const { user, setLoading, walletAPI, setOpenUsernameModal, setUser } =
+    const { user, setLoading, setOpenUsernameModal, setUser, walletAPI } =
         useAppContext();
+
     const theme = useTheme();
     const [proposal, setProposal] = useState(null);
     const [mounted, setMounted] = useState(false);
@@ -796,19 +797,8 @@ const SingleGovernanceAction = ({ id }) => {
                                                                 : undefined
                                                         }
                                                         ref={menuRef}
-                                                        onClick={async () => {
-                                                            await loginUserToApp(
-                                                                {
-                                                                    wallet: walletAPI,
-                                                                    setUser:
-                                                                        setUser,
-                                                                    setOpenUsernameModal:
-                                                                        setOpenUsernameModal,
-                                                                    callBackFn:
-                                                                        () =>
-                                                                            handleClick(),
-                                                                }
-                                                            );
+                                                        onClick={() => {
+                                                            handleClick();
                                                         }}
                                                         data-testid='menu-button'
                                                     >
@@ -859,19 +849,8 @@ const SingleGovernanceAction = ({ id }) => {
                                                         data-testid='proposal-menu'
                                                     >
                                                         <MenuItem
-                                                            onClick={async () =>
-                                                                await loginUserToApp(
-                                                                    {
-                                                                        wallet: walletAPI,
-                                                                        setUser:
-                                                                            setUser,
-                                                                        setOpenUsernameModal:
-                                                                            setOpenUsernameModal,
-                                                                        callBackFn:
-                                                                            () =>
-                                                                                handleEditProposal(),
-                                                                    }
-                                                                )
+                                                            onClick={() =>
+                                                                handleEditProposal()
                                                             }
                                                             data-testid='edit-proposal'
                                                         >
@@ -902,19 +881,8 @@ const SingleGovernanceAction = ({ id }) => {
                                                             </Stack>
                                                         </MenuItem>
                                                         <MenuItem
-                                                            onClick={async () =>
-                                                                await loginUserToApp(
-                                                                    {
-                                                                        wallet: walletAPI,
-                                                                        setUser:
-                                                                            setUser,
-                                                                        setOpenUsernameModal:
-                                                                            setOpenUsernameModal,
-                                                                        callBackFn:
-                                                                            () =>
-                                                                                handleOpenDeleteModal(),
-                                                                    }
-                                                                )
+                                                            onClick={() =>
+                                                                handleOpenDeleteModal()
                                                             }
                                                             data-testid='delete-proposal'
                                                         >
@@ -991,15 +959,8 @@ const SingleGovernanceAction = ({ id }) => {
                                                         height='18'
                                                     />
                                                 }
-                                                onClick={async () =>
-                                                    await loginUserToApp({
-                                                        wallet: walletAPI,
-                                                        setUser: setUser,
-                                                        setOpenUsernameModal:
-                                                            setOpenUsernameModal,
-                                                        callBackFn: () =>
-                                                            handleOpenReviewVersions(),
-                                                    })
+                                                onClick={() =>
+                                                    handleOpenReviewVersions()
                                                 }
                                                 data-testid='review-version'
                                             >
@@ -1173,19 +1134,21 @@ const SingleGovernanceAction = ({ id }) => {
                                                         ?.content?.attributes
                                                         ?.prop_submitted
                                                         ? `Proposal Submitted\n\nYou can't like this proposal`
-                                                        : user
-                                                          ? user?.user?.id?.toString() ===
-                                                            proposal?.attributes?.user_id?.toString()
-                                                              ? `You can't like your proposal`
-                                                              : userProposalVote
-                                                                ? userProposalVote
-                                                                      ?.attributes
-                                                                      ?.vote_result ===
-                                                                  true
-                                                                    ? `You already liked this proposal`
+                                                        : walletAPI?.address
+                                                          ? user
+                                                              ? user?.user?.id?.toString() ===
+                                                                proposal?.attributes?.user_id?.toString()
+                                                                  ? `You can't like your proposal`
+                                                                  : userProposalVote
+                                                                    ? userProposalVote
+                                                                          ?.attributes
+                                                                          ?.vote_result ===
+                                                                      true
+                                                                        ? `You already liked this proposal`
+                                                                        : 'Like this proposal\n\nClick to like this proposal'
                                                                     : 'Like this proposal\n\nClick to like this proposal'
-                                                                : 'Like this proposal\n\nClick to like this proposal'
-                                                          : 'Like this proposal\n\nClick to like this proposal'}
+                                                              : 'Like this proposal\n\nClick to like this proposal'
+                                                          : 'Connect wallet to like this proposal'}
                                                 </span>
                                             }
                                         >
@@ -1197,24 +1160,27 @@ const SingleGovernanceAction = ({ id }) => {
                                                     }}
                                                     data-testid='like-button'
                                                     disabled={
-                                                        proposal?.attributes
-                                                            ?.content
-                                                            ?.attributes
-                                                            ?.prop_submitted
-                                                            ? true
-                                                            : user
-                                                              ? user?.user?.id?.toString() ===
-                                                                proposal?.attributes?.user_id?.toString()
-                                                                  ? true
-                                                                  : userProposalVote
-                                                                    ? userProposalVote
-                                                                          ?.attributes
-                                                                          ?.vote_result ===
-                                                                      true
-                                                                        ? true
+                                                        walletAPI?.address
+                                                            ? proposal
+                                                                  ?.attributes
+                                                                  ?.content
+                                                                  ?.attributes
+                                                                  ?.prop_submitted
+                                                                ? true
+                                                                : user
+                                                                  ? user?.user?.id?.toString() ===
+                                                                    proposal?.attributes?.user_id?.toString()
+                                                                      ? true
+                                                                      : userProposalVote
+                                                                        ? userProposalVote
+                                                                              ?.attributes
+                                                                              ?.vote_result ===
+                                                                          true
+                                                                            ? true
+                                                                            : false
                                                                         : false
-                                                                    : false
-                                                              : false
+                                                                  : false
+                                                            : true
                                                     }
                                                     onClick={
                                                         proposal?.attributes
@@ -1232,67 +1198,28 @@ const SingleGovernanceAction = ({ id }) => {
                                                                           ?.vote_result ===
                                                                       null
                                                                         ? null
-                                                                        : async () =>
-                                                                              await loginUserToApp(
+                                                                        : () =>
+                                                                              updateLikesOrDislikes(
                                                                                   {
-                                                                                      wallet: walletAPI,
-                                                                                      setUser:
-                                                                                          setUser,
-                                                                                      setOpenUsernameModal:
-                                                                                          setOpenUsernameModal,
-                                                                                      callBackFn:
-                                                                                          (
-                                                                                              loggedInUser
-                                                                                          ) =>
-                                                                                              updateLikesOrDislikes(
-                                                                                                  {
-                                                                                                      like: true,
-                                                                                                      loggedInUser:
-                                                                                                          loggedInUser,
-                                                                                                  }
-                                                                                              ),
+                                                                                      like: true,
+                                                                                      loggedInUser:
+                                                                                          user,
                                                                                   }
                                                                               )
-                                                                    : async () =>
-                                                                          await loginUserToApp(
+                                                                    : () =>
+                                                                          updateLikesOrDislikes(
                                                                               {
-                                                                                  wallet: walletAPI,
-                                                                                  setUser:
-                                                                                      setUser,
-                                                                                  setOpenUsernameModal:
-                                                                                      setOpenUsernameModal,
-                                                                                  callBackFn:
-                                                                                      (
-                                                                                          loggedInUser
-                                                                                      ) =>
-                                                                                          updateLikesOrDislikes(
-                                                                                              {
-                                                                                                  like: true,
-                                                                                                  loggedInUser:
-                                                                                                      loggedInUser,
-                                                                                              }
-                                                                                          ),
+                                                                                  like: true,
+                                                                                  loggedInUser:
+                                                                                      user,
                                                                               }
                                                                           )
-                                                              : async () =>
-                                                                    await loginUserToApp(
+                                                              : () =>
+                                                                    updateLikesOrDislikes(
                                                                         {
-                                                                            wallet: walletAPI,
-                                                                            setUser:
-                                                                                setUser,
-                                                                            setOpenUsernameModal:
-                                                                                setOpenUsernameModal,
-                                                                            callBackFn:
-                                                                                (
-                                                                                    loggedInUser
-                                                                                ) =>
-                                                                                    updateLikesOrDislikes(
-                                                                                        {
-                                                                                            like: true,
-                                                                                            loggedInUser:
-                                                                                                loggedInUser,
-                                                                                        }
-                                                                                    ),
+                                                                            like: true,
+                                                                            loggedInUser:
+                                                                                user,
                                                                         }
                                                                     )
                                                     }
@@ -1366,19 +1293,21 @@ const SingleGovernanceAction = ({ id }) => {
                                                         ?.content?.attributes
                                                         ?.prop_submitted
                                                         ? `Proposal Submitted\n\nYou can't dislike this proposal`
-                                                        : user
-                                                          ? user?.user?.id?.toString() ===
-                                                            proposal?.attributes?.user_id?.toString()
-                                                              ? `You can't dislike your proposal`
-                                                              : userProposalVote
-                                                                ? userProposalVote
-                                                                      ?.attributes
-                                                                      ?.vote_result ===
-                                                                  false
-                                                                    ? `You already disliked this proposal`
+                                                        : walletAPI?.address
+                                                          ? user
+                                                              ? user?.user?.id?.toString() ===
+                                                                proposal?.attributes?.user_id?.toString()
+                                                                  ? `You can't dislike your proposal`
+                                                                  : userProposalVote
+                                                                    ? userProposalVote
+                                                                          ?.attributes
+                                                                          ?.vote_result ===
+                                                                      false
+                                                                        ? `You already disliked this proposal`
+                                                                        : 'Dislike this proposal\n\nClick to dislike this proposal'
                                                                     : 'Dislike this proposal\n\nClick to dislike this proposal'
-                                                                : 'Dislike this proposal\n\nClick to dislike this proposal'
-                                                          : 'Dislike this proposal\n\nClick to dislike this proposal'}
+                                                              : 'Dislike this proposal\n\nClick to dislike this proposal'
+                                                          : 'Connect wallet to dislike this proposal'}
                                                 </span>
                                             }
                                         >
@@ -1390,24 +1319,27 @@ const SingleGovernanceAction = ({ id }) => {
                                                     }}
                                                     data-testid='dislike-button'
                                                     disabled={
-                                                        proposal?.attributes
-                                                            ?.content
-                                                            ?.attributes
-                                                            ?.prop_submitted
-                                                            ? true
-                                                            : user
-                                                              ? user?.user?.id?.toString() ===
-                                                                proposal?.attributes?.user_id?.toString()
-                                                                  ? true
-                                                                  : userProposalVote
-                                                                    ? userProposalVote
-                                                                          ?.attributes
-                                                                          ?.vote_result ===
-                                                                      false
-                                                                        ? true
+                                                        walletAPI?.address
+                                                            ? proposal
+                                                                  ?.attributes
+                                                                  ?.content
+                                                                  ?.attributes
+                                                                  ?.prop_submitted
+                                                                ? true
+                                                                : user
+                                                                  ? user?.user?.id?.toString() ===
+                                                                    proposal?.attributes?.user_id?.toString()
+                                                                      ? true
+                                                                      : userProposalVote
+                                                                        ? userProposalVote
+                                                                              ?.attributes
+                                                                              ?.vote_result ===
+                                                                          false
+                                                                            ? true
+                                                                            : false
                                                                         : false
-                                                                    : false
-                                                              : false
+                                                                  : false
+                                                            : true
                                                     }
                                                     onClick={
                                                         proposal?.attributes
@@ -1425,67 +1357,28 @@ const SingleGovernanceAction = ({ id }) => {
                                                                           ?.vote_result ===
                                                                       null
                                                                         ? null
-                                                                        : async () =>
-                                                                              await loginUserToApp(
+                                                                        : () =>
+                                                                              updateLikesOrDislikes(
                                                                                   {
-                                                                                      wallet: walletAPI,
-                                                                                      setUser:
-                                                                                          setUser,
-                                                                                      setOpenUsernameModal:
-                                                                                          setOpenUsernameModal,
-                                                                                      callBackFn:
-                                                                                          (
-                                                                                              loggedInUser
-                                                                                          ) =>
-                                                                                              updateLikesOrDislikes(
-                                                                                                  {
-                                                                                                      like: false,
-                                                                                                      loggedInUser:
-                                                                                                          loggedInUser,
-                                                                                                  }
-                                                                                              ),
+                                                                                      like: false,
+                                                                                      loggedInUser:
+                                                                                          user,
                                                                                   }
                                                                               )
-                                                                    : async () =>
-                                                                          await loginUserToApp(
+                                                                    : () =>
+                                                                          updateLikesOrDislikes(
                                                                               {
-                                                                                  wallet: walletAPI,
-                                                                                  setUser:
-                                                                                      setUser,
-                                                                                  setOpenUsernameModal:
-                                                                                      setOpenUsernameModal,
-                                                                                  callBackFn:
-                                                                                      (
-                                                                                          loggedInUser
-                                                                                      ) =>
-                                                                                          updateLikesOrDislikes(
-                                                                                              {
-                                                                                                  like: false,
-                                                                                                  loggedInUser:
-                                                                                                      loggedInUser,
-                                                                                              }
-                                                                                          ),
+                                                                                  like: false,
+                                                                                  loggedInUser:
+                                                                                      user,
                                                                               }
                                                                           )
-                                                              : async () =>
-                                                                    await loginUserToApp(
+                                                              : () =>
+                                                                    updateLikesOrDislikes(
                                                                         {
-                                                                            wallet: walletAPI,
-                                                                            setUser:
-                                                                                setUser,
-                                                                            setOpenUsernameModal:
-                                                                                setOpenUsernameModal,
-                                                                            callBackFn:
-                                                                                (
-                                                                                    loggedInUser
-                                                                                ) =>
-                                                                                    updateLikesOrDislikes(
-                                                                                        {
-                                                                                            like: false,
-                                                                                            loggedInUser:
-                                                                                                loggedInUser,
-                                                                                        }
-                                                                                    ),
+                                                                            like: false,
+                                                                            loggedInUser:
+                                                                                user,
                                                                         }
                                                                     )
                                                     }
@@ -1728,23 +1621,20 @@ const SingleGovernanceAction = ({ id }) => {
                                     >
                                         <Button
                                             variant='contained'
-                                            onClick={async () =>
-                                                await loginUserToApp({
-                                                    wallet: walletAPI,
-                                                    setUser: setUser,
-                                                    setOpenUsernameModal:
-                                                        setOpenUsernameModal,
-                                                    callBackFn: () =>
-                                                        handleCreateComment(),
-                                                })
+                                            onClick={() =>
+                                                handleCreateComment()
                                             }
-                                            disabled={!newCommentText}
+                                            disabled={
+                                                !newCommentText ||
+                                                !walletAPI?.address
+                                            }
                                             endIcon={
                                                 <IconReply
                                                     height={18}
                                                     width={18}
                                                     fill={
-                                                        !newCommentText
+                                                        !newCommentText ||
+                                                        !walletAPI?.address
                                                             ? 'rgba(0,0,0, 0.26)'
                                                             : 'white'
                                                     }

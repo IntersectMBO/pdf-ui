@@ -20,7 +20,7 @@ const StoreDataStep = ({ setStep }) => {
     return (
         <Box display='flex' flexDirection='column'>
             <Box>
-                <Card variant='outlined'>
+                <Card>
                     <CardContent
                         sx={{
                             ml: {

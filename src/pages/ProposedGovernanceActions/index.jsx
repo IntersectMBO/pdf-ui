@@ -141,7 +141,7 @@ const ProposedGovernanceActions = () => {
                         justifyContent={'space-between'}
                         spacing={1}
                     >
-                        {!walletAPI && (
+                        {!walletAPI?.address && (
                             <Grid item xs={12} paddingBottom={2}>
                                 <Typography variant='h4' component='h1'>
                                     Proposed Governance Actions
@@ -168,25 +168,27 @@ const ProposedGovernanceActions = () => {
                             </Grid>
                         )}
 
-                        <Grid item xs={12} paddingBottom={2}>
-                            <Button
-                                variant='contained'
-                                onClick={async () =>
-                                    await loginUserToApp({
-                                        wallet: walletAPI,
-                                        setUser: setUser,
-                                        setOpenUsernameModal:
-                                            setOpenUsernameModal,
-                                        callBackFn: () =>
-                                            setShowCreateGADialog(true),
-                                    })
-                                }
-                                startIcon={<IconPlusCircle fill='white' />}
-                                data-testid='propose-a-governance-action-button'
-                            >
-                                Propose a Governance Action
-                            </Button>
-                        </Grid>
+                        {walletAPI?.address && (
+                            <Grid item xs={12} paddingBottom={2}>
+                                <Button
+                                    variant='contained'
+                                    onClick={async () =>
+                                        await loginUserToApp({
+                                            wallet: walletAPI,
+                                            setUser: setUser,
+                                            setOpenUsernameModal:
+                                                setOpenUsernameModal,
+                                            callBackFn: () =>
+                                                setShowCreateGADialog(true),
+                                        })
+                                    }
+                                    startIcon={<IconPlusCircle fill='white' />}
+                                    data-testid='propose-a-governance-action-button'
+                                >
+                                    Propose a Governance Action
+                                </Button>
+                            </Grid>
+                        )}
 
                         <Grid item md={6} sx={{ flexGrow: { xs: 1 } }}>
                             <TextField
