@@ -36,7 +36,7 @@ const CheckingDataModal = ({ open }) => {
                         <CircularProgress
                             id='data-checking-modal-loader'
                             data-testid='data-checking-modal-loader'
-                            size={100}
+                            size={60}
                             color='inherit'
                         />
                     </Box>

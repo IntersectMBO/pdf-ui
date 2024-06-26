@@ -439,13 +439,17 @@ const CommentCard = ({ comment, proposal }) => {
                                                     handleCreateComment(),
                                             })
                                         }
-                                        disabled={!subcommentText}
+                                        disabled={
+                                            !subcommentText ||
+                                            !walletAPI?.address
+                                        }
                                         endIcon={
                                             <IconReply
                                                 height={18}
                                                 width={18}
                                                 fill={
-                                                    !subcommentText
+                                                    !subcommentText ||
+                                                    !walletAPI?.address
                                                         ? 'rgba(0,0,0, 0.26)'
                                                         : 'white'
                                                 }
