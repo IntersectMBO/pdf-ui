@@ -68,6 +68,7 @@ const Step1 = ({ setStep, setProposalData, onClose }) => {
                                 <Button
                                     variant='contained'
                                     onClick={() => setStep(2)}
+                                    data-testid='create-new-proposal-button'
                                 >
                                     Create new Proposal
                                 </Button>
@@ -189,12 +190,14 @@ const Step1 = ({ setStep, setProposalData, onClose }) => {
                                     variant='outlined'
                                     sx={{ float: 'left' }}
                                     onClick={onClose}
+                                    data-testid='cancel-button'
                                 >
                                     Cancel
                                 </Button>
                                 <Button
                                     variant='contained'
                                     onClick={() => setStep(2)}
+                                    data-testid='continue-button'
                                 >
                                     Continue
                                 </Button>

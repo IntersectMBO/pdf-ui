@@ -144,6 +144,7 @@ const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
                                 />
                             }
                             onClick={onClose}
+                            data-testid='show-all-button'
                         >
                             Show all
                         </Button>

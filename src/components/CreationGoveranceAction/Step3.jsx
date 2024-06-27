@@ -69,7 +69,11 @@ const Step3 = ({
                         </Typography>
                     </Box>
 
-                    <Typography variant='h5' gutterBottom>
+                    <Typography
+                        variant='h5'
+                        gutterBottom
+                        data-testid='title-content'
+                    >
                         {proposalData?.prop_name}
                     </Typography>
 
@@ -81,7 +85,11 @@ const Step3 = ({
                         >
                             Goverance Action Type
                         </Typography>
-                        <Typography variant='body1' gutterBottom>
+                        <Typography
+                            variant='body1'
+                            gutterBottom
+                            data-testid='governance-action-type-content'
+                        >
                             {
                                 governanceActionTypes?.find(
                                     (x) =>
@@ -105,7 +113,10 @@ const Step3 = ({
                                 p(props) {
                                     const { children } = props;
                                     return (
-                                        <Typography variant='body1'>
+                                        <Typography
+                                            variant='body1'
+                                            data-testid='abstract-content'
+                                        >
                                             {children}
                                         </Typography>
                                     );
@@ -129,7 +140,10 @@ const Step3 = ({
                                 p(props) {
                                     const { children } = props;
                                     return (
-                                        <Typography variant='body1'>
+                                        <Typography
+                                            variant='body1'
+                                            data-testid='motivation-content'
+                                        >
                                             {children}
                                         </Typography>
                                     );
@@ -153,7 +167,10 @@ const Step3 = ({
                                 p(props) {
                                     const { children } = props;
                                     return (
-                                        <Typography variant='body1'>
+                                        <Typography
+                                            variant='body1'
+                                            data-testid='rationale-content'
+                                        >
                                             {children}
                                         </Typography>
                                     );
@@ -173,7 +190,11 @@ const Step3 = ({
                             >
                                 Receiving address
                             </Typography>
-                            <Typography variant='body1' gutterBottom>
+                            <Typography
+                                variant='body1'
+                                gutterBottom
+                                data-testid='receiving-address-content'
+                            >
                                 {proposalData?.prop_receiving_address}
                             </Typography>
                         </Box>
@@ -188,7 +209,11 @@ const Step3 = ({
                             >
                                 Amount
                             </Typography>
-                            <Typography variant='body1' gutterBottom>
+                            <Typography
+                                variant='body1'
+                                gutterBottom
+                                data-testid='amount-content'
+                            >
                                 {proposalData?.prop_amount}
                             </Typography>
                         </Box>
@@ -239,6 +264,7 @@ const Step3 = ({
                                             <Typography
                                                 variant='body1'
                                                 component='span'
+                                                data-testid='link-text-content'
                                             >
                                                 {link?.prop_link_text}
                                             </Typography>
@@ -272,6 +298,7 @@ const Step3 = ({
                             }}
                             fullWidth={isSmallScreen}
                             onClick={() => setStep(2)}
+                            data-testid='back-to-edit-button'
                         >
                             Back to editing
                         </Button>
@@ -310,6 +337,7 @@ const Step3 = ({
                                 variant='contained'
                                 fullWidth
                                 onClick={() => handleSaveDraft(false)}
+                                data-testid='submit-button'
                             >
                                 Submit
                             </Button>

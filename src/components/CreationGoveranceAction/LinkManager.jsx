@@ -85,6 +85,7 @@ const LinkManager = ({ maxLinks = 7, proposalData, setProposalData }) => {
                                         },
                                     },
                                 }}
+                                data-testid={`link-${index}-url-input`}
                             />
                             <TextField
                                 label={`Link #${index + 1} Text`}
@@ -108,6 +109,7 @@ const LinkManager = ({ maxLinks = 7, proposalData, setProposalData }) => {
                                         },
                                     },
                                 }}
+                                data-testid={`link-${index}-text-input`}
                             />
                         </Box>
                     </Box>
@@ -128,6 +130,7 @@ const LinkManager = ({ maxLinks = 7, proposalData, setProposalData }) => {
                             <IconPlus fill={theme.palette.primary.main} />
                         }
                         onClick={handleAddLink}
+                        data-testid='add-link-button'
                     >
                         Add link
                     </Button>
