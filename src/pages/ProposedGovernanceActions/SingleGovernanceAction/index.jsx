@@ -1626,7 +1626,12 @@ const SingleGovernanceAction = ({ id }) => {
                                         <Button
                                             variant='contained'
                                             onClick={() =>
-                                                handleCreateComment()
+                                                user?.user?.govtool_username
+                                                    ? handleCreateComment()
+                                                    : setOpenUsernameModal({
+                                                          open: true,
+                                                          callBackFn: () => {},
+                                                      })
                                             }
                                             disabled={
                                                 !newCommentText ||

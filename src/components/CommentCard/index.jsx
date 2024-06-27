@@ -20,9 +20,9 @@ import {
     Typography,
     TextField,
 } from '@mui/material';
-import { loginUserToApp } from '../../lib/helpers';
+
 const CommentCard = ({ comment, proposal }) => {
-    const { setLoading, walletAPI, setUser, setOpenUsernameModal } =
+    const { setLoading, walletAPI, user, setOpenUsernameModal } =
         useAppContext();
     const theme = useTheme();
     const maxLength = 128;
@@ -429,15 +429,13 @@ const CommentCard = ({ comment, proposal }) => {
                                 >
                                     <Button
                                         variant='contained'
-                                        onClick={async () =>
-                                            await loginUserToApp({
-                                                wallet: walletAPI,
-                                                setUser: setUser,
-                                                setOpenUsernameModal:
-                                                    setOpenUsernameModal,
-                                                callBackFn: () =>
-                                                    handleCreateComment(),
-                                            })
+                                        onClick={() =>
+                                            user?.user?.govtool_username
+                                                ? handleCreateComment()
+                                                : setOpenUsernameModal({
+                                                      open: true,
+                                                      callBackFn: () => {},
+                                                  })
                                         }
                                         disabled={
                                             !subcommentText ||
