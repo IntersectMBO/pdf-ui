@@ -123,9 +123,14 @@ const Step2 = ({
                         required
                         fullWidth
                         onChange={handleChange}
+                        data-testid='governance-action-type'
                     >
                         {governanceActionTypes?.map((option, index) => (
-                            <MenuItem key={option?.value} value={option?.value}>
+                            <MenuItem
+                                key={option?.value}
+                                value={option?.value}
+                                data-testid={`${option?.label?.toLowerCase()}-button`}
+                            >
                                 {option?.label}
                             </MenuItem>
                         ))}
@@ -143,6 +148,7 @@ const Step2 = ({
                             }))
                         }
                         required
+                        data-testid='title-input'
                     />
 
                     <TextField
@@ -180,6 +186,7 @@ const Step2 = ({
                                 maxLength: maxLength,
                             },
                         }}
+                        data-testid='abstract-input'
                     />
 
                     <TextField
@@ -218,6 +225,7 @@ const Step2 = ({
                                 maxLength: maxLength,
                             },
                         }}
+                        data-testid='motivation-input'
                     />
 
                     <TextField
@@ -256,6 +264,7 @@ const Step2 = ({
                                 maxLength: maxLength,
                             },
                         }}
+                        data-testid='rationale-input'
                     />
 
                     {selectedGovActionName === 'Treasury' ? (
@@ -275,6 +284,7 @@ const Step2 = ({
                                     }))
                                 }
                                 required
+                                data-testid='receiving-address-input'
                             />
 
                             <TextField
@@ -292,6 +302,7 @@ const Step2 = ({
                                     }))
                                 }
                                 required
+                                data-testid='amount-input'
                             />
                         </>
                     ) : null}
@@ -349,6 +360,7 @@ const Step2 = ({
                             }}
                             fullWidth={isSmallScreen}
                             onClick={() => setStep(1)}
+                            data-testid='back-button'
                         >
                             Back
                         </Button>
@@ -389,6 +401,7 @@ const Step2 = ({
                                 fullWidth
                                 disabled={isContinueDisabled}
                                 onClick={() => setStep(3)}
+                                data-testid='continue-button'
                             >
                                 Continue
                             </Button>

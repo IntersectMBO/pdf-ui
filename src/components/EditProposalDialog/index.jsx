@@ -387,6 +387,7 @@ const EditProposalDialog = ({
                                                             true
                                                         )
                                                     }
+                                                    data-testid='delete-proposal-button'
                                                 >
                                                     Delete Proposal
                                                 </Button>
@@ -469,12 +470,14 @@ const EditProposalDialog = ({
                                                 draft?.gov_action_type_id || ''
                                             }
                                             onChange={handleChange}
+                                            data-testid='governance-action-type'
                                         >
                                             {governanceActionTypes?.map(
                                                 (option) => (
                                                     <MenuItem
                                                         key={option?.value}
                                                         value={option?.value}
+                                                        data-testid={`${option?.label?.toLowerCase()}-button`}
                                                     >
                                                         {option?.label}
                                                     </MenuItem>
@@ -494,6 +497,7 @@ const EditProposalDialog = ({
                                                 }))
                                             }
                                             required
+                                            data-testid='title-input'
                                         />
 
                                         <TextField
@@ -536,6 +540,7 @@ const EditProposalDialog = ({
                                                     maxLength: maxLength,
                                                 },
                                             }}
+                                            data-testid='abstract-input'
                                         />
 
                                         <TextField
@@ -579,6 +584,7 @@ const EditProposalDialog = ({
                                                     maxLength: maxLength,
                                                 },
                                             }}
+                                            data-testid='motivation-input'
                                         />
 
                                         <TextField
@@ -622,6 +628,7 @@ const EditProposalDialog = ({
                                                     maxLength: maxLength,
                                                 },
                                             }}
+                                            data-testid='rationale-input'
                                         />
 
                                         {selectedGovActionName ===
@@ -644,6 +651,7 @@ const EditProposalDialog = ({
                                                         }))
                                                     }
                                                     required
+                                                    data-testid='receiving-address-input'
                                                 />
 
                                                 <TextField
@@ -664,6 +672,7 @@ const EditProposalDialog = ({
                                                         }))
                                                     }
                                                     required
+                                                    data-testid='amount-input'
                                                 />
                                             </>
                                         ) : null}
@@ -742,6 +751,7 @@ const EditProposalDialog = ({
                                                 onClick={() => {
                                                     handleCloseEditDialog();
                                                 }}
+                                                data-testid='back-button'
                                             >
                                                 Back
                                             </Button>
@@ -793,6 +803,7 @@ const EditProposalDialog = ({
                                                     onClick={() => {
                                                         handleOpenPublishModal();
                                                     }}
+                                                    data-testid='publis-with-new-edits-button'
                                                 >
                                                     Publish with new edits
                                                 </Button>
@@ -913,6 +924,7 @@ const EditProposalDialog = ({
                                     handleCloseEditDialog();
                                     setMounted(false);
                                 }}
+                                data-testid='confirm-button'
                             >
                                 Confirm
                             </Button>
@@ -922,6 +934,7 @@ const EditProposalDialog = ({
                                 onClick={() => {
                                     handleClosePublishModal();
                                 }}
+                                data-testid='cancel-button'
                             >
                                 Cancel
                             </Button>
