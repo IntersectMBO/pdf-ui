@@ -107,7 +107,6 @@ const UsernameModal = ({ open, handleClose: close }) => {
                         </Typography>
 
                         <TextField
-                            data-testid='username-input'
                             label='Username'
                             variant='outlined'
                             sx={{
@@ -117,6 +116,9 @@ const UsernameModal = ({ open, handleClose: close }) => {
                             value={username || ''}
                             onChange={(e) => setUsername(e.target.value)}
                             required
+                            inputProps={{
+                                'data-testid': 'username-input',
+                            }}
                         />
                         <Button
                             data-testid='proceed-button'
@@ -179,6 +181,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
                                 variant='contained'
                                 fullWidth
                                 onClick={handleNext}
+                                data-testid='proceed-button'
                             >
                                 Proceed with this username
                             </Button>
