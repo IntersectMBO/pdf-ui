@@ -634,6 +634,7 @@ const SingleGovernanceAction = ({ id }) => {
                                         >
                                             <IconButton
                                                 id='share-button'
+                                                data-testid='share-button'
                                                 sx={{
                                                     width: 40,
                                                     height: 40,
@@ -1087,11 +1088,14 @@ const SingleGovernanceAction = ({ id }) => {
                                                 display={'flex'}
                                                 alignItems={'center'}
                                             >
-                                                <IconButton
-                                                    data-testid='comment-count'
-                                                    disabled
-                                                >
+                                                <IconButton disabled>
                                                     <Badge
+                                                        slotProps={{
+                                                            badge: {
+                                                                'data-testid':
+                                                                    'comment-count',
+                                                            },
+                                                        }}
                                                         badgeContent={
                                                             proposal?.attributes
                                                                 ?.prop_comments_number ||
@@ -1604,8 +1608,8 @@ const SingleGovernanceAction = ({ id }) => {
                                             autoCorrect: 'off',
                                             autoCapitalize: 'none',
                                             autoComplete: 'off',
+                                            'data-testid': 'comment-input',
                                         }}
-                                        data-testid='comment-input'
                                     />
 
                                     <Box

@@ -417,9 +417,9 @@ const CommentCard = ({ comment, proposal }) => {
                                     InputProps={{
                                         inputProps: {
                                             maxLength: subcommentMaxLength,
+                                            'data-testid': 'reply-input',
                                         },
                                     }}
-                                    data-testid='reply-input'
                                 />
 
                                 <Box

@@ -533,6 +533,7 @@ const Poll = ({
                                     borderRadius: '20px',
                                 }}
                                 onClick={() => closeProposalPoll()}
+                                data-testid='close-the-poll-button'
                             >
                                 Close the Poll
                             </Button>
@@ -543,6 +544,7 @@ const Poll = ({
                                     borderRadius: '20px',
                                 }}
                                 onClick={toggleClosePollModal}
+                                data-testid='cancel-the-poll-button'
                             >
                                 Cancel
                             </Button>
