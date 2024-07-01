@@ -65,7 +65,7 @@ const EditProposalDialog = ({
     const [draft, setDraft] = useState({});
     const [isSaveDisabled, setIsSaveDisabled] = useState(true);
     const [openSaveDraftModal, setOpenSaveDraftModal] = useState(false);
-    const [openPublishftModal, setOpenPublishModal] = useState(false);
+    const [openPublishModal, setOpenPublishModal] = useState(false);
     const [governanceActionTypes, setGovernanceActionTypes] = useState([]);
     const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal] =
         useState(false);
@@ -73,7 +73,7 @@ const EditProposalDialog = ({
         proposal?.attributes?.content?.attributes?.gov_action_type?.attributes
             ?.gov_action_type_name
     );
-    const [showProposalDeleteModal, setShowPoprosalDeleteModal] =
+    const [showProposalDeleteModal, setShowProposalDeleteModal] =
         useState(false);
 
     const isSmallScreen = useMediaQuery((theme) =>
@@ -137,7 +137,7 @@ const EditProposalDialog = ({
             const response = await deleteProposal(proposal?.id);
             if (!response) return;
 
-            setShowPoprosalDeleteModal(false);
+            setShowProposalDeleteModal(false);
             setOpenDeleteConfirmationModal(true);
         } catch (error) {
             console.error('Failed to delete proposal:', error);
@@ -383,7 +383,7 @@ const EditProposalDialog = ({
                                                         />
                                                     }
                                                     onClick={() =>
-                                                        setShowPoprosalDeleteModal(
+                                                        setShowProposalDeleteModal(
                                                             true
                                                         )
                                                     }
@@ -817,7 +817,7 @@ const EditProposalDialog = ({
                                                     onClick={() => {
                                                         handleOpenPublishModal();
                                                     }}
-                                                    data-testid='publis-with-new-edits-button'
+                                                    data-testid='publish-with-new-edits-button'
                                                 >
                                                     Publish with new edits
                                                 </Button>
@@ -887,7 +887,7 @@ const EditProposalDialog = ({
                     </Box>
                 </Modal>
                 <Modal
-                    open={openPublishftModal}
+                    open={openPublishModal}
                     onClose={handleClosePublishModal}
                 >
                     <Box sx={style}>
@@ -1017,7 +1017,7 @@ const EditProposalDialog = ({
 
                 <DeleteProposalModal
                     open={showProposalDeleteModal}
-                    onClose={() => setShowPoprosalDeleteModal(false)}
+                    onClose={() => setShowProposalDeleteModal(false)}
                     handleDeleteProposal={handleDeleteProposal}
                 />
 

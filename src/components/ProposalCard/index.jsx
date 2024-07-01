@@ -124,7 +124,7 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                 data-testid={
                     proposal?.attributes?.content?.attributes?.is_draft
                         ? `draft-${proposal?.id}-card`
-                        : `proposal-${proposal?.id}`
+                        : `proposal-${proposal?.id}-card`
                 }
             >
                 <CardHeader
@@ -485,10 +485,15 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
 
     return proposal?.attributes?.content?.attributes?.is_draft ? (
         <CardStatusBadge
-            badgeContent={'Draft'}
-            aria-label='draft-badge'
+            badgeContent='Draft'
+            aria-label='draft-status-badge'
             showZero
             draft={true}
+            slotProps={{
+                badge: {
+                    'data-testid': `proposal-${proposal?.id}-status`,
+                },
+            }}
         >
             <CardContentComponent proposal={proposal} />
         </CardStatusBadge>
@@ -500,13 +505,18 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                         ? 'Submitted for Vote'
                         : 'Active'
                 }
-                aria-label='draft-badge'
+                aria-label='status-badge'
                 submitted={
                     proposal?.attributes?.content?.attributes?.prop_submitted
                         ? true
                         : false
                 }
                 showZero
+                slotProps={{
+                    badge: {
+                        'data-testid': `proposal-${proposal?.id}-status`,
+                    },
+                }}
             >
                 <CardContentComponent proposal={proposal} />
             </CardStatusBadge>

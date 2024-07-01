@@ -96,7 +96,7 @@ const ProposalsList = ({
     }, [mounted, debouncedSearchValue, sortType, statusList]);
 
     return isDraft && proposalsList?.length === 0 ? null : (
-        <Box overflow={'hidden'}>
+        <Box overflow={'visible'}>
             <Box
                 display={'flex'}
                 alignItems={'center'}
@@ -156,7 +156,7 @@ const ProposalsList = ({
             </Box>
             {proposalsList?.length > 0 ? (
                 showAll ? (
-                    <Box px={1.5}>
+                    <Box>
                         <Grid container spacing={4} paddingY={4}>
                             {proposalsList?.map((proposal, index) => (
                                 <Grid item key={index} xs={12} sm={6} md={4}>
@@ -188,7 +188,7 @@ const ProposalsList = ({
                         )}
                     </Box>
                 ) : (
-                    <Box px={1.5} py={2}>
+                    <Box py={2}>
                         <Slider ref={sliderRef} {...settings}>
                             {proposalsList?.map((proposal, index) => (
                                 <Box key={index} height={'100%'}>
