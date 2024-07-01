@@ -169,6 +169,9 @@ const UsernameModal = ({ open, handleClose: close }) => {
                             fullWidth
                             value={username || ''}
                             disabled
+                            inputProps={{
+                                'data-testid': 'username-input',
+                            }}
                         />
                         <Box
                             sx={{

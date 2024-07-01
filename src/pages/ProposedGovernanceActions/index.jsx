@@ -196,7 +196,6 @@ const ProposedGovernanceActions = () => {
                             <TextField
                                 fullWidth
                                 id='outlined-basic'
-                                data-testid='search-input'
                                 placeholder='Search...'
                                 variant='outlined'
                                 value={proposalSearchText || ''}
@@ -216,6 +215,9 @@ const ProposedGovernanceActions = () => {
                                             />
                                         </InputAdornment>
                                     ),
+                                }}
+                                inputProps={{
+                                    'data-testid': 'search-input',
                                 }}
                                 sx={{
                                     '.MuiOutlinedInput-root': {
