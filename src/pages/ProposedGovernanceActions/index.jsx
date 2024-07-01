@@ -159,7 +159,9 @@ const ProposedGovernanceActions = () => {
                                         />
                                     }
                                     onClick={() =>
-                                        navigate('/proposal_discussion')
+                                        navigate('/proposal_discussion', {
+                                            replace: true,
+                                        })
                                     }
                                     data-testid='back-to-proposal-discussion-button'
                                 >
