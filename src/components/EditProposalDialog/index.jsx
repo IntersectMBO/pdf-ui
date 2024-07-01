@@ -470,7 +470,10 @@ const EditProposalDialog = ({
                                                 draft?.gov_action_type_id || ''
                                             }
                                             onChange={handleChange}
-                                            data-testid='governance-action-type'
+                                            inputProps={{
+                                                'data-testid':
+                                                    'governance-action-type',
+                                            }}
                                         >
                                             {governanceActionTypes?.map(
                                                 (option) => (
@@ -497,7 +500,9 @@ const EditProposalDialog = ({
                                                 }))
                                             }
                                             required
-                                            data-testid='title-input'
+                                            inputProps={{
+                                                'data-testid': 'title-input',
+                                            }}
                                         />
 
                                         <TextField
@@ -538,9 +543,10 @@ const EditProposalDialog = ({
                                             InputProps={{
                                                 inputProps: {
                                                     maxLength: maxLength,
+                                                    'data-testid':
+                                                        'abstract-input',
                                                 },
                                             }}
-                                            data-testid='abstract-input'
                                         />
 
                                         <TextField
@@ -582,9 +588,10 @@ const EditProposalDialog = ({
                                             InputProps={{
                                                 inputProps: {
                                                     maxLength: maxLength,
+                                                    'data-testid':
+                                                        'motivation-input',
                                                 },
                                             }}
-                                            data-testid='motivation-input'
                                         />
 
                                         <TextField
@@ -626,9 +633,10 @@ const EditProposalDialog = ({
                                             InputProps={{
                                                 inputProps: {
                                                     maxLength: maxLength,
+                                                    'data-testid':
+                                                        'rationale-input',
                                                 },
                                             }}
-                                            data-testid='rationale-input'
                                         />
 
                                         {selectedGovActionName ===
@@ -651,7 +659,10 @@ const EditProposalDialog = ({
                                                         }))
                                                     }
                                                     required
-                                                    data-testid='receiving-address-input'
+                                                    inputProps={{
+                                                        'data-testid':
+                                                            'receiving-address-input',
+                                                    }}
                                                 />
 
                                                 <TextField
@@ -672,7 +683,10 @@ const EditProposalDialog = ({
                                                         }))
                                                     }
                                                     required
-                                                    data-testid='amount-input'
+                                                    inputProps={{
+                                                        'data-testid':
+                                                            'amount-input',
+                                                    }}
                                                 />
                                             </>
                                         ) : null}

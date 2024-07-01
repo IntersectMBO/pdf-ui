@@ -85,7 +85,9 @@ const LinkManager = ({ maxLinks = 7, proposalData, setProposalData }) => {
                                         },
                                     },
                                 }}
-                                data-testid={`link-${index}-url-input`}
+                                inputProps={{
+                                    'data-testid': `link-${index}-url-input`,
+                                }}
                             />
                             <TextField
                                 label={`Link #${index + 1} Text`}
@@ -109,7 +111,9 @@ const LinkManager = ({ maxLinks = 7, proposalData, setProposalData }) => {
                                         },
                                     },
                                 }}
-                                data-testid={`link-${index}-text-input`}
+                                inputProps={{
+                                    'data-testid': `link-${index}-text-input`,
+                                }}
                             />
                         </Box>
                     </Box>

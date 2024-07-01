@@ -123,7 +123,7 @@ const Step2 = ({
                         required
                         fullWidth
                         onChange={handleChange}
-                        data-testid='governance-action-type'
+                        inputProps={{ 'data-testid': 'governance-action-type' }}
                     >
                         {governanceActionTypes?.map((option, index) => (
                             <MenuItem
@@ -148,7 +148,9 @@ const Step2 = ({
                             }))
                         }
                         required
-                        data-testid='title-input'
+                        inputProps={{
+                            'data-testid': 'title-input',
+                        }}
                     />
 
                     <TextField
@@ -184,9 +186,9 @@ const Step2 = ({
                         InputProps={{
                             inputProps: {
                                 maxLength: maxLength,
+                                'data-testid': 'abstract-input',
                             },
                         }}
-                        data-testid='abstract-input'
                     />
 
                     <TextField
@@ -223,9 +225,9 @@ const Step2 = ({
                         InputProps={{
                             inputProps: {
                                 maxLength: maxLength,
+                                'data-testid': 'motivation-input',
                             },
                         }}
-                        data-testid='motivation-input'
                     />
 
                     <TextField
@@ -262,9 +264,9 @@ const Step2 = ({
                         InputProps={{
                             inputProps: {
                                 maxLength: maxLength,
+                                'data-testid': 'rationale-input',
                             },
                         }}
-                        data-testid='rationale-input'
                     />
 
                     {selectedGovActionName === 'Treasury' ? (
@@ -284,7 +286,9 @@ const Step2 = ({
                                     }))
                                 }
                                 required
-                                data-testid='receiving-address-input'
+                                inputProps={{
+                                    'data-testid': 'receiving-address-input',
+                                }}
                             />
 
                             <TextField
@@ -302,7 +306,9 @@ const Step2 = ({
                                     }))
                                 }
                                 required
-                                data-testid='amount-input'
+                                inputProps={{
+                                    'data-testid': 'amount-input',
+                                }}
                             />
                         </>
                     ) : null}
