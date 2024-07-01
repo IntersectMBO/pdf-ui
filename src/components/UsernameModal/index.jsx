@@ -1,4 +1,7 @@
-import { IconX } from '@intersect.mbo/intersectmbo.org-icons-set';
+import {
+    IconX,
+    IconExclamation,
+} from '@intersect.mbo/intersectmbo.org-icons-set';
 import {
     Box,
     Button,
@@ -10,6 +13,7 @@ import {
 import { useState } from 'react';
 import { useAppContext } from '../../context/context';
 import { updateUser } from '../../lib/api';
+import { useTheme } from '@emotion/react';
 
 const style = {
     position: 'absolute',
@@ -27,6 +31,7 @@ const style = {
 };
 
 const UsernameModal = ({ open, handleClose: close }) => {
+    const theme = useTheme();
     const { setUser, setOpenUsernameModal } = useAppContext();
     const [username, setUsername] = useState('');
     const [step, setStep] = useState(1);
@@ -47,18 +52,24 @@ const UsernameModal = ({ open, handleClose: close }) => {
         if (step === 1) {
             setStep(2);
         } else if (step === 2) {
-            const updatedUser = await updateUser({
-                govtoolUsername: username,
-            });
+            try {
+                const updatedUser = await updateUser({
+                    govtoolUsername: username,
+                });
 
-            if (!updatedUser) return;
+                if (!updatedUser) return;
 
-            setUser((currentUser) => ({
-                ...currentUser,
-                user: updatedUser,
-            }));
+                setUser((currentUser) => ({
+                    ...currentUser,
+                    user: updatedUser,
+                }));
 
-            setStep(3);
+                setStep(3);
+            } catch (error) {
+                setStep(4);
+                setUsername('');
+                console.error(error);
+            }
         }
     };
 
@@ -231,6 +242,78 @@ const UsernameModal = ({ open, handleClose: close }) => {
                                 onClick={() => handleClose(false)}
                             >
                                 Close
+                            </Button>
+                        </Box>
+                    </>
+                );
+            case 4:
+                return (
+                    <>
+                        <Box
+                            p={3}
+                            borderBottom={1}
+                            borderColor={(theme) =>
+                                theme.palette.border.lightGray
+                            }
+                        >
+                            <Box
+                                display='flex'
+                                flexDirection='row'
+                                justifyContent='center'
+                                alignItems={'center'}
+                            >
+                                <IconButton
+                                    sx={{
+                                        ':disabled': {
+                                            backgroundColor: (theme) =>
+                                                theme?.palette?.iconButton
+                                                    ?.error_50,
+                                        },
+                                        width: '100px',
+                                        height: '100px',
+                                    }}
+                                    disabled
+                                >
+                                    <IconExclamation
+                                        width='54px'
+                                        height='54px'
+                                        fill={
+                                            theme?.palette?.iconButton
+                                                ?.error_200
+                                        }
+                                    />
+                                </IconButton>
+                            </Box>
+                            <Typography
+                                id='url-error-modal-title'
+                                data-testid='url-error-modal-title'
+                                mt={2}
+                                color={(theme) => theme.palette.text.darkPurple}
+                                variant='h5'
+                                component={'h5'}
+                            >
+                                Username Unavailable
+                            </Typography>
+                            <Typography
+                                id='url-error-modal-description'
+                                data-testid='url-error-modal-description'
+                                mt={2}
+                                color={(theme) => theme.palette.text.darkPurple}
+                                variant='body1'
+                                component={'p'}
+                            >
+                                The username you entered is already taken.
+                                Please choose a different one.
+                            </Typography>
+                        </Box>
+                        <Box m={2}>
+                            <Button
+                                data-testid='close-button'
+                                variant='contained'
+                                fullWidth
+                                onClick={() => setStep(1)}
+                            >
+                                Enter a new username
                             </Button>
                         </Box>
                     </>
