@@ -35,11 +35,40 @@ const UsernameModal = ({ open, handleClose: close }) => {
     const { setUser, setOpenUsernameModal } = useAppContext();
     const [username, setUsername] = useState('');
     const [step, setStep] = useState(1);
+    const [usernameError, setUsernameError] = useState('');
+
+    const validateUsername = (username) => {
+        if (username === '') {
+            setUsernameError('');
+            return;
+        }
+
+        const usernamePattern = /^[a-z0-9._]{1,30}$/;
+        const invalidStartPattern = /^[._]/;
+
+        if (
+            !usernamePattern.test(username) ||
+            invalidStartPattern.test(username)
+        ) {
+            setUsernameError(
+                'Invalid username. Only lower case letters, numbers, underscores, and periods are allowed. Username must be between 1 and 30 characters and cannot start with a period or underscore.'
+            );
+        } else {
+            setUsernameError('');
+        }
+    };
+
+    const handleUsernameChange = (e) => {
+        const value = e.target.value.trim();
+        setUsername(value);
+        validateUsername(value);
+    };
 
     const handleClose = (setFnToNUll = true) => {
         close();
         setStep(1);
         setUsername('');
+        setUsernameError('');
         setFnToNUll
             ? setOpenUsernameModal((prev) => ({
                   ...prev,
@@ -125,17 +154,19 @@ const UsernameModal = ({ open, handleClose: close }) => {
                             }}
                             fullWidth
                             value={username || ''}
-                            onChange={(e) => setUsername(e.target.value)}
+                            onChange={(e) => handleUsernameChange(e)}
                             required
                             inputProps={{
                                 'data-testid': 'username-input',
                             }}
+                            error={Boolean(usernameError)}
+                            helperText={usernameError}
                         />
                         <Button
                             data-testid='proceed-button'
                             variant='contained'
                             fullWidth
-                            disabled={!username}
+                            disabled={usernameError.length > 0}
                             onClick={handleNext}
                         >
                             Proceed with this username
