@@ -176,10 +176,17 @@ const SingleGovernanceAction = ({ id }) => {
         try {
             const response = await getSingleProposal(id);
             if (!response) return;
+
+            if (response?.attributes?.content?.attributes?.is_draft) {
+                return navigate('/proposal_discussion');
+            }
             setProposal(response);
         } catch (error) {
             if (
-                error?.response?.data?.error?.details === 'Proposal not found'
+                error?.response?.data?.error?.details ===
+                    'Proposal not found' ||
+                error?.response?.data?.error?.details ===
+                    'You can not access draft proposal details.'
             ) {
                 return navigate('/proposal_discussion');
             }
@@ -370,7 +377,8 @@ const SingleGovernanceAction = ({ id }) => {
         }
     }, [commentsSortType]);
 
-    return (
+    return !proposal ? null : proposal?.attributes?.content?.attributes
+          ?.is_draft ? null : (
         <>
             {openEditDialog ? (
                 <EditProposalDialog
