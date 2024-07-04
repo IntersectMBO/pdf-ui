@@ -22,6 +22,7 @@ const GlobalWrapper = ({ ...props }) => {
         setOpenUsernameModal,
         setValidateMetadata,
         user,
+        clearStates,
     } = useAppContext();
     const [mounted, setMounted] = useState(false);
 
@@ -30,12 +31,6 @@ const GlobalWrapper = ({ ...props }) => {
         locale: GovToolAssemblyLocale,
         validateMetadata: GovToolAssemblyValidateMetadata,
     } = props;
-
-    const clearStates = () => {
-        setWalletAPI(null);
-        setUser(null);
-        setValidateMetadata(null);
-    };
 
     function getProposalID(url) {
         const parts = url.split('/');
@@ -51,11 +46,15 @@ const GlobalWrapper = ({ ...props }) => {
     const handleLogin = async (trigerSignData) => {
         if (GovToolAssemblyWalletAPI?.address) {
             setWalletAPI(GovToolAssemblyWalletAPI);
+            if (GovToolAssemblyValidateMetadata) {
+                setValidateMetadata(() => GovToolAssemblyValidateMetadata);
+            }
             await loginUserToApp({
                 wallet: GovToolAssemblyWalletAPI,
                 setUser: setUser,
                 setOpenUsernameModal: setOpenUsernameModal,
                 trigerSignData: trigerSignData ? true : false,
+                clearStates: clearStates,
             });
         } else {
             if (
@@ -71,7 +70,7 @@ const GlobalWrapper = ({ ...props }) => {
         if (GovToolAssemblyValidateMetadata) {
             setValidateMetadata(() => GovToolAssemblyValidateMetadata);
         }
-    }, [GovToolAssemblyValidateMetadata, setValidateMetadata]);
+    }, [GovToolAssemblyValidateMetadata]);
 
     useEffect(() => {
         if (!mounted) {

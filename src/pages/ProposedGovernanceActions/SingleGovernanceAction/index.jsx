@@ -62,8 +62,14 @@ import { loginUserToApp } from '../../../lib/helpers';
 const SingleGovernanceAction = ({ id }) => {
     const MAX_COMMENT_LENGTH = 256;
     const navigate = useNavigate();
-    const { user, setLoading, setOpenUsernameModal, setUser, walletAPI } =
-        useAppContext();
+    const {
+        user,
+        setLoading,
+        setOpenUsernameModal,
+        setUser,
+        walletAPI,
+        clearStates,
+    } = useAppContext();
 
     const theme = useTheme();
     const [proposal, setProposal] = useState(null);
@@ -568,6 +574,8 @@ const SingleGovernanceAction = ({ id }) => {
                                                                 setOpenGASubmissionDialog(
                                                                     true
                                                                 ),
+                                                            clearStates:
+                                                                clearStates,
                                                         })
                                                     }
                                                 >
