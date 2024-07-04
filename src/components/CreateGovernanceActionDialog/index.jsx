@@ -17,7 +17,7 @@ import {
     DraftSuccessfulModal,
 } from '../CreationGoveranceAction';
 import { useAppContext } from '../../context/context';
-import { createProposal } from '../../lib/api';
+import { createProposal, deleteProposal } from '../../lib/api';
 import CreateGA2 from '../../assets/svg/CreateGA2.js';
 
 const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
@@ -33,10 +33,22 @@ const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
     const [isContinueDisabled, setIsContinueDisabled] = useState(true);
     const [showDraftSuccessfulModal, setShowDraftSuccessfulModal] =
         useState(false);
+    const [selectedDraftId, setSelectedDraftId] = useState(null);
 
     const isSmallScreen = useMediaQuery((theme) =>
         theme.breakpoints.down('sm')
     );
+
+    const handleDeleteProposal = async () => {
+        setLoading(true);
+        try {
+            await deleteProposal(selectedDraftId);
+        } catch (error) {
+            console.error('Failed to delete proposal:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // Define handleIsContinueDisabled using useCallback
     const handleIsContinueDisabled = useCallback(() => {
@@ -88,6 +100,10 @@ const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
                         navigate(
                             `/proposal_discussion/${data?.attributes?.proposal_id}`
                         );
+                    }
+
+                    if (selectedDraftId) {
+                        handleDeleteProposal();
                     }
                 }
 
@@ -163,6 +179,7 @@ const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
                                     setStep={setStep}
                                     setProposalData={setProposalData}
                                     onClose={onClose}
+                                    setSelectedDraftId={setSelectedDraftId}
                                 />
                             )}
 
@@ -180,6 +197,7 @@ const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
                                     }
                                     isSmallScreen={isSmallScreen}
                                     isContinueDisabled={isContinueDisabled}
+                                    selectedDraftId={selectedDraftId}
                                 />
                             )}
 
@@ -213,6 +231,7 @@ const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
             <DraftSuccessfulModal
                 open={showDraftSuccessfulModal}
                 onClose={() => setShowDraftSuccessfulModal(false)}
+                closeCreateGADialog={onClose}
             />
         </Dialog>
     );

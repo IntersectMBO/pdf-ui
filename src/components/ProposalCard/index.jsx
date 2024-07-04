@@ -31,7 +31,11 @@ import { formatIsoDate } from '../../lib/utils';
 import EditProposalDialog from '../EditProposalDialog';
 import ReactMarkdown from 'react-markdown';
 
-const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
+const ProposalCard = ({
+    proposal,
+    startEdittinButtonClick = false,
+    setShouldRefresh = false,
+}) => {
     const { user } = useAppContext();
     const navigate = useNavigate();
     const theme = useTheme();
@@ -538,6 +542,7 @@ const ProposalCard = ({ proposal, startEdittinButtonClick = false }) => {
                     onUpdate={() =>
                         navigate(`/proposal_discussion/${proposal?.id}`)
                     }
+                    setShouldRefresh={setShouldRefresh}
                 />
             )}
         </Box>

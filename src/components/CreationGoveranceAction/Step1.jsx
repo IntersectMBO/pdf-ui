@@ -13,7 +13,7 @@ import { ProposalsList } from '..';
 import { getProposals } from '../../lib/api';
 import { useEffect, useState } from 'react';
 
-const Step1 = ({ setStep, setProposalData, onClose }) => {
+const Step1 = ({ setStep, setProposalData, onClose, setSelectedDraftId }) => {
     const [draftsEnabled, setDraftsEnabled] = useState(false);
     const [mounted, setMounted] = useState(false);
 
@@ -215,6 +215,7 @@ const Step1 = ({ setStep, setProposalData, onClose }) => {
                         setProposalData(
                             proposal?.attributes?.content?.attributes
                         );
+                        setSelectedDraftId(proposal?.id);
                     }}
                     statusList={[]}
                 />

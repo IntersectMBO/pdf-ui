@@ -40,6 +40,7 @@ const ProposalsList = ({
     const [currentPage, setCurrentPage] = useState(1);
     const [mounted, setMounted] = useState(false);
     const debouncedSearchValue = useDebounce(searchText);
+    const [shouldRefresh, setShouldRefresh] = useState(false);
 
     const fetchProposals = async (reset = true, page) => {
         const haveSubmittedFilter = statusList?.some(
@@ -100,6 +101,13 @@ const ProposalsList = ({
         isDraft ? null : statusList,
         showAllActivated,
     ]);
+
+    useEffect(() => {
+        if (shouldRefresh) {
+            fetchProposals(true, 1);
+            setShouldRefresh(false);
+        }
+    }, [shouldRefresh]);
 
     return isDraft && proposalsList?.length === 0 ? null : (
         <Box overflow={'visible'}>
@@ -179,6 +187,7 @@ const ProposalsList = ({
                                         startEdittinButtonClick={
                                             startEdittinButtonClick
                                         }
+                                        setShouldRefresh={setShouldRefresh}
                                     />
                                 </Grid>
                             ))}
@@ -211,6 +220,7 @@ const ProposalsList = ({
                                         startEdittinButtonClick={
                                             startEdittinButtonClick
                                         }
+                                        setShouldRefresh={setShouldRefresh}
                                     />
                                 </Box>
                             ))}
