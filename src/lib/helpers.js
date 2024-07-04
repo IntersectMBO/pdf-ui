@@ -1,5 +1,10 @@
 import { loginUser, getLoggedInUserInfo } from '../lib/api';
-import { saveDataInSession, getDataFromSession, utf8ToHex } from '../lib/utils';
+import {
+    saveDataInSession,
+    getDataFromSession,
+    utf8ToHex,
+    clearSession,
+} from '../lib/utils';
 
 export const loginUserToApp = async ({
     wallet,
@@ -7,6 +12,7 @@ export const loginUserToApp = async ({
     setOpenUsernameModal,
     callBackFn,
     trigerSignData = true,
+    clearStates,
 }) => {
     try {
         if (getDataFromSession('pdfUserJwt')) {
@@ -65,5 +71,7 @@ export const loginUserToApp = async ({
         }
     } catch (error) {
         console.error(error);
+        clearStates();
+        clearSession();
     }
 };

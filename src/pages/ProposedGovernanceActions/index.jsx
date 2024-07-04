@@ -31,7 +31,8 @@ import { loginUserToApp } from '../../lib/helpers';
 
 const ProposedGovernanceActions = () => {
     const theme = useTheme();
-    const { walletAPI, setOpenUsernameModal, setUser } = useAppContext();
+    const { walletAPI, setOpenUsernameModal, setUser, clearStates } =
+        useAppContext();
     const [proposalSearchText, setProposalSearchText] = useState('');
     const [sortType, setSortType] = useState('desc');
     const [governanceActionTypeList, setGovernanceActionTypeList] = useState(
@@ -181,6 +182,7 @@ const ProposedGovernanceActions = () => {
                                                 setOpenUsernameModal,
                                             callBackFn: () =>
                                                 setShowCreateGADialog(true),
+                                            clearStates: clearStates,
                                         })
                                     }
                                     startIcon={<IconPlusCircle fill='white' />}

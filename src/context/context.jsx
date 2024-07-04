@@ -13,6 +13,12 @@ export function AppContextProvider({ children }) {
         callBackFn: () => {},
     });
 
+    const clearStates = () => {
+        setWalletAPI(null);
+        setUser(null);
+        setValidateMetadata(null);
+    };
+
     return (
         <AppContext.Provider
             value={{
@@ -28,6 +34,7 @@ export function AppContextProvider({ children }) {
                 setOpenUsernameModal,
                 validateMetadata,
                 setValidateMetadata,
+                clearStates,
             }}
         >
             {children}
