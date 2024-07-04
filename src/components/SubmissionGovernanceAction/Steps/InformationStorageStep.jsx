@@ -139,10 +139,10 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                 }
             }
         } catch (error) {
-            if (error.includes('Insufficient')) {
+            console.error(error);
+            if (error?.includes('Insufficient')) {
                 setShowInsufficientBallanceModal(true);
             }
-            console.error(error);
         } finally {
             setCheckingDataModal(false);
         }
