@@ -93,7 +93,13 @@ const ProposalsList = ({
             fetchProposals(true, 1);
             setCurrentPage(1);
         }
-    }, [mounted, debouncedSearchValue, sortType, statusList]);
+    }, [
+        mounted,
+        debouncedSearchValue,
+        sortType,
+        isDraft ? null : statusList,
+        showAllActivated,
+    ]);
 
     return isDraft && proposalsList?.length === 0 ? null : (
         <Box overflow={'visible'}>
@@ -131,7 +137,13 @@ const ProposalsList = ({
                                 }}
                                 data-testid='show-all-button'
                             >
-                                {showAll ? 'Show less' : 'Show all'}
+                                {setShowAllActivated
+                                    ? setShowAllActivated?.is_activated
+                                        ? 'Show less'
+                                        : 'Show all'
+                                    : showAll
+                                      ? 'Show less'
+                                      : 'Show all'}
                             </Button>
                         )}
                 </Box>
@@ -155,7 +167,9 @@ const ProposalsList = ({
                     )}
             </Box>
             {proposalsList?.length > 0 ? (
-                showAll ? (
+                (
+                    showAllActivated ? showAllActivated?.is_activated : showAll
+                ) ? (
                     <Box>
                         <Grid container spacing={4} paddingY={4}>
                             {proposalsList?.map((proposal, index) => (
