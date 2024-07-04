@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { UsernameModal } from '../components';
 import { useAppContext } from '../context/context';
-import { clearSession } from '../lib/utils';
+import { clearSession, getDataFromSession } from '../lib/utils';
 import {
     ProposedGovernanceActions,
     SingleGovernanceAction,
@@ -58,8 +58,13 @@ const GlobalWrapper = ({ ...props }) => {
                 trigerSignData: trigerSignData ? true : false,
             });
         } else {
-            clearStates();
-            clearSession();
+            if (
+                !GovToolAssemblyWalletAPI?.isEnabled &&
+                getDataFromSession('pdfUserJwt')
+            ) {
+                clearStates();
+                clearSession();
+            }
         }
     };
     useEffect(() => {
