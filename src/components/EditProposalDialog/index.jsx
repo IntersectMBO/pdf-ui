@@ -58,6 +58,7 @@ const EditProposalDialog = ({
     setMounted,
     maxLength = 256,
     onUpdate = false,
+    setShouldRefresh = false,
 }) => {
     const navigate = useNavigate();
     const { setLoading } = useAppContext();
@@ -960,6 +961,9 @@ const EditProposalDialog = ({
                     onClose={() => {
                         handleCloseEditDialog();
                         navigate('/proposal_discussion');
+                        if (setShouldRefresh) {
+                            setShouldRefresh(true);
+                        }
                     }}
                 >
                     <Box sx={style}>
@@ -987,6 +991,9 @@ const EditProposalDialog = ({
                                         setOpenDeleteConfirmationModal(false);
                                         handleCloseEditDialog();
                                         navigate('/proposal_discussion');
+                                        if (setShouldRefresh) {
+                                            setShouldRefresh(true);
+                                        }
                                     }}
                                 >
                                     <IconX width='24px' height='24px' />
@@ -1007,6 +1014,9 @@ const EditProposalDialog = ({
                                     setOpenDeleteConfirmationModal(false);
                                     handleCloseEditDialog();
                                     navigate('/proposal_discussion');
+                                    if (setShouldRefresh) {
+                                        setShouldRefresh(true);
+                                    }
                                 }}
                             >
                                 Go to Proposal Discussion

@@ -1,10 +1,8 @@
 import React from 'react';
 
 import { Modal, Box, Typography, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 
-const DraftSuccessfulModal = ({ open, onClose }) => {
-    const navigate = useNavigate();
+const DraftSuccessfulModal = ({ open, onClose, closeCreateGADialog }) => {
     return (
         <Modal
             open={open}
@@ -52,7 +50,7 @@ const DraftSuccessfulModal = ({ open, onClose }) => {
                         }}
                         onClick={() => {
                             onClose();
-                            navigate(`/proposal_discussion`);
+                            closeCreateGADialog();
                         }}
                         data-testid='delete-proposal-yes-button'
                     >
