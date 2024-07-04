@@ -28,11 +28,9 @@ import { ProposalsList, CreateGovernanceActionDialog } from '../../components';
 import { getGovernanceActionTypes } from '../../lib/api';
 import { useAppContext } from '../../context/context';
 import { loginUserToApp } from '../../lib/helpers';
-import { useNavigate } from 'react-router-dom';
 
 const ProposedGovernanceActions = () => {
     const theme = useTheme();
-    const navigate = useNavigate();
     const { walletAPI, setOpenUsernameModal, setUser } = useAppContext();
     const [proposalSearchText, setProposalSearchText] = useState('');
     const [sortType, setSortType] = useState('desc');
@@ -158,11 +156,12 @@ const ProposedGovernanceActions = () => {
                                             fill={theme?.palette?.primary?.main}
                                         />
                                     }
-                                    onClick={() =>
-                                        navigate('/proposal_discussion', {
-                                            replace: true,
-                                        })
-                                    }
+                                    onClick={() => {
+                                        setShowAllActivated({
+                                            is_activated: false,
+                                            gov_action_type: null,
+                                        });
+                                    }}
                                     data-testid='back-to-proposal-discussion-button'
                                 >
                                     Back to Proposal Discussion
