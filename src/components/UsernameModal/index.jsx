@@ -161,6 +161,9 @@ const UsernameModal = ({ open, handleClose: close }) => {
                             }}
                             error={Boolean(usernameError)}
                             helperText={usernameError}
+                            FormHelperTextProps={{
+                                'data-testid': 'username-error-text',
+                            }}
                         />
                         <Button
                             data-testid='proceed-button'
