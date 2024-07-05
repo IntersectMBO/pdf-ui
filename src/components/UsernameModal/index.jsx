@@ -319,8 +319,8 @@ const UsernameModal = ({ open, handleClose: close }) => {
                                 </IconButton>
                             </Box>
                             <Typography
-                                id='url-error-modal-title'
-                                data-testid='url-error-modal-title'
+                                id='username-unavailable-title'
+                                data-testid='username-unavailable-title'
                                 mt={2}
                                 color={(theme) => theme.palette.text.darkPurple}
                                 variant='h5'
@@ -329,8 +329,8 @@ const UsernameModal = ({ open, handleClose: close }) => {
                                 Username Unavailable
                             </Typography>
                             <Typography
-                                id='url-error-modal-description'
-                                data-testid='url-error-modal-description'
+                                id='username-unavailable-description'
+                                data-testid='username-unavailable-description'
                                 mt={2}
                                 color={(theme) => theme.palette.text.darkPurple}
                                 variant='body1'
@@ -342,7 +342,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
                         </Box>
                         <Box m={2}>
                             <Button
-                                data-testid='close-button'
+                                data-testid='enter-new-username-button'
                                 variant='contained'
                                 fullWidth
                                 onClick={() => setStep(1)}
