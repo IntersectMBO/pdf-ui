@@ -9,6 +9,7 @@ import {
     CardContent,
     Typography,
     TextField,
+    IconButton,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../../context/context';
@@ -21,8 +22,16 @@ import {
     InsufficientBallanceModal,
 } from '../../../components/SubmissionGovernanceAction';
 import { updateProposalContent } from '../../../lib/api';
+import {
+    isValidURLFormat,
+    isValidURLLength,
+    openInNewTab,
+} from '../../../lib/utils';
+import { IconExternalLink } from '@intersect.mbo/intersectmbo.org-icons-set';
+import { useTheme } from '@emotion/react';
 
 const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
+    const theme = useTheme();
     const navigate = useNavigate();
     const { walletAPI, validateMetadata } = useAppContext();
     const [jsonLdData, setJsonLdData] = useState({});
@@ -42,6 +51,33 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
 
     const [showInsufficientBallanceModal, setShowInsufficientBallanceModal] =
         useState(false);
+
+    const [urlError, setUrlError] = useState('');
+
+    const handleURLChange = (url) => {
+        setFileURL(url);
+
+        if (!url?.length) {
+            return setUrlError('');
+        }
+
+        let errorMessage = '';
+
+        if (!isValidURLFormat(url)) {
+            errorMessage = 'Invalid URL';
+        } else {
+            const lengthValidation = isValidURLLength(url);
+            if (lengthValidation !== true) {
+                errorMessage = lengthValidation;
+            }
+        }
+
+        setUrlError(errorMessage);
+    };
+    const openGuideAboutStoringInformation = () =>
+        openInNewTab(
+            'https://docs.sanchogov.tools/faqs/how-to-create-a-metadata-anchor'
+        );
 
     const handleCreateGAJsonLD = async () => {
         const referencesList = [];
@@ -190,6 +226,18 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                                 md: 5,
                                 lg: 15,
                             },
+                            mt: {
+                                xs: 0,
+                                sm: 2,
+                                md: 2,
+                                lg: 3,
+                            },
+                            mb: {
+                                xs: 0,
+                                sm: 2,
+                                md: 2,
+                                lg: 3,
+                            },
                         }}
                     >
                         <Box
@@ -200,19 +248,27 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                             flexDirection={'column'}
                             alignItems={'center'}
                         >
-                            <Typography
-                                variant='h4'
-                                component={'h2'}
-                                gutterBottom
-                            >
+                            <Typography variant='h4' component={'h2'}>
                                 Information Storage Steps
                             </Typography>
 
-                            {/* <Button variant='text' size='small'>
-                                Read full guide
-                            </Button> */}
+                            <Button
+                                variant='text'
+                                endIcon={
+                                    <IconExternalLink
+                                        width={20}
+                                        height={20}
+                                        fill={theme.palette.primary.main}
+                                    />
+                                }
+                                onClick={openGuideAboutStoringInformation}
+                            >
+                                <Typography variant='body1'>
+                                    Read full guide
+                                </Typography>
+                            </Button>
 
-                            <Typography variant='body1' gutterBottom>
+                            <Typography variant='body1' textAlign={'center'}>
                                 Download your file, save it to your chosen
                                 location, and enter the URL of that location in
                                 step 3
@@ -226,9 +282,34 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                                 }}
                                 my={2}
                             >
-                                <Typography variant='body1' gutterBottom>
-                                    1. Download this file
-                                </Typography>
+                                <Box
+                                    display={'flex'}
+                                    alignItems={'center'}
+                                    gap={3}
+                                >
+                                    <Box
+                                        sx={{
+                                            alignItems: 'center',
+                                            borderRadius: '100%',
+                                            boxShadow: `2px 2px 20px 0px rgba(47, 98, 220, 0.2)`,
+                                            display: 'flex',
+                                            height: 54,
+                                            justifyContent: 'center',
+                                            width: 54,
+                                        }}
+                                    >
+                                        <Typography
+                                            color='primary'
+                                            variant='h6'
+                                            component={'span'}
+                                        >
+                                            1
+                                        </Typography>
+                                    </Box>
+                                    <Typography variant='body1'>
+                                        Download this file
+                                    </Typography>
+                                </Box>
 
                                 <Button
                                     variant='outlined'
@@ -248,10 +329,36 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                                 }}
                                 mb={2}
                             >
-                                <Typography variant='body1' gutterBottom>
-                                    2. Save this file in a location that
-                                    provides a public URL (ex. github)
-                                </Typography>
+                                <Box
+                                    display={'flex'}
+                                    alignItems={'center'}
+                                    gap={3}
+                                >
+                                    <Box
+                                        sx={{
+                                            alignItems: 'center',
+                                            borderRadius: '100%',
+                                            boxShadow: `2px 2px 20px 0px rgba(47, 98, 220, 0.2)`,
+                                            display: 'flex',
+                                            height: 54,
+                                            justifyContent: 'center',
+                                            width: 54,
+                                        }}
+                                    >
+                                        <Typography
+                                            color='primary'
+                                            variant='h6'
+                                            component={'span'}
+                                            fontWeight={400}
+                                        >
+                                            2
+                                        </Typography>
+                                    </Box>
+                                    <Typography variant='body1'>
+                                        Save this file in a location that
+                                        provides a public URL (ex. github)
+                                    </Typography>
+                                </Box>
                             </Box>
 
                             <Box
@@ -261,19 +368,63 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                                     width: '100%',
                                 }}
                             >
-                                <Typography variant='body1' gutterBottom>
-                                    3. Paste the URL here
-                                </Typography>
-                                <TextField
-                                    fullWidth
-                                    margin='normal'
-                                    label='URL'
-                                    variant='outlined'
-                                    placeholder='URL'
-                                    value={fileURL || ''}
-                                    onChange={(e) => setFileURL(e.target.value)}
-                                    inputProps={{ 'data-testid': 'url-input' }}
-                                />
+                                <Box
+                                    display={'flex'}
+                                    alignItems={'center'}
+                                    gap={3}
+                                >
+                                    <Box
+                                        sx={{
+                                            alignItems: 'center',
+                                            borderRadius: '100%',
+                                            boxShadow: `2px 2px 20px 0px rgba(47, 98, 220, 0.2)`,
+                                            display: 'flex',
+                                            height: 54,
+                                            justifyContent: 'center',
+                                            width: 54,
+                                            minHeight: 54,
+                                            minWidth: 54,
+                                        }}
+                                    >
+                                        <Typography
+                                            color='primary'
+                                            variant='h6'
+                                            component={'span'}
+                                        >
+                                            3
+                                        </Typography>
+                                    </Box>
+                                    <Box
+                                        display={'flex'}
+                                        flexDirection={'column'}
+                                        sx={{ width: '100%' }}
+                                    >
+                                        <Typography variant='body1'>
+                                            Paste the URL here
+                                        </Typography>
+                                        <TextField
+                                            fullWidth
+                                            margin='normal'
+                                            label='URL'
+                                            variant='outlined'
+                                            placeholder='URL'
+                                            value={fileURL || ''}
+                                            inputProps={{
+                                                'data-testid': 'url-input',
+                                            }}
+                                            onChange={(e) =>
+                                                handleURLChange(e.target.value)
+                                            }
+                                            error={!!urlError}
+                                            helperText={urlError || 'Required'}
+                                            required
+                                            sx={{
+                                                mt: 1,
+                                                mb: 0,
+                                            }}
+                                        />
+                                    </Box>
+                                </Box>
                             </Box>
                         </Box>
                         <Box
@@ -294,7 +445,7 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                             <Button
                                 variant='contained'
                                 onClick={handleGASubmission}
-                                disabled={!fileURL}
+                                disabled={!fileURL || urlError?.length > 0}
                                 data-testid='submit-button'
                             >
                                 Submit
