@@ -10,7 +10,11 @@ const InsufficientBallanceModal = ({ open, onClose, buttonOneClick }) => {
     const theme = useTheme();
 
     return (
-        <Modal open={open} onClose={onClose} data-testid='url-error-modal'>
+        <Modal
+            open={open}
+            onClose={onClose}
+            data-testid='insufficient-ballance-error-modal'
+        >
             <Box
                 sx={{
                     position: 'absolute',
@@ -42,7 +46,7 @@ const InsufficientBallanceModal = ({ open, onClose, buttonOneClick }) => {
                     >
                         <IconButton
                             onClick={onClose}
-                            data-testid='url-error-modal-close-button'
+                            data-testid='insufficient-ballance-error-modal-close-button'
                         >
                             <IconX width='24px' height='24px' />
                         </IconButton>
@@ -72,8 +76,8 @@ const InsufficientBallanceModal = ({ open, onClose, buttonOneClick }) => {
                         </IconButton>
                     </Box>
                     <Typography
-                        id='url-error-modal-title'
-                        data-testid='url-error-modal-title'
+                        id='insufficient-ballance-error-modal-title'
+                        data-testid='insufficient-ballance-error-modal-title'
                         mt={2}
                         color={(theme) => theme.palette.text.darkPurple}
                         variant='h5'
@@ -82,8 +86,8 @@ const InsufficientBallanceModal = ({ open, onClose, buttonOneClick }) => {
                         Insufficient Balance
                     </Typography>
                     <Typography
-                        id='url-error-modal-description'
-                        data-testid='url-error-modal-description'
+                        id='insufficient-ballance-error-modal-description'
+                        data-testid='insufficient-ballance-error-modal-description'
                         mt={2}
                         color={(theme) => theme.palette.text.darkPurple}
                         variant='body1'
@@ -102,7 +106,7 @@ const InsufficientBallanceModal = ({ open, onClose, buttonOneClick }) => {
                             borderRadius: '20px',
                         }}
                         onClick={buttonOneClick}
-                        data-testid='url-error-modal-cancel-button'
+                        data-testid='cancel-button'
                     >
                         Cancel
                     </Button>

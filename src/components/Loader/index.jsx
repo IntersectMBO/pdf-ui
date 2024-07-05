@@ -80,6 +80,7 @@ const Loader = () => {
             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 100 }}
             open={loading}
             onClick={() => closeLoader()}
+            data-testid='loader-backdrop'
             // ref={loaderRef}
         >
             <CircularProgress id='loader-progress' size={100} color='inherit' />
