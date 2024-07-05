@@ -18,7 +18,11 @@ const StoreDataStep = ({ setStep }) => {
     const [checked, setChecked] = useState(false);
 
     return (
-        <Box display='flex' flexDirection='column'>
+        <Box
+            display='flex'
+            flexDirection='column'
+            data-testid='store-data-step'
+        >
             <Box>
                 <Card>
                     <CardContent
@@ -74,6 +78,7 @@ const StoreDataStep = ({ setStep }) => {
                                         onChange={(e) =>
                                             setChecked((prev) => !prev)
                                         }
+                                        data-testid='agree-checkbox'
                                     />
                                 }
                                 label={
@@ -96,6 +101,7 @@ const StoreDataStep = ({ setStep }) => {
                                 variant='outlined'
                                 sx={{ float: 'left' }}
                                 onClick={() => navigate(-1)}
+                                data-testid='cancel-button'
                             >
                                 Cancel
                             </Button>
@@ -103,6 +109,7 @@ const StoreDataStep = ({ setStep }) => {
                                 variant='contained'
                                 onClick={() => setStep(2)}
                                 disabled={!checked}
+                                data-testid='continue-button'
                             >
                                 Continue
                             </Button>

@@ -128,7 +128,12 @@ const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
     }, [user]);
 
     return (
-        <Dialog fullScreen open={open} onClose={onClose}>
+        <Dialog
+            fullScreen
+            open={open}
+            onClose={onClose}
+            data-testid='create-governance-action-dialog'
+        >
             <Box
                 sx={{
                     position: 'relative',

@@ -61,7 +61,12 @@ const ReviewVersions = ({ open, onClose, id }) => {
     }, [open]);
 
     return (
-        <Dialog fullScreen open={open} onClose={onClose}>
+        <Dialog
+            fullScreen
+            open={open}
+            onClose={onClose}
+            data-testid='review-versions'
+        >
             {isSmallScreen && openVersionsList ? (
                 <Box>
                     <Box
@@ -99,6 +104,7 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                         setSelectedVersion(version);
                                         handleCloseVersionsList();
                                     }}
+                                    data-testid='review-versions-list-item-button'
                                 >
                                     <ListItemText
                                         primary={
@@ -157,6 +163,7 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                 />
                             }
                             onClick={onClose}
+                            data-testid='review-versions-back'
                         >
                             Back
                         </Button>
@@ -571,6 +578,7 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                                             },
                                                         }}
                                                         onClick={onClose}
+                                                        data-testid='back-button'
                                                     >
                                                         Back to Proposal
                                                     </Button>
@@ -598,6 +606,7 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                         >
                                             <IconButton
                                                 onClick={handleOpenVersionsList}
+                                                data-testid='versions-button'
                                             >
                                                 <IconArchive />
                                             </IconButton>

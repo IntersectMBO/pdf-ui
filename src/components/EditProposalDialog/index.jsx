@@ -243,6 +243,7 @@ const EditProposalDialog = ({
             fullScreen
             open={openEditDialog}
             onClose={handleCloseEditDialog}
+            data-testid='edit-proposal-dialog'
         >
             <Box height={'100%'} position={'relative'}>
                 <Grid

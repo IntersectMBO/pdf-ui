@@ -23,6 +23,7 @@ const ProposalSubmissionDialog = ({
             fullScreen
             open={openEditDialog}
             onClose={handleCloseSubmissionDialog}
+            data-testid='proposal-submission-dialog'
         >
             <Box
                 sx={{
@@ -57,6 +58,7 @@ const ProposalSubmissionDialog = ({
                             />
                         }
                         onClick={() => navigate(`/proposal_discussion`)}
+                        data-testid='back-button'
                     >
                         Show all
                     </Button>

@@ -169,7 +169,11 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
     }, [walletAPI, proposal]);
 
     return (
-        <Box display='flex' flexDirection='column'>
+        <Box
+            display='flex'
+            flexDirection='column'
+            data-testid='information-storage-step'
+        >
             <Box>
                 <Card>
                     <CardContent
@@ -230,6 +234,7 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                                     variant='outlined'
                                     sx={{ ml: 2 }}
                                     onClick={() => handleDownloadJsonLD()}
+                                    data-testid='download-button'
                                 >
                                     data.jsonld
                                 </Button>
@@ -244,7 +249,7 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                                 mb={2}
                             >
                                 <Typography variant='body1' gutterBottom>
-                                    1. Save this file in a location that
+                                    2. Save this file in a location that
                                     provides a public URL (ex. github)
                                 </Typography>
                             </Box>
@@ -267,6 +272,7 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                                     placeholder='URL'
                                     value={fileURL || ''}
                                     onChange={(e) => setFileURL(e.target.value)}
+                                    inputProps={{ 'data-testid': 'url-input' }}
                                 />
                             </Box>
                         </Box>
@@ -281,6 +287,7 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                                 variant='outlined'
                                 sx={{ float: 'left' }}
                                 onClick={() => navigate(-1)}
+                                data-testid='cancel-button'
                             >
                                 Cancel
                             </Button>
@@ -288,6 +295,7 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                                 variant='contained'
                                 onClick={handleGASubmission}
                                 disabled={!fileURL}
+                                data-testid='submit-button'
                             >
                                 Submit
                             </Button>
