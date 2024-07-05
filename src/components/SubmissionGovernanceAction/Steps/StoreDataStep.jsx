@@ -12,10 +12,12 @@ import {
     Checkbox,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { openInNewTab } from '../../../lib/utils';
 
 const StoreDataStep = ({ setStep }) => {
     const navigate = useNavigate();
     const [checked, setChecked] = useState(false);
+    const openLink = () => openInNewTab('https://docs.sanchogov.tools');
 
     return (
         <Box
@@ -39,6 +41,18 @@ const StoreDataStep = ({ setStep }) => {
                                 md: 5,
                                 lg: 15,
                             },
+                            mt: {
+                                xs: 0,
+                                sm: 2,
+                                md: 2,
+                                lg: 4,
+                            },
+                            mb: {
+                                xs: 0,
+                                sm: 2,
+                                md: 2,
+                                lg: 4,
+                            },
                         }}
                     >
                         <Box
@@ -57,24 +71,27 @@ const StoreDataStep = ({ setStep }) => {
                                 Store and Maintain the Data Yourself
                             </Typography>
 
-                            <Button variant='text' sx={{ mt: 2 }}>
+                            <Button
+                                variant='text'
+                                sx={{ mt: 2 }}
+                                onClick={openLink}
+                            >
                                 Learn more about storing information
                             </Button>
 
                             <FormControlLabel
                                 id='registration-label1'
                                 sx={{
-                                    mt: 2,
-                                    alignItems: 'flex-start',
+                                    my: 2,
+                                    mx: 0,
+                                    alignItems: 'center',
+                                    width: '100%',
                                 }}
                                 control={
                                     <Checkbox
                                         id='submission-checkbox'
                                         name='agreeTerms'
                                         color='primary'
-                                        sx={{
-                                            pt: 0,
-                                        }}
                                         onChange={(e) =>
                                             setChecked((prev) => !prev)
                                         }
@@ -82,7 +99,10 @@ const StoreDataStep = ({ setStep }) => {
                                     />
                                 }
                                 label={
-                                    <Typography variant='caption'>
+                                    <Typography
+                                        variant='caption'
+                                        sx={{ ml: 0.5 }}
+                                    >
                                         I agree to store correctly this
                                         information and to maintain them over
                                         the years
