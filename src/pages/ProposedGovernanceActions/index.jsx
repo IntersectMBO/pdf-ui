@@ -28,8 +28,10 @@ import { ProposalsList, CreateGovernanceActionDialog } from '../../components';
 import { getGovernanceActionTypes } from '../../lib/api';
 import { useAppContext } from '../../context/context';
 import { loginUserToApp } from '../../lib/helpers';
+import { useLocation } from 'react-router-dom';
 
 const ProposedGovernanceActions = () => {
+    const location = useLocation();
     const theme = useTheme();
     const { walletAPI, setOpenUsernameModal, setUser, clearStates } =
         useAppContext();
@@ -129,6 +131,12 @@ const ProposedGovernanceActions = () => {
             setFilteredGovernanceActionTypeList([]);
         }
     }, [showAllActivated]);
+
+    useEffect(() => {
+        if (location.pathname.includes('propose')) {
+            setShowCreateGADialog(true);
+        }
+    }, [location.pathname]);
 
     return (
         <Box sx={{ mt: 3 }}>

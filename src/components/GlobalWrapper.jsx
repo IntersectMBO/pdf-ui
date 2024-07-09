@@ -90,7 +90,12 @@ const GlobalWrapper = ({ ...props }) => {
         if (!user && GovToolAssemblyWalletAPI?.address) {
             return <IdentificationPage handleLogin={handleLogin} />;
         } else {
-            if (path.includes('proposal_discussion/') && getProposalID(path)) {
+            if (path.includes('propose')) {
+                return <ProposedGovernanceActions />;
+            } else if (
+                path.includes('proposal_discussion/') &&
+                getProposalID(path)
+            ) {
                 return <SingleGovernanceAction id={getProposalID(path)} />;
             } else if (path.includes('proposal_discussion')) {
                 return <ProposedGovernanceActions />;

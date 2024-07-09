@@ -19,8 +19,10 @@ import {
 import { useAppContext } from '../../context/context';
 import { createProposal, deleteProposal } from '../../lib/api';
 import CreateGA2 from '../../assets/svg/CreateGA2.js';
+import { useLocation } from 'react-router-dom';
 
 const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
+    const location = useLocation();
     const navigate = useNavigate();
     const theme = useTheme();
     const { user, setLoading } = useAppContext();
@@ -164,7 +166,12 @@ const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
                                     fill={theme.palette.primary.main}
                                 />
                             }
-                            onClick={onClose}
+                            onClick={() => {
+                                onClose();
+                                if (location.pathname.includes('propose')) {
+                                    navigate('/proposal_discussion');
+                                }
+                            }}
                             data-testid='show-all-button'
                         >
                             Show all
@@ -183,7 +190,16 @@ const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
                                 <Step1
                                     setStep={setStep}
                                     setProposalData={setProposalData}
-                                    onClose={onClose}
+                                    onClose={() => {
+                                        onClose();
+                                        if (
+                                            location.pathname.includes(
+                                                'propose'
+                                            )
+                                        ) {
+                                            navigate('/proposal_discussion');
+                                        }
+                                    }}
                                     setSelectedDraftId={setSelectedDraftId}
                                 />
                             )}
