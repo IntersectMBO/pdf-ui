@@ -169,7 +169,11 @@ const UsernameModal = ({ open, handleClose: close }) => {
                             data-testid='proceed-button'
                             variant='contained'
                             fullWidth
-                            disabled={usernameError.length > 0}
+                            disabled={
+                                username?.length > 0 && username?.length <= 30
+                                    ? false
+                                    : true
+                            }
                             onClick={handleNext}
                         >
                             Proceed with this username
