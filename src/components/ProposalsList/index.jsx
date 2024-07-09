@@ -14,6 +14,7 @@ import {
     Stack,
     Typography,
     alpha,
+    useMediaQuery,
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import Slider from 'react-slick';
@@ -21,6 +22,7 @@ import { ProposalCard } from '..';
 import { useDebounce } from '../..//lib/hooks';
 import { getProposals } from '../../lib/api';
 import { settings } from '../../lib/carouselSettings';
+import { useTheme } from '@emotion/react';
 
 const ProposalsList = ({
     governanceAction,
@@ -32,6 +34,7 @@ const ProposalsList = ({
     setShowAllActivated = false,
     showAllActivated = false,
 }) => {
+    const theme = useTheme();
     const sliderRef = useRef(null);
 
     const [showAll, setShowAll] = useState(false);
@@ -41,6 +44,28 @@ const ProposalsList = ({
     const [mounted, setMounted] = useState(false);
     const debouncedSearchValue = useDebounce(searchText);
     const [shouldRefresh, setShouldRefresh] = useState(false);
+    const isXs = useMediaQuery(theme.breakpoints.only('xs'));
+    const isSm = useMediaQuery(theme.breakpoints.only('sm'));
+    const isMd = useMediaQuery(theme.breakpoints.only('md'));
+    const isLg = useMediaQuery(theme.breakpoints.only('lg'));
+
+    let extraBoxes = 0;
+
+    if (isXs) {
+        extraBoxes = 0;
+    } else if (isSm) {
+        extraBoxes = 1;
+    } else if (isMd) {
+        extraBoxes = 2;
+    } else if (isLg) {
+        extraBoxes = 2;
+    } else {
+        extraBoxes = 2;
+    }
+
+    const boxesToRender = Array.from({ length: extraBoxes }, (_, index) => (
+        <Box key={`extra-${index}`} height={'100%'} />
+    ));
 
     const fetchProposals = async (reset = true, page) => {
         const haveSubmittedFilter = statusList?.some(
@@ -225,10 +250,7 @@ const ProposalsList = ({
                                 </Box>
                             ))}
 
-                            <Box></Box>
-                            <Box></Box>
-                            <Box></Box>
-                            <Box></Box>
+                            {boxesToRender}
                         </Slider>
                     </Box>
                 )
