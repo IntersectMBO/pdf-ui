@@ -1209,31 +1209,41 @@ const SingleGovernanceAction = ({ id }) => {
                                                             ?.prop_submitted
                                                             ? null
                                                             : user
-                                                              ? user?.user?.id?.toString() ===
-                                                                proposal?.attributes?.user_id?.toString()
-                                                                  ? null
-                                                                  : userProposalVote
-                                                                    ? userProposalVote
-                                                                          ?.attributes
-                                                                          ?.vote_result ===
-                                                                      null
-                                                                        ? null
-                                                                        : () =>
-                                                                              updateLikesOrDislikes(
-                                                                                  {
-                                                                                      like: true,
-                                                                                      loggedInUser:
-                                                                                          user,
-                                                                                  }
-                                                                              )
-                                                                    : () =>
-                                                                          updateLikesOrDislikes(
-                                                                              {
-                                                                                  like: true,
-                                                                                  loggedInUser:
-                                                                                      user,
-                                                                              }
-                                                                          )
+                                                              ? !user?.user
+                                                                    ?.govtool_username
+                                                                  ? () =>
+                                                                        setOpenUsernameModal(
+                                                                            {
+                                                                                open: true,
+                                                                                callBackFn:
+                                                                                    () => {},
+                                                                            }
+                                                                        )
+                                                                  : user?.user?.id?.toString() ===
+                                                                      proposal?.attributes?.user_id?.toString()
+                                                                    ? null
+                                                                    : userProposalVote
+                                                                      ? userProposalVote
+                                                                            ?.attributes
+                                                                            ?.vote_result ===
+                                                                        null
+                                                                          ? null
+                                                                          : () =>
+                                                                                updateLikesOrDislikes(
+                                                                                    {
+                                                                                        like: true,
+                                                                                        loggedInUser:
+                                                                                            user,
+                                                                                    }
+                                                                                )
+                                                                      : () =>
+                                                                            updateLikesOrDislikes(
+                                                                                {
+                                                                                    like: true,
+                                                                                    loggedInUser:
+                                                                                        user,
+                                                                                }
+                                                                            )
                                                               : () =>
                                                                     updateLikesOrDislikes(
                                                                         {
@@ -1368,31 +1378,41 @@ const SingleGovernanceAction = ({ id }) => {
                                                             ?.prop_submitted
                                                             ? null
                                                             : user
-                                                              ? user?.user?.id?.toString() ===
-                                                                proposal?.attributes?.user_id?.toString()
-                                                                  ? null
-                                                                  : userProposalVote
-                                                                    ? userProposalVote
-                                                                          ?.attributes
-                                                                          ?.vote_result ===
-                                                                      null
-                                                                        ? null
-                                                                        : () =>
-                                                                              updateLikesOrDislikes(
-                                                                                  {
-                                                                                      like: false,
-                                                                                      loggedInUser:
-                                                                                          user,
-                                                                                  }
-                                                                              )
-                                                                    : () =>
-                                                                          updateLikesOrDislikes(
-                                                                              {
-                                                                                  like: false,
-                                                                                  loggedInUser:
-                                                                                      user,
-                                                                              }
-                                                                          )
+                                                              ? !user?.user
+                                                                    ?.govtool_username
+                                                                  ? () =>
+                                                                        setOpenUsernameModal(
+                                                                            {
+                                                                                open: true,
+                                                                                callBackFn:
+                                                                                    () => {},
+                                                                            }
+                                                                        )
+                                                                  : user?.user?.id?.toString() ===
+                                                                      proposal?.attributes?.user_id?.toString()
+                                                                    ? null
+                                                                    : userProposalVote
+                                                                      ? userProposalVote
+                                                                            ?.attributes
+                                                                            ?.vote_result ===
+                                                                        null
+                                                                          ? null
+                                                                          : () =>
+                                                                                updateLikesOrDislikes(
+                                                                                    {
+                                                                                        like: false,
+                                                                                        loggedInUser:
+                                                                                            user,
+                                                                                    }
+                                                                                )
+                                                                      : () =>
+                                                                            updateLikesOrDislikes(
+                                                                                {
+                                                                                    like: false,
+                                                                                    loggedInUser:
+                                                                                        user,
+                                                                                }
+                                                                            )
                                                               : () =>
                                                                     updateLikesOrDislikes(
                                                                         {

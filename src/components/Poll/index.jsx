@@ -29,7 +29,7 @@ const Poll = ({
     proposalSubmitted,
     poll,
 }) => {
-    const { user, setLoading } = useAppContext();
+    const { user, setLoading, setOpenUsernameModal } = useAppContext();
     const [userPollVote, setUserPollVote] = useState(null);
     const [showChangeVoteModal, setShowChangeVoteModal] = useState(false);
     const [showClosePollModal, setShowClosePollModal] = useState(false);
@@ -184,14 +184,30 @@ const Poll = ({
                             <Button
                                 variant='outlined'
                                 sx={{ mb: 1 }}
-                                onClick={() => handlePollVote({ vote: true })}
+                                onClick={
+                                    user?.user?.govtool_username
+                                        ? () => handlePollVote({ vote: true })
+                                        : () =>
+                                              setOpenUsernameModal({
+                                                  open: true,
+                                                  callBackFn: () => {},
+                                              })
+                                }
                                 data-testid='poll-yes-button'
                             >
                                 Yes
                             </Button>
                             <Button
                                 variant='outlined'
-                                onClick={() => handlePollVote({ vote: false })}
+                                onClick={
+                                    user?.user?.govtool_username
+                                        ? () => handlePollVote({ vote: false })
+                                        : () =>
+                                              setOpenUsernameModal({
+                                                  open: true,
+                                                  callBackFn: () => {},
+                                              })
+                                }
                                 data-testid='poll-no-button'
                             >
                                 No

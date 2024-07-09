@@ -33,7 +33,7 @@ import { useLocation } from 'react-router-dom';
 const ProposedGovernanceActions = () => {
     const location = useLocation();
     const theme = useTheme();
-    const { walletAPI, setOpenUsernameModal, setUser, clearStates } =
+    const { user, walletAPI, setOpenUsernameModal, setUser, clearStates } =
         useAppContext();
     const [proposalSearchText, setProposalSearchText] = useState('');
     const [sortType, setSortType] = useState('desc');
@@ -134,7 +134,11 @@ const ProposedGovernanceActions = () => {
 
     useEffect(() => {
         if (location.pathname.includes('propose')) {
-            setShowCreateGADialog(true);
+            if (user?.user?.govtool_username) {
+                setShowCreateGADialog(true);
+            } else {
+                setOpenUsernameModal({ open: true, callBackFn: () => {} });
+            }
         }
     }, [location.pathname]);
 
