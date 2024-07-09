@@ -416,6 +416,10 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                                                 handleURLChange(e.target.value)
                                             }
                                             error={!!urlError}
+                                            FormHelperTextProps={{
+                                                'data-testid':
+                                                    'url-input-error-text',
+                                            }}
                                             helperText={urlError || 'Required'}
                                             required
                                             sx={{
