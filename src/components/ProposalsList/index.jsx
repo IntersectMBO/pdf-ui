@@ -21,7 +21,7 @@ import Slider from 'react-slick';
 import { ProposalCard } from '..';
 import { useDebounce } from '../..//lib/hooks';
 import { getProposals } from '../../lib/api';
-import { settings } from '../../lib/carouselSettings';
+import { lg, md, settings, sm, xs } from '../../lib/carouselSettings';
 import { useTheme } from '@emotion/react';
 
 const ProposalsList = ({
@@ -48,6 +48,12 @@ const ProposalsList = ({
     const isSm = useMediaQuery(theme.breakpoints.only('sm'));
     const isMd = useMediaQuery(theme.breakpoints.only('md'));
     const isLg = useMediaQuery(theme.breakpoints.only('lg'));
+    const [disableSliderNext, setDisableSliderNext] = useState(false);
+    const [oldSlide, setOldSlide] = useState(0);
+    const [activeSlide, setActiveSlide] = useState(0);
+    const [activeSlide2, setActiveSlide2] = useState(0);
+    const [sliderAction, setSliderAction] = useState(null);
+    const [totalSlides, setTotalSlides] = useState(0);
 
     let extraBoxes = 0;
 
@@ -134,6 +140,83 @@ const ProposalsList = ({
         }
     }, [shouldRefresh]);
 
+    useEffect(() => {
+        proposalsList?.length &&
+            setDisableSliderNext(
+                isXs
+                    ? proposalsList?.length > 1
+                        ? false
+                        : true
+                    : isSm
+                      ? proposalsList?.length > 1
+                          ? false
+                          : true
+                      : isMd
+                        ? proposalsList?.length > 2
+                            ? false
+                            : true
+                        : isLg
+                          ? proposalsList?.length > 3
+                              ? false
+                              : true
+                          : true
+            );
+        proposalsList?.length &&
+            setTotalSlides(
+                isXs
+                    ? proposalsList?.length > 1
+                        ? Math.round(
+                              proposalsList?.length -
+                                  settings.responsive?.find(
+                                      (bp) => bp.breakpoint === xs
+                                  )?.settings?.slidesToShow
+                          )
+                        : 0
+                    : isSm
+                      ? proposalsList?.length > 1
+                          ? Math.round(
+                                proposalsList?.length -
+                                    settings.responsive?.find(
+                                        (bp) => bp.breakpoint === sm
+                                    )?.settings?.slidesToShow
+                            )
+                          : 0
+                      : isMd
+                        ? proposalsList?.length > 2
+                            ? Math.round(
+                                  proposalsList?.length -
+                                      settings.responsive?.find(
+                                          (bp) => bp.breakpoint === md
+                                      )?.settings?.slidesToShow
+                              )
+                            : 0
+                        : isLg
+                          ? proposalsList?.length > 3
+                              ? Math.round(
+                                    proposalsList?.length -
+                                        settings.responsive?.find(
+                                            (bp) => bp.breakpoint === lg
+                                        )?.settings?.slidesToShow
+                                )
+                              : 0
+                          : 0
+            );
+    }, [proposalsList, isXs, isSm, isMd, isLg]);
+
+    useEffect(() => {
+        if (totalSlides === 0 && activeSlide2 > totalSlides) {
+            if (sliderRef?.current) {
+                sliderRef?.current?.slickPrev();
+            }
+        }
+
+        if (totalSlides === activeSlide2) {
+            setDisableSliderNext(true);
+        } else {
+            setDisableSliderNext(false);
+        }
+    }, [totalSlides, activeSlide2, sliderRef]);
+
     return isDraft && proposalsList?.length === 0 ? null : (
         <Box overflow={'visible'}>
             <Box
@@ -187,12 +270,19 @@ const ProposalsList = ({
                     proposalsList?.length > 0 && (
                         <Box display={'flex'} alignItems={'center'}>
                             <IconButton
-                                onClick={() => sliderRef.current.slickPrev()}
+                                onClick={() => {
+                                    sliderRef.current.slickPrev();
+                                    setSliderAction('prev');
+                                }}
                             >
                                 <IconCheveronLeft width={20} height={20} />
                             </IconButton>
                             <IconButton
-                                onClick={() => sliderRef.current.slickNext()}
+                                onClick={() => {
+                                    sliderRef.current.slickNext();
+                                    setSliderAction('next');
+                                }}
+                                disabled={disableSliderNext}
                             >
                                 <IconCheveronRight width={20} height={20} />
                             </IconButton>
@@ -237,7 +327,23 @@ const ProposalsList = ({
                     </Box>
                 ) : (
                     <Box py={2}>
-                        <Slider ref={sliderRef} {...settings}>
+                        <Slider
+                            ref={sliderRef}
+                            {...settings}
+                            beforeChange={(current, next) => {
+                                setOldSlide(current);
+                                setActiveSlide(next);
+                            }}
+                            afterChange={(current) => {
+                                setActiveSlide2(current);
+                            }}
+                            onReInit={() => {
+                                if (activeSlide < 0) {
+                                    sliderRef.current.slickPrev();
+                                }
+                            }}
+                            waitForAnimate={false}
+                        >
                             {proposalsList?.map((proposal, index) => (
                                 <Box key={index} height={'100%'}>
                                     <ProposalCard
@@ -250,7 +356,7 @@ const ProposalsList = ({
                                 </Box>
                             ))}
 
-                            {boxesToRender}
+                            {/* {boxesToRender} */}
                         </Slider>
                     </Box>
                 )
