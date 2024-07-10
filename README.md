@@ -22,49 +22,79 @@ or
 
 ## Usage
 
-After installation, you can import the component and use it in your project. This is an example of implementing a package in a [NextJs](https://nextjs.org/) application:
+After installation, you can import the component and use it in your project.
 
-```jsx
+#### This is an example of implementing a package in a [NextJs](https://nextjs.org/) application
+
+```tsx
 'use client';
 import dynamic from 'next/dynamic';
-import { useWalletContext } from '@/context/walletProvider';
-import { localePrefix, defaultLocale } from '@/constants';
-import { usePathname } from 'next/navigation';
+import { useValidateMutation } from "@/hooks/mutations";
+import { useCardano, useGovernanceActions } from "@/context";
 
 const ProposalDiscussion = dynamic(() => import('@intersect.mbo/pdf-ui'), {
     ssr: false,
 });
 
-export default function Page({ params: { locale } }) {
-    const pathname = usePathname();
-    const {
-        disableWallet,
-        enableError,
-        enableWallet,
-        isEnableLoading,
-        walletAPI,
-        address,
-        network,
-    } = useWalletContext();
+export default function Page() {
+    const { validateMetadata } = useValidateMutation();
+    const { walletApi, ...context } = useCardano();
+    const { createGovernanceActionJsonLD, createHash } = useGovernanceActions();
 
     return (
         <ProposalDiscussion
-            locale={locale}
-            localePrefix={localePrefix}
-            defaultLocale={defaultLocale}
-            pathname={pathname}
             walletAPI={{
-                disableWallet,
-                enableError,
-                enableWallet,
-                isEnableLoading,
-                address,
-                network,
-                ...walletAPI,
+              ...context,
+              ...walletApi,
+              createGovernanceActionJsonLD,
+              createHash,
             }}
+            pathname={window.location.pathname}
+            validateMetadata={
+              validateMetadata as ComponentProps<
+                typeof ProposalDiscussion
+              >["validateMetadata"]
+            }
         />
     );
 }
+```
+
+
+#### Example of Implementing a Package Using CommonJS Modules (CJS):
+
+```tsx
+import React, { ComponentProps } from "react";
+import "@intersect.mbo/pdf-ui/style";
+import { useCardano, useGovernanceActions } from "@/context";
+import { useValidateMutation } from "@/hooks/mutations";
+
+const ProposalDiscussion = React.lazy(
+  () => import("@intersect.mbo/pdf-ui/cjs"),
+);
+
+export const ProposalDiscussionPillar = () => {
+  const { validateMetadata } = useValidateMutation();
+  const { walletApi, ...context } = useCardano();
+  const { createGovernanceActionJsonLD, createHash } = useGovernanceActions();
+
+  return (
+          <ProposalDiscussion
+            walletAPI={{
+              ...context,
+              ...walletApi,
+              createGovernanceActionJsonLD,
+              createHash,
+            }}
+            pathname={window.location.pathname}
+            validateMetadata={
+              validateMetadata as ComponentProps<
+                typeof ProposalDiscussion
+              >["validateMetadata"]
+            }
+          />
+  )
+};
 ```
 
 ## Project Structure
@@ -72,6 +102,7 @@ export default function Page({ params: { locale } }) {
 ```pdf-ui
 ├── node_modules
 ├── src
+│   ├── assets
 │   ├── components
 │   ├── context
 │   ├── lib
@@ -79,15 +110,18 @@ export default function Page({ params: { locale } }) {
 │   ├── styles
 │   └── App.jsx
 │   └── index.js
+│   └── index.scss
 └── rollup.config.js
 ```
 
+-   **assets/**: The `@intersect.mbo/pdf-ui` assets.
 -   **components/**: The `@intersect.mbo/pdf-ui` components.
 -   **context/**: Context for global application state.
 -   **lib/**: Libraries and helper functions.
 -   **pages/**: Application pages.
 -   **styles/**: SCSS files for styling the application.
 -   **index.js**: Main application file.
+-   **index.scss**: Main application styles file.
 -   **rollup.config.js**: Configuration for the Rollup bundler.
 
 ## Prerequisites
