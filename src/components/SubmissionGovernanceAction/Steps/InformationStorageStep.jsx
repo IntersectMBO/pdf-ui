@@ -417,8 +417,9 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                                             }
                                             error={!!urlError}
                                             FormHelperTextProps={{
-                                                'data-testid':
-                                                    'url-input-error-text',
+                                                'data-testid': urlError
+                                                    ? 'url-input-error-text'
+                                                    : 'required-url-input-text',
                                             }}
                                             helperText={urlError || 'Required'}
                                             required
