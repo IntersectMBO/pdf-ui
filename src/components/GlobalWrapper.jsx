@@ -11,9 +11,11 @@ import {
     IdentificationPage,
 } from '../pages';
 import { loginUserToApp } from '../lib/helpers';
+import { setAxiosBaseURL } from '../lib/axiosInstance'; // Import axiosInstance and setAxiosBaseURL
 
 const GlobalWrapper = ({ ...props }) => {
     const pathname = props?.pathname;
+
     const {
         setWalletAPI,
         setLocale,
@@ -30,6 +32,7 @@ const GlobalWrapper = ({ ...props }) => {
         walletAPI: GovToolAssemblyWalletAPI,
         locale: GovToolAssemblyLocale,
         validateMetadata: GovToolAssemblyValidateMetadata,
+        pdfApiUrl: GovToolAssemblyPdfApiUrl,
     } = props;
 
     function getProposalID(url) {
@@ -85,6 +88,10 @@ const GlobalWrapper = ({ ...props }) => {
             setLocale(GovToolAssemblyLocale);
         }
     }, [GovToolAssemblyLocale]);
+
+    useEffect(() => {
+        setAxiosBaseURL(GovToolAssemblyPdfApiUrl);
+    }, [GovToolAssemblyPdfApiUrl]);
 
     const renderComponentBasedOnPath = (path) => {
         if (!user && GovToolAssemblyWalletAPI?.address) {
