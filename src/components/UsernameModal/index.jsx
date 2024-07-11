@@ -43,7 +43,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
             return;
         }
 
-        const usernamePattern = /^[a-z0-9._]{1,30}$/;
+        const usernamePattern = /^(?=.*[a-z])[a-z0-9._]{1,30}$/;
         const invalidStartPattern = /^[._]/;
 
         if (
@@ -51,7 +51,7 @@ const UsernameModal = ({ open, handleClose: close }) => {
             invalidStartPattern.test(username)
         ) {
             setUsernameError(
-                'Invalid username. Only lower case letters, numbers, underscores, and periods are allowed. Username must be between 1 and 30 characters and cannot start with a period or underscore.'
+                'Invalid username. Only lower case letters, numbers, underscores, and periods are allowed. Username must be between 1 and 30 characters, contain at least one letter and cannot start with a period or underscore.'
             );
         } else {
             setUsernameError('');
@@ -170,7 +170,9 @@ const UsernameModal = ({ open, handleClose: close }) => {
                             variant='contained'
                             fullWidth
                             disabled={
-                                username?.length > 0 && username?.length <= 30
+                                !Boolean(usernameError) &&
+                                username?.length > 0 &&
+                                username?.length <= 30
                                     ? false
                                     : true
                             }
