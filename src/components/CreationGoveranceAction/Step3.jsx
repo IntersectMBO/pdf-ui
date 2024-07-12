@@ -93,8 +93,8 @@ const Step3 = ({
                             {
                                 governanceActionTypes?.find(
                                     (x) =>
-                                        x?.value ===
-                                        proposalData?.gov_action_type_id
+                                        +x?.value ===
+                                        +proposalData?.gov_action_type_id
                                 )?.label
                             }
                         </Typography>

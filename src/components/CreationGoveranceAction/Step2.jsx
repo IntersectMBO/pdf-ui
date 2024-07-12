@@ -23,7 +23,9 @@ const Step2 = ({
 }) => {
     const maxLength = 256;
     const { setLoading } = useAppContext();
-    const [selectedGovActionName, setSelectedGovActionName] = useState('');
+    const [selectedGovActionName, setSelectedGovActionName] = useState(
+        proposalData?.gov_action_type?.attributes?.gov_action_type_name || ''
+    );
 
     const handleChange = (e) => {
         const selectedValue = e.target.value;
