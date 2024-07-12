@@ -539,8 +539,9 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                                                             />
                                                                         </Box>
                                                                         <Typography
-                                                                            variant='body1'
+                                                                            variant='body2'
                                                                             component='span'
+                                                                            data-testid={`link-${index}-text-content`}
                                                                         >
                                                                             {
                                                                                 link?.prop_link_text
