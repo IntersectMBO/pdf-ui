@@ -472,9 +472,11 @@ const EditProposalDialog = ({
                                                 draft?.gov_action_type_id || ''
                                             }
                                             onChange={handleChange}
-                                            inputProps={{
-                                                'data-testid':
-                                                    'governance-action-type',
+                                            SelectProps={{
+                                                SelectDisplayProps: {
+                                                    'data-testid':
+                                                        'governance-action-type',
+                                                },
                                             }}
                                         >
                                             {governanceActionTypes?.map(

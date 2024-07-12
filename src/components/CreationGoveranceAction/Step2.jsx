@@ -123,7 +123,11 @@ const Step2 = ({
                         required
                         fullWidth
                         onChange={handleChange}
-                        inputProps={{ 'data-testid': 'governance-action-type' }}
+                        SelectProps={{
+                            SelectDisplayProps: {
+                                'data-testid': 'governance-action-type',
+                            },
+                        }}
                     >
                         {governanceActionTypes?.map((option, index) => (
                             <MenuItem
