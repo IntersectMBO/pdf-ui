@@ -54,7 +54,7 @@ import {
     createPoll,
     getPolls,
 } from '../../../lib/api';
-import { formatIsoDate } from '../../../lib/utils';
+import { formatIsoDate, openInNewTab } from '../../../lib/utils';
 import ProposalOwnModal from '../../../components/ProposalOwnModal';
 import ReactMarkdown from 'react-markdown';
 import { loginUserToApp } from '../../../lib/helpers';
@@ -62,6 +62,8 @@ import { loginUserToApp } from '../../../lib/helpers';
 const SingleGovernanceAction = ({ id }) => {
     const MAX_COMMENT_LENGTH = 256;
     const navigate = useNavigate();
+    const openLink = (link) => openInNewTab(link);
+
     const {
         user,
         setLoading,
@@ -1083,6 +1085,11 @@ const SingleGovernanceAction = ({ id }) => {
                                                                         .main
                                                                 }
                                                             />
+                                                        }
+                                                        onClick={() =>
+                                                            openLink(
+                                                                item?.prop_link
+                                                            )
                                                         }
                                                     >
                                                         {item?.prop_link_text}
