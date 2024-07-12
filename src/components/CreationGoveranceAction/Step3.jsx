@@ -266,7 +266,7 @@ const Step3 = ({
                                             <Typography
                                                 variant='body1'
                                                 component='span'
-                                                data-testid='link-text-content'
+                                                data-testid={`link-${index}-text-content`}
                                             >
                                                 {link?.prop_link_text}
                                             </Typography>
