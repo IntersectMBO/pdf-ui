@@ -36,7 +36,9 @@ const Step2 = ({
     const titleMaxLength = 80;
     const { setLoading } = useAppContext();
     const [selectedGovActionName, setSelectedGovActionName] = useState(
-        proposalData?.gov_action_type?.attributes?.gov_action_type_name || ''
+        governanceActionTypes.find(
+            (option) => option?.value === proposalData?.gov_action_type_id
+        )?.label || ''
     );
 
     const handleAddressChange = async (e) => {
