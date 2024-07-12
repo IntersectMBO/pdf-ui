@@ -35,7 +35,9 @@ const Step2 = ({
     const maxLength = 256;
     const titleMaxLength = 80;
     const { setLoading } = useAppContext();
-    const [selectedGovActionName, setSelectedGovActionName] = useState('');
+    const [selectedGovActionName, setSelectedGovActionName] = useState(
+        proposalData?.gov_action_type?.attributes?.gov_action_type_name || ''
+    );
 
     const handleAddressChange = async (e) => {
         const newAddress = e.target.value?.trim();

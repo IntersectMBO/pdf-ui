@@ -140,8 +140,7 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
                         await walletAPI.buildTreasuryGovernanceAction({
                             hash: hashData,
                             url: fileURL,
-                            amount: proposal?.attributes?.content?.attributes
-                                ?.prop_amount,
+                            amount: proposal?.attributes?.content?.attributes?.prop_amount?.toString(),
                             receivingAddress:
                                 proposal?.attributes?.content?.attributes
                                     ?.prop_receiving_address,
