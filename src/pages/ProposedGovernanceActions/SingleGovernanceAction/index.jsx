@@ -609,7 +609,11 @@ const SingleGovernanceAction = ({ id }) => {
                             <CardContent>
                                 <Grid container>
                                     <Grid item xs={10}>
-                                        <Typography variant='h4' component='h2'>
+                                        <Typography
+                                            variant='h4'
+                                            component='h2'
+                                            data-testid='title-content'
+                                        >
                                             {
                                                 proposal?.attributes?.content
                                                     ?.attributes?.prop_name
@@ -752,6 +756,7 @@ const SingleGovernanceAction = ({ id }) => {
                                                         }}
                                                         color='primary'
                                                         disabled={disableShare}
+                                                        data-testid='copy-link'
                                                     >
                                                         <IconLink
                                                             fill={
@@ -779,6 +784,7 @@ const SingleGovernanceAction = ({ id }) => {
                                                                     .text
                                                                     .darkPurple,
                                                         }}
+                                                        data-testid='copy-link-text'
                                                     >
                                                         {disableShare
                                                             ? 'Link copied'
@@ -938,10 +944,19 @@ const SingleGovernanceAction = ({ id }) => {
                                 </Grid>
 
                                 <Box mt={2}>
-                                    <Typography variant='caption'>
+                                    <Typography
+                                        variant='caption'
+                                        sx={{
+                                            color: (theme) =>
+                                                theme?.palette?.text?.grey,
+                                        }}
+                                    >
                                         Governance Action Type
                                     </Typography>
-                                    <Typography variant='body2'>
+                                    <Typography
+                                        variant='body2'
+                                        data-testid='governance-action-type-content'
+                                    >
                                         {
                                             proposal?.attributes?.content
                                                 ?.attributes?.gov_action_type
@@ -957,7 +972,13 @@ const SingleGovernanceAction = ({ id }) => {
                                     alignItems='center'
                                     justifyContent='space-between'
                                 >
-                                    <Typography variant='caption'>
+                                    <Typography
+                                        variant='caption'
+                                        sx={{
+                                            color: (theme) =>
+                                                theme?.palette?.text?.grey,
+                                        }}
+                                    >
                                         {`Last Edit: ${formatIsoDate(
                                             proposal?.attributes?.content
                                                 ?.attributes?.createdAt
@@ -998,7 +1019,13 @@ const SingleGovernanceAction = ({ id }) => {
                                 </Box>
 
                                 <Box mt={4}>
-                                    <Typography variant='caption'>
+                                    <Typography
+                                        variant='caption'
+                                        sx={{
+                                            color: (theme) =>
+                                                theme?.palette?.text?.grey,
+                                        }}
+                                    >
                                         Abstract
                                     </Typography>
                                     <ReactMarkdown
@@ -1006,7 +1033,10 @@ const SingleGovernanceAction = ({ id }) => {
                                             p(props) {
                                                 const { children } = props;
                                                 return (
-                                                    <Typography variant='body2'>
+                                                    <Typography
+                                                        variant='body2'
+                                                        data-testid='abstract-content'
+                                                    >
                                                         {children}
                                                     </Typography>
                                                 );
@@ -1018,7 +1048,13 @@ const SingleGovernanceAction = ({ id }) => {
                                     </ReactMarkdown>
                                 </Box>
                                 <Box mt={4}>
-                                    <Typography variant='caption'>
+                                    <Typography
+                                        variant='caption'
+                                        sx={{
+                                            color: (theme) =>
+                                                theme?.palette?.text?.grey,
+                                        }}
+                                    >
                                         Motivation
                                     </Typography>
                                     <ReactMarkdown
@@ -1026,7 +1062,10 @@ const SingleGovernanceAction = ({ id }) => {
                                             p(props) {
                                                 const { children } = props;
                                                 return (
-                                                    <Typography variant='body2'>
+                                                    <Typography
+                                                        variant='body2'
+                                                        data-testid='motivation-content'
+                                                    >
                                                         {children}
                                                     </Typography>
                                                 );
@@ -1038,7 +1077,13 @@ const SingleGovernanceAction = ({ id }) => {
                                     </ReactMarkdown>
                                 </Box>
                                 <Box mt={4}>
-                                    <Typography variant='caption'>
+                                    <Typography
+                                        variant='caption'
+                                        sx={{
+                                            color: (theme) =>
+                                                theme?.palette?.text?.grey,
+                                        }}
+                                    >
                                         Rationale
                                     </Typography>
                                     <ReactMarkdown
@@ -1046,7 +1091,10 @@ const SingleGovernanceAction = ({ id }) => {
                                             p(props) {
                                                 const { children } = props;
                                                 return (
-                                                    <Typography variant='body2'>
+                                                    <Typography
+                                                        variant='body2'
+                                                        data-testid='rationale-content'
+                                                    >
                                                         {children}
                                                     </Typography>
                                                 );
@@ -1061,7 +1109,13 @@ const SingleGovernanceAction = ({ id }) => {
                                 {proposal?.attributes?.content?.attributes
                                     ?.proposal_links?.length > 0 && (
                                     <Box mt={4}>
-                                        <Typography variant='caption'>
+                                        <Typography
+                                            variant='caption'
+                                            sx={{
+                                                color: (theme) =>
+                                                    theme?.palette?.text?.grey,
+                                            }}
+                                        >
                                             Supporting links
                                         </Typography>
 
@@ -1092,7 +1146,18 @@ const SingleGovernanceAction = ({ id }) => {
                                                             )
                                                         }
                                                     >
-                                                        {item?.prop_link_text}
+                                                        <Typography
+                                                            component={'p'}
+                                                            variant='body2'
+                                                            style={{
+                                                                margin: 0,
+                                                            }}
+                                                            data-testid={`link-${index}-text-content`}
+                                                        >
+                                                            {
+                                                                item?.prop_link_text
+                                                            }
+                                                        </Typography>
                                                     </Button>
                                                 )
                                             )}
