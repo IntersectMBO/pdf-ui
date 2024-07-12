@@ -1,4 +1,8 @@
 import { format } from 'date-fns';
+import {
+    Address,
+    RewardAddress,
+} from '@emurgo/cardano-serialization-lib-asmjs';
 
 export const URL_REGEX =
     /^(?:(?:https?:\/\/)?(?:\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(?:\/[^\s]*)?)|(?:ipfs:\/\/[a-f0-9]+(?:\/[a-zA-Z0-9_]+)*)$|^$/;
@@ -62,6 +66,46 @@ export function isValidURLLength(s) {
 }
 
 export const openInNewTab = (url) => {
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url;
+    }
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
     if (newWindow) newWindow.opener = null;
+};
+
+export async function isRewardAddress(address) {
+    try {
+        const stake = RewardAddress.from_address(Address.from_bech32(address));
+        return stake ? true : 'It must be reward address in bech32 format';
+    } catch (e) {
+        return 'It must be reward address in bech32 format';
+    }
+}
+
+/**
+ * Validates a string value as a number.
+ *
+ * @param value - The string value to be validated.
+ * @returns Either an error message or `true` if the value is a valid number.
+ */
+export const numberValidation = (value) => {
+    const parsedValue = Number(
+        value.includes(',') ? value.replace(',', '.') : value
+    );
+
+    if (Number.isNaN(parsedValue)) {
+        return 'Only number is allowed';
+    }
+
+    if (parsedValue < 0) {
+        return 'Only positive number is allowed';
+    }
+
+    return true;
+};
+
+export const containsString = (str) => {
+    return /^(?!\s*$).+/.test(str)
+        ? true
+        : 'Must contain at least one non-whitespace character.';
 };
