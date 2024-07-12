@@ -26,6 +26,7 @@
         "prepublishOnly": "npm run build:rollup"
     },
     "dependencies": {
+        "@emurgo/cardano-serialization-lib-asmjs": "^12.0.0-beta.2",
         "@fontsource/poppins": "^5.0.14",
         "@intersect.mbo/intersectmbo.org-icons-set": "^1.0.8",
         "axios": "^1.7.2",
