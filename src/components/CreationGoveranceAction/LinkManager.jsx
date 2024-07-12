@@ -2,21 +2,49 @@ import { useTheme } from '@emotion/react';
 import { IconPlus, IconX } from '@intersect.mbo/intersectmbo.org-icons-set';
 import { Box, Button, TextField } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
+import { isValidURLFormat } from '../../lib/utils';
 
-const LinkManager = ({ maxLinks = 7, proposalData, setProposalData }) => {
+const LinkManager = ({
+    maxLinks = 7,
+    proposalData,
+    setProposalData,
+    linksErrors,
+    setLinksErrors,
+}) => {
     const theme = useTheme();
 
     const handleLinkChange = (index, field, value) => {
-        const newLinks = proposalData?.proposal_links?.map((link, i) => {
+        let newLinks = proposalData?.proposal_links?.map((link, i) => {
             if (i === index) {
                 return { ...link, [field]: value };
             }
             return link;
         });
+
         setProposalData({
             ...proposalData,
             proposal_links: newLinks,
         });
+
+        // If the URL is empty, remove the error
+        if (field === 'prop_link' && value === '') {
+            return setLinksErrors((prev) => {
+                const { [index]: removed, ...rest } = prev;
+                return rest;
+            });
+        }
+
+        // Validate URL
+        if (field === 'prop_link') {
+            const isValid = isValidURLFormat(value);
+            setLinksErrors((prev) => ({
+                ...prev,
+                [index]: {
+                    ...prev[index],
+                    url: isValid ? '' : 'Invalid URL format',
+                },
+            }));
+        }
     };
 
     const handleAddLink = () => {
@@ -32,12 +60,18 @@ const LinkManager = ({ maxLinks = 7, proposalData, setProposalData }) => {
     };
 
     const handleRemoveLink = (index) => {
-        const newLinks = proposalData?.proposal_links?.filter(
+        let newLinks = proposalData?.proposal_links?.filter(
             (_, i) => i !== index
         );
         setProposalData({
             ...proposalData,
             proposal_links: newLinks,
+        });
+
+        // Remove errors for removed link
+        setLinksErrors((prev) => {
+            const { [index]: removed, ...rest } = prev;
+            return rest;
         });
     };
 
@@ -54,7 +88,10 @@ const LinkManager = ({ maxLinks = 7, proposalData, setProposalData }) => {
                 >
                     <Box display='flex' flexDirection='column' flexGrow={1}>
                         <Box display={'flex'} justifyContent={'flex-end'}>
-                            <IconButton onClick={() => handleRemoveLink(index)}>
+                            <IconButton
+                                onClick={() => handleRemoveLink(index)}
+                                data-testid='link-wrapper-remove-link-button'
+                            >
                                 <IconX width='16px' height='16px' />
                             </IconButton>
                         </Box>
@@ -78,8 +115,8 @@ const LinkManager = ({ maxLinks = 7, proposalData, setProposalData }) => {
                                 placeholder='https://website.com'
                                 sx={{
                                     mb: 2,
-                                    background: '#fff',
                                     '& .MuiOutlinedInput-root': {
+                                        background: '#fff',
                                         '& fieldset': {
                                             borderColor: `${theme.palette.border.lightGray}`,
                                         },
@@ -87,6 +124,14 @@ const LinkManager = ({ maxLinks = 7, proposalData, setProposalData }) => {
                                 }}
                                 inputProps={{
                                     'data-testid': `link-${index}-url-input`,
+                                }}
+                                error={!!linksErrors[index]?.url}
+                                helperText={linksErrors[index]?.url}
+                                FormHelperTextProps={{
+                                    sx: {
+                                        backgroundColor: 'transparent',
+                                    },
+                                    'data-testid': `link-${index}-url-input-error`,
                                 }}
                             />
                             <TextField
@@ -104,8 +149,8 @@ const LinkManager = ({ maxLinks = 7, proposalData, setProposalData }) => {
                                 placeholder='Text'
                                 sx={{
                                     mb: 2,
-                                    background: '#fff',
                                     '& .MuiOutlinedInput-root': {
+                                        background: '#fff',
                                         '& fieldset': {
                                             borderColor: `${theme.palette.border.lightGray}`,
                                         },
