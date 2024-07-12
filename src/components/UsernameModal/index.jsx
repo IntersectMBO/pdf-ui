@@ -126,7 +126,10 @@ const UsernameModal = ({ open, handleClose: close }) => {
                             <Typography variant='h6' component='h3'>
                                 Hey, setup your username
                             </Typography>
-                            <IconButton onClick={handleClose}>
+                            <IconButton
+                                onClick={handleClose}
+                                data-testid='close-user-modal'
+                            >
                                 <IconX width='24px' height='24px' />
                             </IconButton>
                         </Box>
@@ -196,7 +199,10 @@ const UsernameModal = ({ open, handleClose: close }) => {
                             <Typography variant='h6' component='h3'>
                                 Are you sure you want to use "{username}"?
                             </Typography>
-                            <IconButton onClick={handleClose}>
+                            <IconButton
+                                onClick={handleClose}
+                                data-testid='close-user-modal'
+                            >
                                 <IconX width='24px' height='24px' />
                             </IconButton>
                         </Box>
@@ -269,7 +275,10 @@ const UsernameModal = ({ open, handleClose: close }) => {
                                 <Typography variant='h6' component='h3'>
                                     Username submitted!
                                 </Typography>
-                                <IconButton onClick={() => handleClose(false)}>
+                                <IconButton
+                                    onClick={() => handleClose(false)}
+                                    data-testid='close-user-modal'
+                                >
                                     <IconX width='24px' height='24px' />
                                 </IconButton>
                             </Box>

@@ -11,6 +11,11 @@ import { useEffect, useState } from 'react';
 import { LinkManager } from '.';
 import { useAppContext } from '../../context/context';
 import { getGovernanceActionTypes } from '../../lib/api';
+import {
+    containsString,
+    isRewardAddress,
+    numberValidation,
+} from '../../lib/utils';
 const Step2 = ({
     setStep,
     proposalData,
@@ -20,12 +25,103 @@ const Step2 = ({
     setGovernanceActionTypes,
     isSmallScreen,
     isContinueDisabled,
+    errors,
+    setErrors,
+    helperText,
+    setHelperText,
+    linksErrors,
+    setLinksErrors,
 }) => {
     const maxLength = 256;
+    const titleMaxLength = 80;
     const { setLoading } = useAppContext();
     const [selectedGovActionName, setSelectedGovActionName] = useState(
-        proposalData?.gov_action_type?.attributes?.gov_action_type_name || ''
+        governanceActionTypes.find(
+            (option) => option?.value === proposalData?.gov_action_type_id
+        )?.label || ''
     );
+
+    const handleAddressChange = async (e) => {
+        const newAddress = e.target.value?.trim();
+        setProposalData((prev) => ({
+            ...prev,
+            prop_receiving_address: newAddress,
+        }));
+
+        if (newAddress === '') {
+            setErrors((prev) => ({
+                ...prev,
+                address: false,
+            }));
+            setHelperText((prev) => ({
+                ...prev,
+                address: ``,
+            }));
+            return;
+        }
+
+        const validationResult = await isRewardAddress(newAddress);
+        if (validationResult === true) {
+            setErrors((prev) => ({
+                ...prev,
+                address: false,
+            }));
+            setHelperText((prev) => ({
+                ...prev,
+                address: ``,
+            }));
+        } else {
+            setErrors((prev) => ({
+                ...prev,
+                address: true,
+            }));
+            setHelperText((prev) => ({
+                ...prev,
+                address: validationResult,
+            }));
+        }
+    };
+
+    const handleAmountChange = (e) => {
+        const newAmount = e.target.value?.trim();
+        setProposalData((prev) => ({
+            ...prev,
+            prop_amount: newAmount,
+        }));
+
+        if (newAmount === '') {
+            setErrors((prev) => ({
+                ...prev,
+                amount: false,
+            }));
+            setHelperText((prev) => ({
+                ...prev,
+                amount: ``,
+            }));
+            return;
+        }
+
+        const validationResult = numberValidation(newAmount);
+        if (validationResult === true) {
+            setErrors((prev) => ({
+                ...prev,
+                amount: false,
+            }));
+            setHelperText((prev) => ({
+                ...prev,
+                amount: ``,
+            }));
+        } else {
+            setErrors((prev) => ({
+                ...prev,
+                amount: true,
+            }));
+            setHelperText((prev) => ({
+                ...prev,
+                amount: validationResult,
+            }));
+        }
+    };
 
     const handleChange = (e) => {
         const selectedValue = e.target.value;
@@ -59,6 +155,39 @@ const Step2 = ({
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleTextAreaChange = (event, field, errorField) => {
+        const value = event?.target?.value;
+
+        setProposalData((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+
+        if (value === '') {
+            setHelperText((prev) => ({
+                ...prev,
+                [errorField]: '',
+            }));
+            setErrors((prev) => ({
+                ...prev,
+                [errorField]: false,
+            }));
+            return;
+        }
+
+        const hasString = containsString(value);
+
+        setHelperText((prev) => ({
+            ...prev,
+            [errorField]: hasString === true ? '' : hasString,
+        }));
+
+        setErrors((prev) => ({
+            ...prev,
+            [errorField]: hasString === true ? false : true,
+        }));
     };
 
     useEffect(() => {
@@ -156,6 +285,7 @@ const Step2 = ({
                         required
                         inputProps={{
                             'data-testid': 'title-input',
+                            maxLength: titleMaxLength,
                         }}
                     />
 
@@ -168,32 +298,44 @@ const Step2 = ({
                         rows={isSmallScreen ? 10 : 4}
                         value={proposalData?.prop_abstract || ''}
                         onChange={(e) =>
-                            setProposalData((prev) => ({
-                                ...prev,
-                                prop_abstract: e.target.value,
-                            }))
+                            handleTextAreaChange(e, 'prop_abstract', 'abstract')
                         }
                         required
                         helperText={
-                            <>
-                                <Typography variant='caption'>
-                                    * General Summary of your proposal
-                                </Typography>
-                                <Typography
-                                    variant='caption'
-                                    sx={{ float: 'right' }}
-                                >
-                                    {`${
-                                        proposalData?.prop_abstract?.length || 0
-                                    }/${maxLength}`}
-                                </Typography>
-                            </>
+                            helperText?.abstract ? (
+                                helperText?.abstract
+                            ) : (
+                                <>
+                                    <Typography
+                                        variant='caption'
+                                        data-testid='abstract-helper-text'
+                                    >
+                                        * General Summary of your proposal
+                                    </Typography>
+                                    <Typography
+                                        variant='caption'
+                                        sx={{ float: 'right' }}
+                                        data-testid='abstract-helper-character-count'
+                                    >
+                                        {`${
+                                            proposalData?.prop_abstract
+                                                ?.length || 0
+                                        }/${maxLength}`}
+                                    </Typography>
+                                </>
+                            )
                         }
                         InputProps={{
                             inputProps: {
                                 maxLength: maxLength,
                                 'data-testid': 'abstract-input',
                             },
+                        }}
+                        error={errors?.abstract}
+                        FormHelperTextProps={{
+                            'data-testid': errors?.abstract
+                                ? 'abstract-helper-error'
+                                : 'abstract-helper',
                         }}
                     />
 
@@ -206,33 +348,48 @@ const Step2 = ({
                         rows={isSmallScreen ? 10 : 4}
                         value={proposalData?.prop_motivation || ''}
                         onChange={(e) =>
-                            setProposalData((prev) => ({
-                                ...prev,
-                                prop_motivation: e.target.value,
-                            }))
+                            handleTextAreaChange(
+                                e,
+                                'prop_motivation',
+                                'motivation'
+                            )
                         }
                         required
                         helperText={
-                            <>
-                                <Typography variant='caption'>
-                                    * How will this solve a problem
-                                </Typography>
-                                <Typography
-                                    variant='caption'
-                                    sx={{ float: 'right' }}
-                                >
-                                    {`${
-                                        proposalData?.prop_motivation?.length ||
-                                        0
-                                    }/${maxLength}`}
-                                </Typography>
-                            </>
+                            helperText?.motivation ? (
+                                helperText?.motivation
+                            ) : (
+                                <>
+                                    <Typography
+                                        variant='caption'
+                                        data-testid='motivation-helper-text'
+                                    >
+                                        * How will this solve a problem
+                                    </Typography>
+                                    <Typography
+                                        variant='caption'
+                                        sx={{ float: 'right' }}
+                                        data-testid='motivation-helper-character-count'
+                                    >
+                                        {`${
+                                            proposalData?.prop_motivation
+                                                ?.length || 0
+                                        }/${maxLength}`}
+                                    </Typography>
+                                </>
+                            )
                         }
                         InputProps={{
                             inputProps: {
                                 maxLength: maxLength,
                                 'data-testid': 'motivation-input',
                             },
+                        }}
+                        error={errors?.motivation}
+                        FormHelperTextProps={{
+                            'data-testid': errors?.motivation
+                                ? 'motivation-helper-error'
+                                : 'motivation-helper',
                         }}
                     />
 
@@ -245,33 +402,49 @@ const Step2 = ({
                         rows={isSmallScreen ? 10 : 4}
                         value={proposalData?.prop_rationale || ''}
                         onChange={(e) =>
-                            setProposalData((prev) => ({
-                                ...prev,
-                                prop_rationale: e.target.value,
-                            }))
+                            handleTextAreaChange(
+                                e,
+                                'prop_rationale',
+                                'rationale'
+                            )
                         }
                         required
                         helperText={
-                            <>
-                                <Typography variant='caption'>
-                                    * Put all the content of the Proposal here
-                                </Typography>
-                                <Typography
-                                    variant='caption'
-                                    sx={{ float: 'right' }}
-                                >
-                                    {`${
-                                        proposalData?.prop_rationale?.length ||
-                                        0
-                                    }/${maxLength}`}
-                                </Typography>
-                            </>
+                            helperText?.rationale ? (
+                                helperText?.rationale
+                            ) : (
+                                <>
+                                    <Typography
+                                        variant='caption'
+                                        data-testid='rationale-helper-text'
+                                    >
+                                        * Put all the content of the Proposal
+                                        here
+                                    </Typography>
+                                    <Typography
+                                        variant='caption'
+                                        sx={{ float: 'right' }}
+                                        data-testid='rationale-helper-character-count'
+                                    >
+                                        {`${
+                                            proposalData?.prop_rationale
+                                                ?.length || 0
+                                        }/${maxLength}`}
+                                    </Typography>
+                                </>
+                            )
                         }
                         InputProps={{
                             inputProps: {
                                 maxLength: maxLength,
                                 'data-testid': 'rationale-input',
                             },
+                        }}
+                        error={errors?.rationale}
+                        FormHelperTextProps={{
+                            'data-testid': errors?.rationale
+                                ? 'rationale-helper-error'
+                                : 'rationale-helper',
                         }}
                     />
 
@@ -285,35 +458,36 @@ const Step2 = ({
                                     proposalData?.prop_receiving_address || ''
                                 }
                                 fullWidth
-                                onChange={(e) =>
-                                    setProposalData((prev) => ({
-                                        ...prev,
-                                        prop_receiving_address: e.target.value,
-                                    }))
-                                }
+                                onChange={handleAddressChange}
                                 required
                                 inputProps={{
                                     'data-testid': 'receiving-address-input',
+                                }}
+                                error={errors?.address}
+                                helperText={helperText?.address}
+                                FormHelperTextProps={{
+                                    'data-testid':
+                                        'receiving-address-text-error',
                                 }}
                             />
 
                             <TextField
                                 margin='normal'
                                 label='Amount'
-                                type='number'
+                                type='tel'
                                 variant='outlined'
                                 placeholder='e.g. 2000'
                                 value={proposalData?.prop_amount || ''}
                                 fullWidth
-                                onChange={(e) =>
-                                    setProposalData((prev) => ({
-                                        ...prev,
-                                        prop_amount: e.target.value,
-                                    }))
-                                }
+                                onChange={handleAmountChange}
                                 required
                                 inputProps={{
                                     'data-testid': 'amount-input',
+                                }}
+                                error={errors?.amount}
+                                helperText={helperText?.amount}
+                                FormHelperTextProps={{
+                                    'data-testid': 'amount-text-error',
                                 }}
                             />
                         </>
@@ -351,6 +525,8 @@ const Step2 = ({
                     <LinkManager
                         proposalData={proposalData}
                         setProposalData={setProposalData}
+                        linksErrors={linksErrors}
+                        setLinksErrors={setLinksErrors}
                     />
                 </Box>
                 <Box

@@ -12,6 +12,7 @@ import {
     Typography,
 } from '@mui/material';
 import ReactMarkdown from 'react-markdown';
+import { openInNewTab } from '../../lib/utils';
 
 const Step3 = ({
     setStep,
@@ -20,6 +21,7 @@ const Step3 = ({
     isSmallScreen,
     handleSaveDraft,
 }) => {
+    const openLink = (link) => openInNewTab(link);
     const theme = useTheme();
 
     return (
@@ -248,10 +250,10 @@ const Step3 = ({
                                                 alignItems: 'center',
                                                 textDecoration: 'none',
                                             }}
-                                            component={Link}
-                                            href={link?.prop_link}
-                                            target='_blank'
-                                            rel='noopener noreferrer'
+                                            component={Button}
+                                            onClick={() =>
+                                                openLink(link?.prop_link)
+                                            }
                                         >
                                             <Box mr={0.5}>
                                                 <IconLink
@@ -264,7 +266,7 @@ const Step3 = ({
                                             <Typography
                                                 variant='body1'
                                                 component='span'
-                                                data-testid='link-text-content'
+                                                data-testid={`link-${index}-text-content`}
                                             >
                                                 {link?.prop_link_text}
                                             </Typography>

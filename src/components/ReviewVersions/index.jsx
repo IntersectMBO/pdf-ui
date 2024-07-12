@@ -22,13 +22,14 @@ import {
     IconArchive,
     IconLink,
 } from '@intersect.mbo/intersectmbo.org-icons-set';
-import { formatIsoDate, formatIsoTime } from '../../lib/utils';
+import { formatIsoDate, formatIsoTime, openInNewTab } from '../../lib/utils';
 import { useEffect, useState } from 'react';
 import { getProposals } from '../../lib/api';
 import ReactMarkdown from 'react-markdown';
 
 const ReviewVersions = ({ open, onClose, id }) => {
     const theme = useTheme();
+    const openLink = (link) => openInNewTab(link);
 
     const [versions, setVersions] = useState(null);
     const [selectedVersion, setSelectedVersion] = useState(null);
@@ -515,17 +516,13 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                                                         flexDirection='row'
                                                                         alignItems='center'
                                                                         component={
-                                                                            Link
+                                                                            Button
                                                                         }
-                                                                        href={
-                                                                            link?.prop_link
+                                                                        onClick={() =>
+                                                                            openLink(
+                                                                                link?.prop_link
+                                                                            )
                                                                         }
-                                                                        target='_blank'
-                                                                        rel='noopener noreferrer'
-                                                                        sx={{
-                                                                            textDecoration:
-                                                                                'none',
-                                                                        }}
                                                                     >
                                                                         <Box
                                                                             mr={
@@ -542,8 +539,9 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                                                             />
                                                                         </Box>
                                                                         <Typography
-                                                                            variant='body1'
+                                                                            variant='body2'
                                                                             component='span'
+                                                                            data-testid={`link-${index}-text-content`}
                                                                         >
                                                                             {
                                                                                 link?.prop_link_text

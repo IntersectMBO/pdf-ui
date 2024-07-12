@@ -128,7 +128,11 @@ const ProposalCard = ({
                 data-testid={
                     proposal?.attributes?.content?.attributes?.is_draft
                         ? `draft-${proposal?.id}-card`
-                        : `proposal-${proposal?.id}-card`
+                        : `proposal-${
+                              proposal?.attributes?.content?.attributes
+                                  ?.gov_action_type?.attributes
+                                  ?.gov_action_type_name
+                          }-card`
                 }
             >
                 <CardHeader
@@ -231,6 +235,7 @@ const ProposalCard = ({
                                                 }}
                                                 color='primary'
                                                 disabled={disableShare}
+                                                data-testid='copy-link'
                                             >
                                                 <IconLink
                                                     fill={
@@ -254,6 +259,7 @@ const ProposalCard = ({
                                                         theme.palette.text
                                                             .darkPurple,
                                                 }}
+                                                data-testid='copy-link-text'
                                             >
                                                 {disableShare
                                                     ? 'Link copied'
@@ -360,6 +366,7 @@ const ProposalCard = ({
                                 variant='body2'
                                 component='p'
                                 color='text.darkPurple'
+                                data-testid='governance-action-type'
                             >
                                 {
                                     proposal?.attributes?.content?.attributes
@@ -402,13 +409,25 @@ const ProposalCard = ({
                                 variant='body2'
                                 component='p'
                                 color='text.black'
+                                data-testid={
+                                    proposal?.attributes?.content?.attributes
+                                        ?.is_draft
+                                        ? 'not-submitted-text'
+                                        : 'proposed-date-wrapper'
+                                }
                             >
                                 {proposal?.attributes?.content?.attributes
                                     ?.is_draft
                                     ? 'Not submitted'
-                                    : `Proposed on: ${formatIsoDate(
-                                          proposal?.attributes?.createdAt
-                                      )}`}
+                                    : `Proposed on: `}
+                                {!proposal?.attributes?.content?.attributes
+                                    ?.is_draft && (
+                                    <span data-testid='proposed-date'>
+                                        {formatIsoDate(
+                                            proposal?.attributes?.createdAt
+                                        )}
+                                    </span>
+                                )}
                             </Typography>
                         </Box>
                         <Box

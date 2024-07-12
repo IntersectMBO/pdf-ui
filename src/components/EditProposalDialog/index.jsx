@@ -30,7 +30,12 @@ import {
     deleteProposal,
     getGovernanceActionTypes,
 } from '../../lib/api';
-import { formatIsoDate } from '../../lib/utils';
+import {
+    containsString,
+    formatIsoDate,
+    isRewardAddress,
+    numberValidation,
+} from '../../lib/utils';
 import { LinkManager } from '../CreationGoveranceAction';
 import DeleteProposalModal from '../DeleteProposalModal';
 
@@ -57,6 +62,7 @@ const EditProposalDialog = ({
     handleCloseEditDialog,
     setMounted,
     maxLength = 256,
+    titleMaxLength = 80,
     onUpdate = false,
     setShouldRefresh = false,
 }) => {
@@ -77,6 +83,23 @@ const EditProposalDialog = ({
     const [showProposalDeleteModal, setShowProposalDeleteModal] =
         useState(false);
 
+    const [errors, setErrors] = useState({
+        abstract: false,
+        motivation: false,
+        rationale: false,
+        address: false,
+        amount: false,
+    });
+    const [helperText, setHelperText] = useState({
+        abstract: '',
+        motivation: '',
+        rationale: '',
+        address: ``,
+        amount: ``,
+    });
+
+    const [linksErrors, setLinksErrors] = useState({});
+
     const isSmallScreen = useMediaQuery((theme) =>
         theme.breakpoints.down('sm')
     );
@@ -86,15 +109,36 @@ const EditProposalDialog = ({
             draft?.gov_action_type_id &&
             draft?.prop_name &&
             draft?.prop_abstract &&
+            !errors?.abstract &&
             draft?.prop_motivation &&
-            draft?.prop_rationale
+            !errors?.motivation &&
+            draft?.prop_rationale &&
+            !errors?.rationale
         ) {
+            if (draft?.proposal_links) {
+                if (
+                    draft?.proposal_links?.some(
+                        (link) => !link.prop_link || !link.prop_link_text
+                    ) ||
+                    Object.values(linksErrors).some((error) => error.url)
+                ) {
+                    return setIsSaveDisabled(true);
+                } else {
+                    setIsSaveDisabled(false);
+                }
+            }
+
             const selectedLabel = governanceActionTypes.find(
                 (option) => option?.value === draft?.gov_action_type_id
             )?.label;
 
             if (selectedLabel === 'Treasury') {
-                if (draft?.prop_receiving_address && draft?.prop_amount) {
+                if (
+                    draft?.prop_receiving_address &&
+                    !errors?.address &&
+                    draft?.prop_amount &&
+                    !errors?.amount
+                ) {
                     setIsSaveDisabled(false);
                 } else {
                     setIsSaveDisabled(true);
@@ -145,6 +189,121 @@ const EditProposalDialog = ({
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleAddressChange = async (e) => {
+        const newAddress = e.target.value?.trim();
+        setDraft((prev) => ({
+            ...prev,
+            prop_receiving_address: newAddress,
+        }));
+
+        if (newAddress === '') {
+            setErrors((prev) => ({
+                ...prev,
+                address: false,
+            }));
+            setHelperText((prev) => ({
+                ...prev,
+                address: ``,
+            }));
+            return;
+        }
+
+        const validationResult = await isRewardAddress(newAddress);
+        if (validationResult === true) {
+            setErrors((prev) => ({
+                ...prev,
+                address: false,
+            }));
+            setHelperText((prev) => ({
+                ...prev,
+                address: ``,
+            }));
+        } else {
+            setErrors((prev) => ({
+                ...prev,
+                address: true,
+            }));
+            setHelperText((prev) => ({
+                ...prev,
+                address: validationResult,
+            }));
+        }
+    };
+
+    const handleAmountChange = (e) => {
+        const newAmount = e.target.value?.trim();
+        setDraft((prev) => ({
+            ...prev,
+            prop_amount: newAmount,
+        }));
+
+        if (newAmount === '') {
+            setErrors((prev) => ({
+                ...prev,
+                amount: false,
+            }));
+            setHelperText((prev) => ({
+                ...prev,
+                amount: ``,
+            }));
+            return;
+        }
+
+        const validationResult = numberValidation(newAmount);
+        if (validationResult === true) {
+            setErrors((prev) => ({
+                ...prev,
+                amount: false,
+            }));
+            setHelperText((prev) => ({
+                ...prev,
+                amount: ``,
+            }));
+        } else {
+            setErrors((prev) => ({
+                ...prev,
+                amount: true,
+            }));
+            setHelperText((prev) => ({
+                ...prev,
+                amount: validationResult,
+            }));
+        }
+    };
+
+    const handleTextAreaChange = (event, field, errorField) => {
+        const value = event?.target?.value;
+
+        setDraft((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+
+        if (value === '') {
+            setHelperText((prev) => ({
+                ...prev,
+                [errorField]: '',
+            }));
+            setErrors((prev) => ({
+                ...prev,
+                [errorField]: false,
+            }));
+            return;
+        }
+
+        const hasString = containsString(value);
+
+        setHelperText((prev) => ({
+            ...prev,
+            [errorField]: hasString === true ? '' : hasString,
+        }));
+
+        setErrors((prev) => ({
+            ...prev,
+            [errorField]: hasString === true ? false : true,
+        }));
     };
 
     const handleUpdatePorposal = async (isDraft = false) => {
@@ -236,7 +395,7 @@ const EditProposalDialog = ({
 
     useEffect(() => {
         handleIsSaveDisabled();
-    }, [draft]);
+    }, [draft, errors, linksErrors]);
 
     return (
         <Dialog
@@ -506,6 +665,7 @@ const EditProposalDialog = ({
                                             required
                                             inputProps={{
                                                 'data-testid': 'title-input',
+                                                maxLength: titleMaxLength,
                                             }}
                                         />
 
@@ -518,31 +678,41 @@ const EditProposalDialog = ({
                                             rows={isSmallScreen ? 10 : 4}
                                             value={draft?.prop_abstract || ''}
                                             onChange={(e) =>
-                                                setDraft((prev) => ({
-                                                    ...prev,
-                                                    prop_abstract:
-                                                        e.target.value,
-                                                }))
+                                                handleTextAreaChange(
+                                                    e,
+                                                    'prop_abstract',
+                                                    'abstract'
+                                                )
                                             }
                                             required
                                             helperText={
-                                                <>
-                                                    <Typography variant='caption'>
-                                                        * General Summary of
-                                                        your proposal
-                                                    </Typography>
-                                                    <Typography
-                                                        variant='caption'
-                                                        sx={{
-                                                            float: 'right',
-                                                        }}
-                                                    >
-                                                        {`${
-                                                            draft?.prop_abstract
-                                                                ?.length || 0
-                                                        }/${maxLength}`}
-                                                    </Typography>
-                                                </>
+                                                helperText?.abstract ? (
+                                                    helperText?.abstract
+                                                ) : (
+                                                    <>
+                                                        <Typography
+                                                            variant='caption'
+                                                            data-testid='abstract-helper-text'
+                                                        >
+                                                            * General Summary of
+                                                            your proposal
+                                                        </Typography>
+                                                        <Typography
+                                                            variant='caption'
+                                                            sx={{
+                                                                float: 'right',
+                                                            }}
+                                                            data-testid='abstract-helper-character-count'
+                                                        >
+                                                            {`${
+                                                                draft
+                                                                    ?.prop_abstract
+                                                                    ?.length ||
+                                                                0
+                                                            }/${maxLength}`}
+                                                        </Typography>
+                                                    </>
+                                                )
                                             }
                                             InputProps={{
                                                 inputProps: {
@@ -550,6 +720,12 @@ const EditProposalDialog = ({
                                                     'data-testid':
                                                         'abstract-input',
                                                 },
+                                            }}
+                                            error={errors?.abstract}
+                                            FormHelperTextProps={{
+                                                'data-testid': errors?.abstract
+                                                    ? 'abstract-helper-error'
+                                                    : 'abstract-helper',
                                             }}
                                         />
 
@@ -562,32 +738,41 @@ const EditProposalDialog = ({
                                             rows={isSmallScreen ? 10 : 4}
                                             value={draft?.prop_motivation || ''}
                                             onChange={(e) =>
-                                                setDraft((prev) => ({
-                                                    ...prev,
-                                                    prop_motivation:
-                                                        e.target.value,
-                                                }))
+                                                handleTextAreaChange(
+                                                    e,
+                                                    'prop_motivation',
+                                                    'motivation'
+                                                )
                                             }
                                             required
                                             helperText={
-                                                <>
-                                                    <Typography variant='caption'>
-                                                        * How will this solve a
-                                                        problem
-                                                    </Typography>
-                                                    <Typography
-                                                        variant='caption'
-                                                        sx={{
-                                                            float: 'right',
-                                                        }}
-                                                    >
-                                                        {`${
-                                                            draft
-                                                                ?.prop_motivation
-                                                                ?.length || 0
-                                                        }/${maxLength}`}
-                                                    </Typography>
-                                                </>
+                                                helperText?.motivation ? (
+                                                    helperText?.motivation
+                                                ) : (
+                                                    <>
+                                                        <Typography
+                                                            variant='caption'
+                                                            data-testid='motivation-helper-text'
+                                                        >
+                                                            * How will this
+                                                            solve a problem
+                                                        </Typography>
+                                                        <Typography
+                                                            variant='caption'
+                                                            sx={{
+                                                                float: 'right',
+                                                            }}
+                                                            data-testid='motivation-helper-character-count'
+                                                        >
+                                                            {`${
+                                                                draft
+                                                                    ?.prop_motivation
+                                                                    ?.length ||
+                                                                0
+                                                            }/${maxLength}`}
+                                                        </Typography>
+                                                    </>
+                                                )
                                             }
                                             InputProps={{
                                                 inputProps: {
@@ -595,6 +780,13 @@ const EditProposalDialog = ({
                                                     'data-testid':
                                                         'motivation-input',
                                                 },
+                                            }}
+                                            error={errors?.motivation}
+                                            FormHelperTextProps={{
+                                                'data-testid':
+                                                    errors?.motivation
+                                                        ? 'motivation-helper-error'
+                                                        : 'motivation-helper',
                                             }}
                                         />
 
@@ -607,32 +799,42 @@ const EditProposalDialog = ({
                                             rows={isSmallScreen ? 10 : 4}
                                             value={draft?.prop_rationale || ''}
                                             onChange={(e) =>
-                                                setDraft((prev) => ({
-                                                    ...prev,
-                                                    prop_rationale:
-                                                        e.target.value,
-                                                }))
+                                                handleTextAreaChange(
+                                                    e,
+                                                    'prop_rationale',
+                                                    'rationale'
+                                                )
                                             }
                                             required
                                             helperText={
-                                                <>
-                                                    <Typography variant='caption'>
-                                                        * Put all the content of
-                                                        the Proposal here
-                                                    </Typography>
-                                                    <Typography
-                                                        variant='caption'
-                                                        sx={{
-                                                            float: 'right',
-                                                        }}
-                                                    >
-                                                        {`${
-                                                            draft
-                                                                ?.prop_rationale
-                                                                ?.length || 0
-                                                        }/${maxLength}`}
-                                                    </Typography>
-                                                </>
+                                                helperText?.rationale ? (
+                                                    helperText?.rationale
+                                                ) : (
+                                                    <>
+                                                        <Typography
+                                                            variant='caption'
+                                                            data-testid='rationale-helper-text'
+                                                        >
+                                                            * Put all the
+                                                            content of the
+                                                            Proposal here
+                                                        </Typography>
+                                                        <Typography
+                                                            variant='caption'
+                                                            sx={{
+                                                                float: 'right',
+                                                            }}
+                                                            data-testid='rationale-helper-character-count'
+                                                        >
+                                                            {`${
+                                                                draft
+                                                                    ?.prop_rationale
+                                                                    ?.length ||
+                                                                0
+                                                            }/${maxLength}`}
+                                                        </Typography>
+                                                    </>
+                                                )
                                             }
                                             InputProps={{
                                                 inputProps: {
@@ -640,6 +842,12 @@ const EditProposalDialog = ({
                                                     'data-testid':
                                                         'rationale-input',
                                                 },
+                                            }}
+                                            error={errors?.rationale}
+                                            FormHelperTextProps={{
+                                                'data-testid': errors?.rationale
+                                                    ? 'rationale-helper-error'
+                                                    : 'rationale-helper',
                                             }}
                                         />
 
@@ -655,17 +863,21 @@ const EditProposalDialog = ({
                                                         draft?.prop_receiving_address ||
                                                         ''
                                                     }
-                                                    onChange={(e) =>
-                                                        setDraft((prev) => ({
-                                                            ...prev,
-                                                            prop_receiving_address:
-                                                                e.target.value,
-                                                        }))
+                                                    onChange={
+                                                        handleAddressChange
                                                     }
                                                     required
                                                     inputProps={{
                                                         'data-testid':
                                                             'receiving-address-input',
+                                                    }}
+                                                    error={errors?.address}
+                                                    helperText={
+                                                        helperText?.address
+                                                    }
+                                                    FormHelperTextProps={{
+                                                        'data-testid':
+                                                            'receiving-address-text-error',
                                                     }}
                                                 />
 
@@ -673,23 +885,27 @@ const EditProposalDialog = ({
                                                     fullWidth
                                                     margin='normal'
                                                     label='Amount'
-                                                    type='number'
+                                                    type='tel'
                                                     variant='outlined'
                                                     placeholder='e.g. 2000'
                                                     value={
                                                         draft?.prop_amount || ''
                                                     }
-                                                    onChange={(e) =>
-                                                        setDraft((prev) => ({
-                                                            ...prev,
-                                                            prop_amount:
-                                                                e.target.value,
-                                                        }))
+                                                    onChange={
+                                                        handleAmountChange
                                                     }
                                                     required
                                                     inputProps={{
                                                         'data-testid':
                                                             'amount-input',
+                                                    }}
+                                                    error={errors?.amount}
+                                                    helperText={
+                                                        helperText?.amount
+                                                    }
+                                                    FormHelperTextProps={{
+                                                        'data-testid':
+                                                            'amount-text-error',
                                                     }}
                                                 />
                                             </>
@@ -739,6 +955,8 @@ const EditProposalDialog = ({
                                         <LinkManager
                                             proposalData={draft}
                                             setProposalData={setDraft}
+                                            linksErrors={linksErrors}
+                                            setLinksErrors={setLinksErrors}
                                         />
                                     </Box>
                                     <Box

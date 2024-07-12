@@ -32,6 +32,7 @@ const IdentificationPage = ({ handleLogin }) => {
                         mt: 3,
                     }}
                     onClick={handleLogin}
+                    data-testid='verify-identity-button'
                 >
                     Verify your identity
                 </Button>
