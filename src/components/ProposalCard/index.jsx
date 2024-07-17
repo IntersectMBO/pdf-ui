@@ -529,7 +529,7 @@ const ProposalCard = ({
             <CardContentComponent proposal={proposal} />
         </CardStatusBadge>
     ) : (
-        <Box>
+        <>
             <CardStatusBadge
                 badgeContent={
                     proposal?.attributes?.content?.attributes?.prop_submitted
@@ -564,7 +564,7 @@ const ProposalCard = ({
                     setShouldRefresh={setShouldRefresh}
                 />
             )}
-        </Box>
+        </>
     );
 };
 
