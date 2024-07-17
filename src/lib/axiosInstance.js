@@ -4,7 +4,10 @@ import { getDataFromSession } from './utils';
 let axiosInstance = axios.create();
 
 export const setAxiosBaseURL = (baseURL) => {
-    axiosInstance.defaults.baseURL = baseURL || 'https://dev.api.pdf.gov.tools';
+    axiosInstance.defaults.baseURL =
+        baseURL ||
+        process.env.NEXT_PUBLIC_PROPOSAL_DISCUSSION_API_URL ||
+        'https://dev.api.pdf.gov.tools';
 };
 
 axiosInstance.interceptors.request.use((config) => {
