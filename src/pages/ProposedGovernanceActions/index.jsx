@@ -333,7 +333,12 @@ const ProposedGovernanceActions = () => {
                                                                     ga?.id
                                                             )}
                                                             id={`${ga?.attributes?.gov_action_type_name}-radio-wrapper`}
-                                                            data-testid={`${ga?.attributes?.gov_action_type_name}-radio-wrapper`}
+                                                            data-testid={
+                                                                ga?.attributes
+                                                                    ?.gov_action_type_name
+                                                                    ? `${ga?.attributes?.gov_action_type_name?.toLowerCase()}-radio-wrapper`
+                                                                    : `${index}-radio-wrapper`
+                                                            }
                                                         >
                                                             <FormControlLabel
                                                                 control={
@@ -351,7 +356,13 @@ const ProposedGovernanceActions = () => {
                                                                                 ga?.id
                                                                         )}
                                                                         id={`${ga?.attributes?.gov_action_type_name}-radio`}
-                                                                        data-testid={`${ga?.attributes?.gov_action_type_name}-radio`}
+                                                                        data-testid={
+                                                                            ga
+                                                                                ?.attributes
+                                                                                ?.gov_action_type_name
+                                                                                ? `${ga?.attributes?.gov_action_type_name?.toLowerCase()}-radio`
+                                                                                : `${index}-radio`
+                                                                        }
                                                                     />
                                                                 }
                                                                 label={
