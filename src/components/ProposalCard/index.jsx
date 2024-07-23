@@ -125,15 +125,6 @@ const ProposalCard = ({
                     backgroundColor: alpha('#FFFFFF', 0.3),
                     minHeight: '400px',
                 }}
-                data-testid={
-                    proposal?.attributes?.content?.attributes?.is_draft
-                        ? `draft-${proposal?.id}-card`
-                        : `proposal-${
-                              proposal?.attributes?.content?.attributes
-                                  ?.gov_action_type?.attributes
-                                  ?.gov_action_type_name
-                          }-card`
-                }
             >
                 <CardHeader
                     action={
@@ -515,25 +506,57 @@ const ProposalCard = ({
     };
 
     return proposal?.attributes?.content?.attributes?.is_draft ? (
-        <CardStatusBadge
-            badgeContent='Draft'
-            aria-label='draft-status-badge'
-            showZero
-            draft={true}
-            slotProps={{
-                badge: {
-                    'data-testid': `proposal-${proposal?.id}-status`,
-                },
+        <div
+            data-testid={
+                proposal?.attributes?.content?.attributes?.is_draft
+                    ? `draft-${proposal?.id}-card`
+                    : `proposal-${
+                          proposal?.attributes?.content?.attributes
+                              ?.gov_action_type?.attributes
+                              ?.gov_action_type_name
+                              ? proposal?.attributes?.content?.attributes?.gov_action_type?.attributes?.gov_action_type_name?.toLowerCase()
+                              : ''
+                      }-card`
+            }
+            style={{
+                height: '100%',
             }}
         >
-            <CardContentComponent proposal={proposal} />
-        </CardStatusBadge>
+            <CardStatusBadge
+                badgeContent='Draft'
+                aria-label='draft-status-badge'
+                showZero
+                draft={true}
+                slotProps={{
+                    badge: {
+                        'data-testid': `proposal-${proposal?.id}-status`,
+                    },
+                }}
+            >
+                <CardContentComponent proposal={proposal} />
+            </CardStatusBadge>
+        </div>
     ) : (
-        <>
+        <div
+            data-testid={
+                proposal?.attributes?.content?.attributes?.is_draft
+                    ? `draft-${proposal?.id}-card`
+                    : `proposal-${
+                          proposal?.attributes?.content?.attributes
+                              ?.gov_action_type?.attributes
+                              ?.gov_action_type_name
+                              ? proposal?.attributes?.content?.attributes?.gov_action_type?.attributes?.gov_action_type_name?.toLowerCase()
+                              : ''
+                      }-card`
+            }
+            style={{
+                height: '100%',
+            }}
+        >
             <CardStatusBadge
                 badgeContent={
                     proposal?.attributes?.content?.attributes?.prop_submitted
-                        ? 'Submitted for Vote'
+                        ? 'Submitted for vote'
                         : 'Active'
                 }
                 aria-label='status-badge'
@@ -564,7 +587,7 @@ const ProposalCard = ({
                     setShouldRefresh={setShouldRefresh}
                 />
             )}
-        </>
+        </div>
     );
 };
 
