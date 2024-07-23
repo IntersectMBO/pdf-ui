@@ -109,3 +109,18 @@ export const containsString = (str) => {
         ? true
         : 'Must contain at least one non-whitespace character.';
 };
+
+/**
+ * Validates a string value max length.
+ *
+ * @param str - The string value to be validated.
+ * @param limit - The max length value of the string to be validated.
+ * @returns Either an error message or `true` if the value has a valid length.
+ */
+export const maxLengthCheck = (str, limit) => {
+    if (typeof str !== 'string') {
+        return 'Input must be a string.';
+    }
+
+    return str?.length < limit ? true : `Max ${limit} characters.`;
+};
