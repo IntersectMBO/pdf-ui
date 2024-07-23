@@ -34,6 +34,7 @@ import {
     containsString,
     formatIsoDate,
     isRewardAddress,
+    maxLengthCheck,
     numberValidation,
 } from '../../lib/utils';
 import { LinkManager } from '../CreationGoveranceAction';
@@ -84,6 +85,7 @@ const EditProposalDialog = ({
         useState(false);
 
     const [errors, setErrors] = useState({
+        name: false,
         abstract: false,
         motivation: false,
         rationale: false,
@@ -91,6 +93,7 @@ const EditProposalDialog = ({
         amount: false,
     });
     const [helperText, setHelperText] = useState({
+        name: '',
         abstract: '',
         motivation: '',
         rationale: '',
@@ -108,6 +111,7 @@ const EditProposalDialog = ({
         if (
             draft?.gov_action_type_id &&
             draft?.prop_name &&
+            !errors?.name &&
             draft?.prop_abstract &&
             !errors?.abstract &&
             draft?.prop_motivation &&
@@ -293,16 +297,21 @@ const EditProposalDialog = ({
             return;
         }
 
-        const hasString = containsString(value);
+        let errorMessage = '';
+        errorMessage = containsString(value);
+
+        if (errorMessage === true && field === 'prop_name') {
+            errorMessage = maxLengthCheck(value, titleMaxLength);
+        }
 
         setHelperText((prev) => ({
             ...prev,
-            [errorField]: hasString === true ? '' : hasString,
+            [errorField]: errorMessage === true ? '' : errorMessage,
         }));
 
         setErrors((prev) => ({
             ...prev,
-            [errorField]: hasString === true ? false : true,
+            [errorField]: errorMessage === true ? false : true,
         }));
     };
 
@@ -652,20 +661,26 @@ const EditProposalDialog = ({
                                         </TextField>
 
                                         <TextField
-                                            fullWidth
                                             label='Title'
                                             variant='outlined'
                                             value={draft?.prop_name || ''}
+                                            fullWidth
                                             onChange={(e) =>
-                                                setDraft((prev) => ({
-                                                    ...prev,
-                                                    prop_name: e.target.value,
-                                                }))
+                                                handleTextAreaChange(
+                                                    e,
+                                                    'prop_name',
+                                                    'name'
+                                                )
                                             }
                                             required
                                             inputProps={{
                                                 'data-testid': 'title-input',
-                                                maxLength: titleMaxLength,
+                                            }}
+                                            error={errors?.name}
+                                            helperText={helperText?.name}
+                                            FormHelperTextProps={{
+                                                'data-testid':
+                                                    'title-input-error',
                                             }}
                                         />
 

@@ -37,6 +37,7 @@ const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
         useState(false);
     const [selectedDraftId, setSelectedDraftId] = useState(null);
     const [errors, setErrors] = useState({
+        name: false,
         abstract: false,
         motivation: false,
         rationale: false,
@@ -44,6 +45,7 @@ const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
         amount: false,
     });
     const [helperText, setHelperText] = useState({
+        name: '',
         abstract: '',
         motivation: '',
         rationale: '',
@@ -73,6 +75,7 @@ const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {
         if (
             proposalData?.gov_action_type_id &&
             proposalData?.prop_name &&
+            !errors?.name &&
             proposalData?.prop_abstract &&
             !errors?.abstract &&
             proposalData?.prop_motivation &&
