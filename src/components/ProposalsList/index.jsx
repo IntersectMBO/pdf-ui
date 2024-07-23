@@ -260,7 +260,6 @@ const ProposalsList = ({
                     sx={{
                         backgroundColor: alpha('#FFFFFF', 0.3),
                         my: 3,
-                        mx: 1,
                     }}
                 >
                     <CardContent>
