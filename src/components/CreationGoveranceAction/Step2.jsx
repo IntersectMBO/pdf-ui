@@ -14,6 +14,7 @@ import { getGovernanceActionTypes } from '../../lib/api';
 import {
     containsString,
     isRewardAddress,
+    maxLengthCheck,
     numberValidation,
 } from '../../lib/utils';
 const Step2 = ({
@@ -177,16 +178,21 @@ const Step2 = ({
             return;
         }
 
-        const hasString = containsString(value);
+        let errorMessage = '';
+        errorMessage = containsString(value);
+
+        if (errorMessage === true && field === 'prop_name') {
+            errorMessage = maxLengthCheck(value, titleMaxLength);
+        }
 
         setHelperText((prev) => ({
             ...prev,
-            [errorField]: hasString === true ? '' : hasString,
+            [errorField]: errorMessage === true ? '' : errorMessage,
         }));
 
         setErrors((prev) => ({
             ...prev,
-            [errorField]: hasString === true ? false : true,
+            [errorField]: errorMessage === true ? false : true,
         }));
     };
 
@@ -277,15 +283,16 @@ const Step2 = ({
                         value={proposalData?.prop_name || ''}
                         fullWidth
                         onChange={(e) =>
-                            setProposalData((prev) => ({
-                                ...prev,
-                                prop_name: e.target.value,
-                            }))
+                            handleTextAreaChange(e, 'prop_name', 'name')
                         }
                         required
                         inputProps={{
                             'data-testid': 'title-input',
-                            maxLength: titleMaxLength,
+                        }}
+                        error={errors?.name}
+                        helperText={helperText?.name}
+                        FormHelperTextProps={{
+                            'data-testid': 'title-input-error',
                         }}
                     />
 
