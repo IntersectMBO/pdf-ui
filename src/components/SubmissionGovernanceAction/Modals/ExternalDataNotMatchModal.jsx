@@ -133,17 +133,6 @@ const ExternalDataNotMatchModal = ({
                     >
                         Cancel registration
                     </Button>
-                    <Button
-                        variant='text'
-                        fullWidth
-                        sx={{
-                            borderRadius: '20px',
-                        }}
-                        onClick={() => console.log('Feedback')}
-                        data-testid='data-not-match-modal-feedback-button'
-                    >
-                        Feedback
-                    </Button>
                 </Box>
             </Box>
         </Modal>
