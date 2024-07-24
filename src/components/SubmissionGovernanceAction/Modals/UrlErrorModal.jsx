@@ -12,9 +12,11 @@ import {
     Typography,
 } from '@mui/material';
 import React from 'react';
+import { openInNewTab } from '../../../lib/utils';
 
 const UrlErrorModal = ({ open, onClose, buttonOneClick, buttonTwoClick }) => {
     const theme = useTheme();
+    const openLink = () => openInNewTab('https://docs.sanchogov.tools');
 
     return (
         <Modal open={open} onClose={onClose} data-testid='url-error-modal'>
@@ -106,7 +108,7 @@ const UrlErrorModal = ({ open, onClose, buttonOneClick, buttonTwoClick }) => {
                         }}
                         component={'button'}
                         variant='body1'
-                        onClick={() => console.log('Learn More')}
+                        onClick={openLink}
                         id='url-error-modal-learn-more-link'
                         data-testid='url-error-modal-learn-more-link'
                     >
@@ -135,17 +137,6 @@ const UrlErrorModal = ({ open, onClose, buttonOneClick, buttonTwoClick }) => {
                         data-testid='url-error-modal-cancel-button'
                     >
                         Cancel registration
-                    </Button>
-                    <Button
-                        variant='text'
-                        fullWidth
-                        sx={{
-                            borderRadius: '20px',
-                        }}
-                        onClick={() => console.log('Feedback')}
-                        data-testid='url-error-modal-feedback-button'
-                    >
-                        Feedback
                     </Button>
                 </Box>
             </Box>
