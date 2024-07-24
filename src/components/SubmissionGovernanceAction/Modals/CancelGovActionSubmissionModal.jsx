@@ -1,3 +1,5 @@
+'use client';
+
 import { useTheme } from '@emotion/react';
 import {
     IconExclamation,
@@ -5,9 +7,12 @@ import {
 } from '@intersect.mbo/intersectmbo.org-icons-set';
 import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const CancelGovActionSubmissionModal = ({ open, onClose, onSubmit }) => {
+const CancelGovActionSubmissionModal = ({ open, onClose }) => {
     const theme = useTheme();
+    const navigate = useNavigate();
+
     return (
         <Modal
             open={open}
@@ -92,9 +97,9 @@ const CancelGovActionSubmissionModal = ({ open, onClose, onSubmit }) => {
                         variant='body1'
                         component={'p'}
                     >
-                        Returning to the Dashboard will cancel your submission
-                        and your proposed Governance Action will not be
-                        submitted.
+                        Returning to the proposal list will cancel your
+                        submission and your proposed Governance Action will not
+                        be submitted.
                     </Typography>
                 </Box>
                 <Box display='flex' flexDirection='column' padding={2} gap={2}>
@@ -104,7 +109,7 @@ const CancelGovActionSubmissionModal = ({ open, onClose, onSubmit }) => {
                         sx={{
                             borderRadius: '20px',
                         }}
-                        onClick={() => console.log('Go to Data Edit Screen')}
+                        onClick={onClose}
                         data-testid='cancel-ga-submission-modal-no-button'
                     >
                         I don’t want to cancel
@@ -115,10 +120,11 @@ const CancelGovActionSubmissionModal = ({ open, onClose, onSubmit }) => {
                         sx={{
                             borderRadius: '20px',
                         }}
-                        onClick={() => console.log('Cancel registration')}
+                        onClick={() => navigate('/proposal_discussion')}
                         data-testid='cancel-ga-submission-modal-yes-button'
                     >
-                        Yes, cancel my proposal and take me to the to Dashboard
+                        Yes, cancel my proposal submission and take me to the to
+                        proposal list
                     </Button>
                 </Box>
             </Box>

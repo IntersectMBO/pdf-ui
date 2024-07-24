@@ -7,7 +7,7 @@ const DraftSuccessfulModal = ({ open, onClose, closeCreateGADialog }) => {
         <Modal
             open={open}
             onClose={onClose}
-            data-testid='delete-proposal-modal'
+            data-testid='draft-successful-modal'
         >
             <Box
                 sx={{
@@ -34,7 +34,7 @@ const DraftSuccessfulModal = ({ open, onClose, closeCreateGADialog }) => {
                     borderColor={(theme) => theme.palette.border.lightGray}
                 >
                     <Typography
-                        id='modal-modal-title'
+                        id='draft-successful-modal-title'
                         variant='h6'
                         component='h2'
                     >
@@ -52,7 +52,7 @@ const DraftSuccessfulModal = ({ open, onClose, closeCreateGADialog }) => {
                             onClose();
                             closeCreateGADialog();
                         }}
-                        data-testid='delete-proposal-yes-button'
+                        data-testid='close-button'
                     >
                         Close and go to Proposal List
                     </Button>
