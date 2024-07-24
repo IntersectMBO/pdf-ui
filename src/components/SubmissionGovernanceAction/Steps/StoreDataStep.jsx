@@ -80,6 +80,7 @@ const StoreDataStep = ({ setStep }) => {
                                     variant='text'
                                     sx={{ mt: 2 }}
                                     onClick={openLink}
+                                    data-testid='storing-information-link'
                                 >
                                     Learn more about storing information
                                 </Button>
