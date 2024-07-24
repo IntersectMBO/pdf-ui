@@ -52,7 +52,7 @@ const DraftSuccessfulModal = ({ open, onClose, closeCreateGADialog }) => {
                             onClose();
                             closeCreateGADialog();
                         }}
-                        data-testid='delete-proposal-yes-button'
+                        data-testid='close-and-go-to-proposal-list-button'
                     >
                         Close and go to Proposal List
                     </Button>
