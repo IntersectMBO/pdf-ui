@@ -18,7 +18,7 @@ import {
 } from '../CreationGoveranceAction';
 import { useAppContext } from '../../context/context';
 import { createProposal, deleteProposal } from '../../lib/api';
-import CreateGA2 from '../../assets/svg/CreateGA2.js';
+import CreateGA2 from '../../assets/svg/CreateGA2.jsx';
 import { useLocation } from 'react-router-dom';
 
 const CreateGovernanceActionDialog = ({ open = false, onClose = false }) => {

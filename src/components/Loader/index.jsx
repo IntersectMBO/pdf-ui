@@ -79,7 +79,7 @@ const Loader = () => {
             id='loader-backdrop'
             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 100 }}
             open={loading}
-            onClick={() => closeLoader()}
+            onClick={() => {}}
             data-testid='loader-backdrop'
             // ref={loaderRef}
         >

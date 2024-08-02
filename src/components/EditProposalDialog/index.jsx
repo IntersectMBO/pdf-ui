@@ -40,7 +40,7 @@ import {
 import { LinkManager } from '../CreationGoveranceAction';
 import DeleteProposalModal from '../DeleteProposalModal';
 
-import CreateGA2 from '../../assets/svg/CreateGA2.js';
+import CreateGA2 from '../../assets/svg/CreateGA2.jsx';
 
 const style = {
     position: 'absolute',
