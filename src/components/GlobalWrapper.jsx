@@ -90,25 +90,31 @@ const GlobalWrapper = ({ ...props }) => {
     }, [GovToolAssemblyLocale]);
 
     useEffect(() => {
-        setAxiosBaseURL(GovToolAssemblyPdfApiUrl);
+        if (GovToolAssemblyPdfApiUrl) {
+            setAxiosBaseURL(GovToolAssemblyPdfApiUrl);
+        }
     }, [GovToolAssemblyPdfApiUrl]);
 
     const renderComponentBasedOnPath = (path) => {
-        if (!user && GovToolAssemblyWalletAPI?.address) {
-            return <IdentificationPage handleLogin={handleLogin} />;
-        } else {
-            if (path.includes('propose')) {
-                return <ProposedGovernanceActions />;
-            } else if (
-                path.includes('proposal_discussion/') &&
-                getProposalID(path)
-            ) {
-                return <SingleGovernanceAction id={getProposalID(path)} />;
-            } else if (path.includes('proposal_discussion')) {
-                return <ProposedGovernanceActions />;
+        if (GovToolAssemblyPdfApiUrl) {
+            if (!user && GovToolAssemblyWalletAPI?.address) {
+                return <IdentificationPage handleLogin={handleLogin} />;
             } else {
-                return <ProposedGovernanceActions />;
+                if (path.includes('propose')) {
+                    return <ProposedGovernanceActions />;
+                } else if (
+                    path.includes('proposal_discussion/') &&
+                    getProposalID(path)
+                ) {
+                    return <SingleGovernanceAction id={getProposalID(path)} />;
+                } else if (path.includes('proposal_discussion')) {
+                    return <ProposedGovernanceActions />;
+                } else {
+                    return <ProposedGovernanceActions />;
+                }
             }
+        } else {
+            return null;
         }
     };
 

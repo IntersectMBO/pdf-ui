@@ -5,9 +5,7 @@ let axiosInstance = axios.create();
 
 export const setAxiosBaseURL = (baseURL) => {
     axiosInstance.defaults.baseURL =
-        baseURL ||
-        process.env.NEXT_PUBLIC_PROPOSAL_DISCUSSION_API_URL ||
-        'https://dev.api.pdf.gov.tools';
+        baseURL || process.env.NEXT_PUBLIC_PROPOSAL_DISCUSSION_API_URL;
 };
 
 axiosInstance.interceptors.request.use((config) => {
