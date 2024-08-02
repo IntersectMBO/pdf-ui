@@ -89,11 +89,7 @@ const GlobalWrapper = ({ ...props }) => {
         }
     }, [GovToolAssemblyLocale]);
 
-    useEffect(() => {
-        if (GovToolAssemblyPdfApiUrl) {
-            setAxiosBaseURL(GovToolAssemblyPdfApiUrl);
-        }
-    }, [GovToolAssemblyPdfApiUrl]);
+    setAxiosBaseURL(GovToolAssemblyPdfApiUrl);
 
     const renderComponentBasedOnPath = (path) => {
         if (GovToolAssemblyPdfApiUrl) {
