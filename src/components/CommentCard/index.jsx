@@ -114,8 +114,9 @@ const CommentCard = ({ comment, proposal }) => {
     useEffect(() => {
         if (showSubcomments) {
             loadSubComments(1);
+            setCommentHasReplays(false);
         }
-    }, [showSubcomments]);
+    }, [showSubcomments, comment]);
 
     useEffect(() => {
         if (window) {
@@ -127,6 +128,7 @@ const CommentCard = ({ comment, proposal }) => {
         window?.addEventListener('resize', handleResize);
         return () => window?.removeEventListener('resize', handleResize);
     }, []);
+
     useEffect(() => {
         if (showMoreRef.current) {
             const showMore = showMoreRef.current.getBoundingClientRect();
@@ -429,13 +431,17 @@ const CommentCard = ({ comment, proposal }) => {
                                 >
                                     <Button
                                         variant='contained'
-                                        onClick={() =>
+                                        onClick={
                                             user?.user?.govtool_username
-                                                ? handleCreateComment()
-                                                : setOpenUsernameModal({
-                                                      open: true,
-                                                      callBackFn: () => {},
-                                                  })
+                                                ? () => {
+                                                      handleCreateComment();
+                                                      setShowSubcomments(true);
+                                                  }
+                                                : () =>
+                                                      setOpenUsernameModal({
+                                                          open: true,
+                                                          callBackFn: () => {},
+                                                      })
                                         }
                                         disabled={
                                             !subcommentText ||
