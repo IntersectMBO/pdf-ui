@@ -1,13 +1,16 @@
+import React from 'react';
 import { useTheme } from '@emotion/react';
 import {
     IconExclamation,
     IconX,
 } from '@intersect.mbo/intersectmbo.org-icons-set';
 import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
-import React from 'react';
+import { getItemFromLocalStorage, correctAdaFormat } from '../../../lib/utils';
+const PROTOCOL_PARAMS_KEY = 'protocol_params';
 
 const InsufficientBallanceModal = ({ open, onClose, buttonOneClick }) => {
     const theme = useTheme();
+    const protocolParams = getItemFromLocalStorage(PROTOCOL_PARAMS_KEY);
 
     return (
         <Modal
@@ -94,8 +97,10 @@ const InsufficientBallanceModal = ({ open, onClose, buttonOneClick }) => {
                         component={'p'}
                     >
                         To submit a Governance Action, you will be required to
-                        post a refundable balance of ₳50000. You do not
-                        currently have enough ADA in your wallet to continue.
+                        post a refundable balance of ₳
+                        {correctAdaFormat(protocolParams?.gov_action_deposit)}.
+                        You do not currently have enough ADA in your wallet to
+                        continue.
                     </Typography>
                 </Box>
                 <Box display='flex' flexDirection='column' padding={2} gap={2}>
