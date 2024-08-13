@@ -124,3 +124,18 @@ export const maxLengthCheck = (str, limit) => {
 
     return str?.length < limit ? true : `Max ${limit} characters.`;
 };
+
+const LOVELACE = 1000000;
+const DECIMALS = 6;
+
+export const correctAdaFormat = (lovelace) => {
+    if (lovelace) {
+        return Number.parseFloat((lovelace / LOVELACE).toFixed(DECIMALS));
+    }
+    return 0;
+};
+
+export function getItemFromLocalStorage(key) {
+    const item = window.localStorage.getItem(key);
+    return item ? JSON.parse(item) : null;
+}
