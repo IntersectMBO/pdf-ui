@@ -61,14 +61,6 @@ const Step3 = ({
                         <Typography variant='h4' gutterBottom>
                             Review Your Submission
                         </Typography>
-
-                        <Typography
-                            variant='subtitle'
-                            color={(theme) => theme.palette.text.grey}
-                            gutterBottom
-                        >
-                            Subtext to describe something if needed
-                        </Typography>
                     </Box>
 
                     <Typography
