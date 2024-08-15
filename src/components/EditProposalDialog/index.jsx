@@ -516,16 +516,6 @@ const EditProposalDialog = ({
                                             >
                                                 Proposal Details
                                             </Typography>
-                                            {/* <Typography
-                                                variant='subtitle'
-                                                color={(theme) =>
-                                                    theme.palette.text.grey
-                                                }
-                                                gutterBottom
-                                            >
-                                                Subtext to describe something if
-                                                needed
-                                            </Typography> */}
 
                                             <Box>
                                                 <Button

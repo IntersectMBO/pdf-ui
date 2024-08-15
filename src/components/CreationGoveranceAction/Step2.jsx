@@ -243,14 +243,6 @@ const Step2 = ({
                         <Typography variant='h4' gutterBottom>
                             Proposal Details
                         </Typography>
-
-                        <Typography
-                            variant='subtitle2'
-                            color={(theme) => theme.palette.text.grey}
-                            gutterBottom
-                        >
-                            Subtext to describe something if needed
-                        </Typography>
                     </Box>
 
                     <TextField
