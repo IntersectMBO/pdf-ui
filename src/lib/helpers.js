@@ -37,17 +37,17 @@ export const loginUserToApp = async ({
             }
         } else {
             if (trigerSignData) {
-                const changeAddrHex = await wallet?.address;
+                const stakeKeyHash = await wallet?.stakeKey;
                 const messageUtf = `To proceed, please sign this data to verify your identity. This ensures that the action is secure and confirms your identity.`;
                 const messageHex = utf8ToHex(messageUtf);
 
                 const signedData = await wallet.signData(
-                    changeAddrHex,
+                    stakeKeyHash,
                     messageHex
                 );
 
                 const userResponse = await loginUser({
-                    identifier: changeAddrHex,
+                    identifier: stakeKeyHash,
                     signedData: signedData,
                 });
 
