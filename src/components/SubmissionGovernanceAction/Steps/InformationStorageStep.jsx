@@ -76,7 +76,7 @@ const InformationStorageStep = ({ proposal, handleCloseSubmissionDialog }) => {
     };
     const openGuideAboutStoringInformation = () =>
         openInNewTab(
-            'https://docs.sanchogov.tools/faqs/how-to-create-a-metadata-anchor'
+            'https://docs.gov.tools/using-govtool/govtool-functions/storing-information-offline'
         );
 
     const handleCreateGAJsonLD = async () => {

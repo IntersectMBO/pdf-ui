@@ -16,7 +16,10 @@ import { openInNewTab } from '../../../lib/utils';
 
 const UrlErrorModal = ({ open, onClose, buttonOneClick, buttonTwoClick }) => {
     const theme = useTheme();
-    const openLink = () => openInNewTab('https://docs.sanchogov.tools');
+    const openLink = () =>
+        openInNewTab(
+            'https://docs.gov.tools/using-govtool/govtool-functions/storing-information-offline'
+        );
 
     return (
         <Modal open={open} onClose={onClose} data-testid='url-error-modal'>
