@@ -516,8 +516,8 @@ const Step2 = ({
                             color={(theme) => theme.palette.text.grey}
                             gutterBottom
                         >
-                            Links to extra content or social media contacts
-                            (maiximum of 7 entries)
+                            Links to additional content or social media contacts
+                            (up to 7 entries)
                         </Typography>
                     </Box>
 
