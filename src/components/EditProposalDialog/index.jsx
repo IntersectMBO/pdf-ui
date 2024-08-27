@@ -952,8 +952,8 @@ const EditProposalDialog = ({
                                                 }
                                                 gutterBottom
                                             >
-                                                Links to extra content or social
-                                                media contacts (maiximum of 7
+                                                Links to additional content or
+                                                social media contacts (up to 7
                                                 entries)
                                             </Typography>
                                         </Box>
