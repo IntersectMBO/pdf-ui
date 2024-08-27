@@ -20,8 +20,11 @@ const StoreDataStep = ({ setStep }) => {
     const [checked, setChecked] = useState(false);
     const [openCancelGASubmissionModal, setOpenCancelGASubmissionModal] =
         useState(false);
-    
-    const openLink = () => openInNewTab('https://docs.sanchogov.tools');
+
+    const openLink = () =>
+        openInNewTab(
+            'https://docs.gov.tools/using-govtool/govtool-functions/storing-information-offline'
+        );
 
     return (
         <>
