@@ -1607,12 +1607,12 @@ const SingleGovernanceAction = ({ id }) => {
                                     </Typography>
 
                                     <Typography variant='body2' mt={2}>
-                                        Poll will be pinned to top of your
-                                        comments list. You can close poll any
-                                        time you like. Every next poll will
-                                        close previous one. Previous polls will
-                                        be displayed as a comment in the
-                                        comments feed.
+                                        The poll will be pinned to the top of
+                                        your comments list, and you can close it
+                                        whenever you like. Opening a new poll
+                                        will automatically close the previous
+                                        one, which will then appear as a comment
+                                        in the comments feed.
                                     </Typography>
 
                                     <Box
