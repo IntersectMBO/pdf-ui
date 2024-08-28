@@ -33,8 +33,9 @@ const Step2 = ({
     linksErrors,
     setLinksErrors,
 }) => {
-    const maxLength = 256;
     const titleMaxLength = 80;
+    const abstractMaxLength = 2500;
+    const motivationRationaleMaxLength = 12000;
     const { setLoading } = useAppContext();
     const [selectedGovActionName, setSelectedGovActionName] = useState(
         governanceActionTypes.find(
@@ -292,7 +293,6 @@ const Step2 = ({
                         size='large'
                         name='Abstract'
                         label='Abstract'
-                        placeholder='Summary...'
                         multiline
                         rows={isSmallScreen ? 10 : 4}
                         value={proposalData?.prop_abstract || ''}
@@ -309,7 +309,7 @@ const Step2 = ({
                                         variant='caption'
                                         data-testid='abstract-helper-text'
                                     >
-                                        * General Summary of your proposal
+                                        * A short summary of your proposal
                                     </Typography>
                                     <Typography
                                         variant='caption'
@@ -319,14 +319,14 @@ const Step2 = ({
                                         {`${
                                             proposalData?.prop_abstract
                                                 ?.length || 0
-                                        }/${maxLength}`}
+                                        }/${abstractMaxLength}`}
                                     </Typography>
                                 </>
                             )
                         }
                         InputProps={{
                             inputProps: {
-                                maxLength: maxLength,
+                                maxLength: abstractMaxLength,
                                 'data-testid': 'abstract-input',
                             },
                         }}
@@ -342,7 +342,7 @@ const Step2 = ({
                         size='large'
                         name='Motivation'
                         label='Motivation'
-                        placeholder='Problem this will solve'
+                        placeholder='This is a problem because...'
                         multiline
                         rows={isSmallScreen ? 10 : 4}
                         value={proposalData?.prop_motivation || ''}
@@ -363,7 +363,7 @@ const Step2 = ({
                                         variant='caption'
                                         data-testid='motivation-helper-text'
                                     >
-                                        * How will this solve a problem
+                                        * What problem is your proposal solving?
                                     </Typography>
                                     <Typography
                                         variant='caption'
@@ -373,14 +373,14 @@ const Step2 = ({
                                         {`${
                                             proposalData?.prop_motivation
                                                 ?.length || 0
-                                        }/${maxLength}`}
+                                        }/${motivationRationaleMaxLength}`}
                                     </Typography>
                                 </>
                             )
                         }
                         InputProps={{
                             inputProps: {
-                                maxLength: maxLength,
+                                maxLength: motivationRationaleMaxLength,
                                 'data-testid': 'motivation-input',
                             },
                         }}
@@ -396,7 +396,7 @@ const Step2 = ({
                         size='large'
                         name='Rationale'
                         label='Rationale'
-                        placeholder='Problem this will solve'
+                        placeholder='This problem is solved by...'
                         multiline
                         rows={isSmallScreen ? 10 : 4}
                         value={proposalData?.prop_rationale || ''}
@@ -417,8 +417,8 @@ const Step2 = ({
                                         variant='caption'
                                         data-testid='rationale-helper-text'
                                     >
-                                        * Put all the content of the Proposal
-                                        here
+                                        * How does the on-chain change solve the
+                                        problem?
                                     </Typography>
                                     <Typography
                                         variant='caption'
@@ -428,14 +428,14 @@ const Step2 = ({
                                         {`${
                                             proposalData?.prop_rationale
                                                 ?.length || 0
-                                        }/${maxLength}`}
+                                        }/${motivationRationaleMaxLength}`}
                                     </Typography>
                                 </>
                             )
                         }
                         InputProps={{
                             inputProps: {
-                                maxLength: maxLength,
+                                maxLength: motivationRationaleMaxLength,
                                 'data-testid': 'rationale-input',
                             },
                         }}
@@ -451,8 +451,9 @@ const Step2 = ({
                         <>
                             <TextField
                                 margin='normal'
-                                label='Receiving address'
+                                label='Receiving stake address'
                                 variant='outlined'
+                                placeholder='e.g. stake1...'
                                 value={
                                     proposalData?.prop_receiving_address || ''
                                 }
@@ -475,7 +476,7 @@ const Step2 = ({
                                 label='Amount'
                                 type='tel'
                                 variant='outlined'
-                                placeholder='e.g. 2000'
+                                placeholder='e.g. 2000 ada'
                                 value={proposalData?.prop_amount || ''}
                                 fullWidth
                                 onChange={handleAmountChange}

@@ -1036,6 +1036,10 @@ const SingleGovernanceAction = ({ id }) => {
                                                     <Typography
                                                         variant='body2'
                                                         data-testid='abstract-content'
+                                                        style={{
+                                                            wordWrap:
+                                                                'break-word',
+                                                        }}
                                                     >
                                                         {children}
                                                     </Typography>
@@ -1065,6 +1069,10 @@ const SingleGovernanceAction = ({ id }) => {
                                                     <Typography
                                                         variant='body2'
                                                         data-testid='motivation-content'
+                                                        style={{
+                                                            wordWrap:
+                                                                'break-word',
+                                                        }}
                                                     >
                                                         {children}
                                                     </Typography>
@@ -1094,6 +1102,10 @@ const SingleGovernanceAction = ({ id }) => {
                                                     <Typography
                                                         variant='body2'
                                                         data-testid='rationale-content'
+                                                        style={{
+                                                            wordWrap:
+                                                                'break-word',
+                                                        }}
                                                     >
                                                         {children}
                                                     </Typography>
