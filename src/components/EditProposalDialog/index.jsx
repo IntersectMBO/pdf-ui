@@ -62,7 +62,8 @@ const EditProposalDialog = ({
     openEditDialog,
     handleCloseEditDialog,
     setMounted,
-    maxLength = 256,
+    abstractMaxLength = 2500,
+    motivationRationaleMaxLength = 12000,
     titleMaxLength = 80,
     onUpdate = false,
     setShouldRefresh = false,
@@ -714,14 +715,15 @@ const EditProposalDialog = ({
                                                                     ?.prop_abstract
                                                                     ?.length ||
                                                                 0
-                                                            }/${maxLength}`}
+                                                            }/${abstractMaxLength}`}
                                                         </Typography>
                                                     </>
                                                 )
                                             }
                                             InputProps={{
                                                 inputProps: {
-                                                    maxLength: maxLength,
+                                                    maxLength:
+                                                        abstractMaxLength,
                                                     'data-testid':
                                                         'abstract-input',
                                                 },
@@ -775,14 +777,15 @@ const EditProposalDialog = ({
                                                                     ?.prop_motivation
                                                                     ?.length ||
                                                                 0
-                                                            }/${maxLength}`}
+                                                            }/${motivationRationaleMaxLength}`}
                                                         </Typography>
                                                     </>
                                                 )
                                             }
                                             InputProps={{
                                                 inputProps: {
-                                                    maxLength: maxLength,
+                                                    maxLength:
+                                                        motivationRationaleMaxLength,
                                                     'data-testid':
                                                         'motivation-input',
                                                 },
@@ -837,14 +840,15 @@ const EditProposalDialog = ({
                                                                     ?.prop_rationale
                                                                     ?.length ||
                                                                 0
-                                                            }/${maxLength}`}
+                                                            }/${motivationRationaleMaxLength}`}
                                                         </Typography>
                                                     </>
                                                 )
                                             }
                                             InputProps={{
                                                 inputProps: {
-                                                    maxLength: maxLength,
+                                                    maxLength:
+                                                        motivationRationaleMaxLength,
                                                     'data-testid':
                                                         'rationale-input',
                                                 },
