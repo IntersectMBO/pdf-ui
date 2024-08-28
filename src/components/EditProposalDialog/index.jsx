@@ -699,7 +699,7 @@ const EditProposalDialog = ({
                                                             variant='caption'
                                                             data-testid='abstract-helper-text'
                                                         >
-                                                            * General Summary of
+                                                            * A short summary of
                                                             your proposal
                                                         </Typography>
                                                         <Typography
@@ -738,7 +738,7 @@ const EditProposalDialog = ({
                                             size='large'
                                             name='Motivation'
                                             label='Motivation'
-                                            placeholder='Problem this will solve'
+                                            placeholder='This is a problem because...'
                                             multiline
                                             rows={isSmallScreen ? 10 : 4}
                                             value={draft?.prop_motivation || ''}
@@ -759,8 +759,9 @@ const EditProposalDialog = ({
                                                             variant='caption'
                                                             data-testid='motivation-helper-text'
                                                         >
-                                                            * How will this
-                                                            solve a problem
+                                                            * What problem is
+                                                            your proposal
+                                                            solving?
                                                         </Typography>
                                                         <Typography
                                                             variant='caption'
@@ -799,7 +800,7 @@ const EditProposalDialog = ({
                                             size='large'
                                             name='Rationale'
                                             label='Rationale'
-                                            placeholder='Problem this will solve'
+                                            placeholder='This problem is solved by...'
                                             multiline
                                             rows={isSmallScreen ? 10 : 4}
                                             value={draft?.prop_rationale || ''}
@@ -820,9 +821,9 @@ const EditProposalDialog = ({
                                                             variant='caption'
                                                             data-testid='rationale-helper-text'
                                                         >
-                                                            * Put all the
-                                                            content of the
-                                                            Proposal here
+                                                            * How does the
+                                                            on-chain change
+                                                            solve the problem?
                                                         </Typography>
                                                         <Typography
                                                             variant='caption'
@@ -862,7 +863,8 @@ const EditProposalDialog = ({
                                                 <TextField
                                                     fullWidth
                                                     margin='normal'
-                                                    label='Receiving address'
+                                                    label='Receiving stake address'
+                                                    placeholder='e.g. stake1...'
                                                     variant='outlined'
                                                     value={
                                                         draft?.prop_receiving_address ||
@@ -892,7 +894,7 @@ const EditProposalDialog = ({
                                                     label='Amount'
                                                     type='tel'
                                                     variant='outlined'
-                                                    placeholder='e.g. 2000'
+                                                    placeholder='e.g. 2000 ada'
                                                     value={
                                                         draft?.prop_amount || ''
                                                     }

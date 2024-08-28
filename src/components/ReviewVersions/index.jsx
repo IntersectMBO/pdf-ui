@@ -392,7 +392,13 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                                                     children,
                                                                 } = props;
                                                                 return (
-                                                                    <Typography variant='body1'>
+                                                                    <Typography
+                                                                        variant='body1'
+                                                                        style={{
+                                                                            wordWrap:
+                                                                                'break-word',
+                                                                        }}
+                                                                    >
                                                                         {
                                                                             children
                                                                         }
@@ -426,7 +432,13 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                                                     children,
                                                                 } = props;
                                                                 return (
-                                                                    <Typography variant='body1'>
+                                                                    <Typography
+                                                                        variant='body1'
+                                                                        style={{
+                                                                            wordWrap:
+                                                                                'break-word',
+                                                                        }}
+                                                                    >
                                                                         {
                                                                             children
                                                                         }
@@ -461,7 +473,13 @@ const ReviewVersions = ({ open, onClose, id }) => {
                                                                     children,
                                                                 } = props;
                                                                 return (
-                                                                    <Typography variant='body1'>
+                                                                    <Typography
+                                                                        variant='body1'
+                                                                        style={{
+                                                                            wordWrap:
+                                                                                'break-word',
+                                                                        }}
+                                                                    >
                                                                         {
                                                                             children
                                                                         }

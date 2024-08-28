@@ -110,6 +110,9 @@ const Step3 = ({
                                         <Typography
                                             variant='body1'
                                             data-testid='abstract-content'
+                                            style={{
+                                                wordWrap: 'break-word',
+                                            }}
                                         >
                                             {children}
                                         </Typography>
@@ -137,6 +140,9 @@ const Step3 = ({
                                         <Typography
                                             variant='body1'
                                             data-testid='motivation-content'
+                                            style={{
+                                                wordWrap: 'break-word',
+                                            }}
                                         >
                                             {children}
                                         </Typography>
@@ -164,6 +170,9 @@ const Step3 = ({
                                         <Typography
                                             variant='body1'
                                             data-testid='rationale-content'
+                                            style={{
+                                                wordWrap: 'break-word',
+                                            }}
                                         >
                                             {children}
                                         </Typography>
