@@ -33,8 +33,9 @@ const Step2 = ({
     linksErrors,
     setLinksErrors,
 }) => {
-    const maxLength = 2500;
     const titleMaxLength = 80;
+    const abstractMaxLength = 2500;
+    const motivationRationaleMaxLength = 12000;
     const { setLoading } = useAppContext();
     const [selectedGovActionName, setSelectedGovActionName] = useState(
         governanceActionTypes.find(
@@ -318,14 +319,14 @@ const Step2 = ({
                                         {`${
                                             proposalData?.prop_abstract
                                                 ?.length || 0
-                                        }/${maxLength}`}
+                                        }/${abstractMaxLength}`}
                                     </Typography>
                                 </>
                             )
                         }
                         InputProps={{
                             inputProps: {
-                                maxLength: maxLength,
+                                maxLength: abstractMaxLength,
                                 'data-testid': 'abstract-input',
                             },
                         }}
@@ -372,14 +373,14 @@ const Step2 = ({
                                         {`${
                                             proposalData?.prop_motivation
                                                 ?.length || 0
-                                        }/${maxLength}`}
+                                        }/${motivationRationaleMaxLength}`}
                                     </Typography>
                                 </>
                             )
                         }
                         InputProps={{
                             inputProps: {
-                                maxLength: maxLength,
+                                maxLength: motivationRationaleMaxLength,
                                 'data-testid': 'motivation-input',
                             },
                         }}
@@ -416,7 +417,7 @@ const Step2 = ({
                                         variant='caption'
                                         data-testid='rationale-helper-text'
                                     >
-                                        * How does the on-chain change solve the 
+                                        * How does the on-chain change solve the
                                         problem?
                                     </Typography>
                                     <Typography
@@ -427,14 +428,14 @@ const Step2 = ({
                                         {`${
                                             proposalData?.prop_rationale
                                                 ?.length || 0
-                                        }/${maxLength}`}
+                                        }/${motivationRationaleMaxLength}`}
                                     </Typography>
                                 </>
                             )
                         }
                         InputProps={{
                             inputProps: {
-                                maxLength: maxLength,
+                                maxLength: motivationRationaleMaxLength,
                                 'data-testid': 'rationale-input',
                             },
                         }}
